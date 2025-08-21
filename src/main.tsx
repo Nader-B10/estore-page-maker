@@ -127,6 +127,35 @@ const initialStoreData: StoreData = {
         textColor: '#FFFFFF'
       }
     },
+    footer: {
+      enabled: true,
+      backgroundColor: '#1F2937',
+      textColor: '#FFFFFF',
+      style: 'modern',
+      layout: 'columns',
+      showSocialLinks: true,
+      showNewsletter: false,
+      showPaymentMethods: false,
+      columns: [
+        {
+          id: '1',
+          title: 'روابط سريعة',
+          links: [
+            { text: 'الرئيسية', url: '#' },
+            { text: 'المنتجات', url: '#products' },
+            { text: 'من نحن', url: '#about' },
+            { text: 'اتصل بنا', url: '#contact' }
+          ]
+        }
+      ],
+      socialLinks: [
+        { platform: 'facebook', url: '#' },
+        { platform: 'twitter', url: '#' },
+        { platform: 'instagram', url: '#' }
+      ],
+      copyrightText: '© 2024 جميع الحقوق محفوظة',
+      showCopyright: true
+    },
     whatsapp: {
       enabled: true,
       number: '+966501234567',
