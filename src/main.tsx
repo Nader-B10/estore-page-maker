@@ -143,7 +143,9 @@ const initialStoreData: StoreData = {
       showOnDesktop: true
     }
   },
-  products: []
+  products: [],
+  pages: [],
+  categories: []
 };
 
 createRoot(document.getElementById('root')!).render(
