@@ -239,7 +239,7 @@ export default function SettingsPanel({ settings, onUpdateSettings, customPages 
 
         {/* Custom Colors */}
         <div className="border-t pt-4">
-          <h4 className="text-md font-medium mb-3">تخصيص الألوان (متقدم)</h4>
+          <h4 className="text-md font-medium mb-3">تخصيص الألوان والخطوط</h4>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
               <label className="block text-sm font-medium mb-2">اللون الأساسي</label>
@@ -298,96 +298,6 @@ export default function SettingsPanel({ settings, onUpdateSettings, customPages 
               <option value="list">قائمة</option>
               <option value="masonry">بناء حجري</option>
             </select>
-          </div>
-
-          <div className="mt-4">
-            <label className="block text-sm font-medium mb-2">قالب الرأس</label>
-            <select
-              value={settings.headerTemplate}
-              onChange={(e) => handleChange('headerTemplate', e.target.value)}
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            >
-              {availableHeaders.map(header => (
-                <option key={header.id} value={header.id}>
-                  {header.name}
-                </option>
-              ))}
-            </select>
-            <p className="text-xs text-gray-500 mt-1">
-              {availableHeaders.find(h => h.id === settings.headerTemplate)?.description}
-            </p>
-          </div>
-
-          <div className="mt-4">
-            <label className="block text-sm font-medium mb-2">قالب التذييل</label>
-            <select
-              value={settings.footerTemplate}
-              onChange={(e) => handleChange('footerTemplate', e.target.value)}
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            >
-              {availableFooters.map(footer => (
-                <option key={footer.id} value={footer.id}>
-                  {footer.name}
-                </option>
-              ))}
-            </select>
-            <p className="text-xs text-gray-500 mt-1">
-              {availableFooters.find(f => f.id === settings.footerTemplate)?.description}
-            </p>
-          </div>
-
-          <div className="mt-4">
-            <label className="block text-sm font-medium mb-2">قالب من نحن</label>
-            <select
-              value={settings.aboutTemplate}
-              onChange={(e) => handleChange('aboutTemplate', e.target.value)}
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            >
-              {availableAbouts.map(about => (
-                <option key={about.id} value={about.id}>
-                  {about.name}
-                </option>
-              ))}
-            </select>
-            <p className="text-xs text-gray-500 mt-1">
-              {availableAbouts.find(a => a.id === settings.aboutTemplate)?.description}
-            </p>
-          </div>
-
-          <div className="mt-4">
-            <label className="block text-sm font-medium mb-2">قالب الميزات</label>
-            <select
-              value={settings.featuresTemplate}
-              onChange={(e) => handleChange('featuresTemplate', e.target.value)}
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            >
-              {availableFeatures.map(feature => (
-                <option key={feature.id} value={feature.id}>
-                  {feature.name}
-                </option>
-              ))}
-            </select>
-            <p className="text-xs text-gray-500 mt-1">
-              {availableFeatures.find(f => f.id === settings.featuresTemplate)?.description}
-            </p>
-          </div>
-
-          <div className="mt-4">
-            <label className="block text-sm font-medium mb-2">قالب الأسئلة الشائعة</label>
-            <select
-              value={settings.faqTemplate}
-              onChange={(e) => handleChange('faqTemplate', e.target.value)}
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            >
-              {availableFAQs.map(faq => (
-                <option key={faq.id} value={faq.id}>
-                  {faq.name}
-                </option>
-              ))}
-            </select>
-            <p className="text-xs text-gray-500 mt-1">
-              {availableFAQs.find(f => f.id === settings.faqTemplate)?.description}
-            </p>
           </div>
         </div>
       </div>

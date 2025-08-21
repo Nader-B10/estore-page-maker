@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Plus, Edit, Trash2, Upload, X, Eye, EyeOff } from 'lucide-react';
+import { Plus, Edit, Trash2, Upload, X, Eye, EyeOff, Palette } from 'lucide-react';
 import { StoreSettings, WhyChooseUsItem, FAQItem } from '../../types/store';
+import { getAvailableHeaders, getAvailableFooters, getAvailableHeros, getAvailableAbouts, getAvailableFeatures, getAvailableFAQs } from '../../utils/componentRegistry';
 
 interface SectionsManagerProps {
   settings: StoreSettings;
@@ -12,6 +13,13 @@ export default function SectionsManager({ settings, onUpdateSettings }: Sections
   const [editingWhyItem, setEditingWhyItem] = useState<WhyChooseUsItem | null>(null);
   const [editingFAQItem, setEditingFAQItem] = useState<FAQItem | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const availableHeaders = getAvailableHeaders();
+  const availableFooters = getAvailableFooters();
+  const availableHeros = getAvailableHeros();
+  const availableAbouts = getAvailableAbouts();
+  const availableFeatures = getAvailableFeatures();
+  const availableFAQs = getAvailableFAQs();
 
   const handleHeroChange = (field: string, value: any) => {
     onUpdateSettings({
@@ -118,6 +126,7 @@ export default function SectionsManager({ settings, onUpdateSettings }: Sections
   };
 
   const sections = [
+    { id: 'templates', label: 'اختيار القوالب' },
     { id: 'hero', label: 'قسم البطل (Hero)' },
     { id: 'products', label: 'أقسام المنتجات' },
     { id: 'about', label: 'قسم من نحن' },
@@ -145,6 +154,245 @@ export default function SectionsManager({ settings, onUpdateSettings }: Sections
           ))}
         </div>
       </div>
+
+      {/* Templates Selection */}
+      {activeSection === 'templates' && (
+        <div className="space-y-6">
+          {/* Header Templates */}
+          <div className="bg-white rounded-lg p-6 shadow-sm">
+            <div className="flex items-center gap-2 mb-4">
+              <Palette className="text-blue-600" size={20} />
+              <h3 className="text-lg font-semibold">قوالب الهيدر</h3>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {availableHeaders.map(header => (
+                <div
+                  key={header.id}
+                  className={`border-2 rounded-lg p-4 cursor-pointer transition-all hover:shadow-md ${
+                    settings.headerTemplate === header.id
+                      ? 'border-blue-500 bg-blue-50'
+                      : 'border-gray-200 hover:border-gray-300'
+                  }`}
+                  onClick={() => onUpdateSettings({ ...settings, headerTemplate: header.id })}
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <h4 className="font-medium">{header.name}</h4>
+                    {settings.headerTemplate === header.id && (
+                      <div className="w-5 h-5 bg-blue-500 rounded-full flex items-center justify-center">
+                        <span className="text-white text-xs">✓</span>
+                      </div>
+                    )}
+                  </div>
+                  <p className="text-sm text-gray-600 mb-3">{header.description}</p>
+                  <div className="flex flex-wrap gap-1">
+                    {header.features.map(feature => (
+                      <span key={feature} className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">
+                        {feature}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Footer Templates */}
+          <div className="bg-white rounded-lg p-6 shadow-sm">
+            <div className="flex items-center gap-2 mb-4">
+              <Palette className="text-green-600" size={20} />
+              <h3 className="text-lg font-semibold">قوالب الفوتر</h3>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {availableFooters.map(footer => (
+                <div
+                  key={footer.id}
+                  className={`border-2 rounded-lg p-4 cursor-pointer transition-all hover:shadow-md ${
+                    settings.footerTemplate === footer.id
+                      ? 'border-green-500 bg-green-50'
+                      : 'border-gray-200 hover:border-gray-300'
+                  }`}
+                  onClick={() => onUpdateSettings({ ...settings, footerTemplate: footer.id })}
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <h4 className="font-medium">{footer.name}</h4>
+                    {settings.footerTemplate === footer.id && (
+                      <div className="w-5 h-5 bg-green-500 rounded-full flex items-center justify-center">
+                        <span className="text-white text-xs">✓</span>
+                      </div>
+                    )}
+                  </div>
+                  <p className="text-sm text-gray-600 mb-3">{footer.description}</p>
+                  <div className="flex flex-wrap gap-1">
+                    {footer.features.map(feature => (
+                      <span key={feature} className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">
+                        {feature}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Hero Templates */}
+          <div className="bg-white rounded-lg p-6 shadow-sm">
+            <div className="flex items-center gap-2 mb-4">
+              <Palette className="text-purple-600" size={20} />
+              <h3 className="text-lg font-semibold">قوالب الهيرو</h3>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {availableHeros.map(hero => (
+                <div
+                  key={hero.id}
+                  className={`border-2 rounded-lg p-4 cursor-pointer transition-all hover:shadow-md ${
+                    settings.heroTemplate === hero.id
+                      ? 'border-purple-500 bg-purple-50'
+                      : 'border-gray-200 hover:border-gray-300'
+                  }`}
+                  onClick={() => onUpdateSettings({ ...settings, heroTemplate: hero.id })}
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <h4 className="font-medium">{hero.name}</h4>
+                    {settings.heroTemplate === hero.id && (
+                      <div className="w-5 h-5 bg-purple-500 rounded-full flex items-center justify-center">
+                        <span className="text-white text-xs">✓</span>
+                      </div>
+                    )}
+                  </div>
+                  <p className="text-sm text-gray-600 mb-3">{hero.description}</p>
+                  <div className="flex flex-wrap gap-1">
+                    {hero.features.map(feature => (
+                      <span key={feature} className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">
+                        {feature}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* About Templates */}
+          <div className="bg-white rounded-lg p-6 shadow-sm">
+            <div className="flex items-center gap-2 mb-4">
+              <Palette className="text-orange-600" size={20} />
+              <h3 className="text-lg font-semibold">قوالب من نحن</h3>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {availableAbouts.map(about => (
+                <div
+                  key={about.id}
+                  className={`border-2 rounded-lg p-4 cursor-pointer transition-all hover:shadow-md ${
+                    settings.aboutTemplate === about.id
+                      ? 'border-orange-500 bg-orange-50'
+                      : 'border-gray-200 hover:border-gray-300'
+                  }`}
+                  onClick={() => onUpdateSettings({ ...settings, aboutTemplate: about.id })}
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <h4 className="font-medium">{about.name}</h4>
+                    {settings.aboutTemplate === about.id && (
+                      <div className="w-5 h-5 bg-orange-500 rounded-full flex items-center justify-center">
+                        <span className="text-white text-xs">✓</span>
+                      </div>
+                    )}
+                  </div>
+                  <p className="text-sm text-gray-600 mb-3">{about.description}</p>
+                  <div className="flex flex-wrap gap-1">
+                    {about.features.map(feature => (
+                      <span key={feature} className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">
+                        {feature}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Features Templates */}
+          <div className="bg-white rounded-lg p-6 shadow-sm">
+            <div className="flex items-center gap-2 mb-4">
+              <Palette className="text-red-600" size={20} />
+              <h3 className="text-lg font-semibold">قوالب الميزات</h3>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {availableFeatures.map(feature => (
+                <div
+                  key={feature.id}
+                  className={`border-2 rounded-lg p-4 cursor-pointer transition-all hover:shadow-md ${
+                    settings.featuresTemplate === feature.id
+                      ? 'border-red-500 bg-red-50'
+                      : 'border-gray-200 hover:border-gray-300'
+                  }`}
+                  onClick={() => onUpdateSettings({ ...settings, featuresTemplate: feature.id })}
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <h4 className="font-medium">{feature.name}</h4>
+                    {settings.featuresTemplate === feature.id && (
+                      <div className="w-5 h-5 bg-red-500 rounded-full flex items-center justify-center">
+                        <span className="text-white text-xs">✓</span>
+                      </div>
+                    )}
+                  </div>
+                  <p className="text-sm text-gray-600 mb-3">{feature.description}</p>
+                  <div className="flex flex-wrap gap-1">
+                    {feature.features.map(feat => (
+                      <span key={feat} className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">
+                        {feat}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* FAQ Templates */}
+          <div className="bg-white rounded-lg p-6 shadow-sm">
+            <div className="flex items-center gap-2 mb-4">
+              <Palette className="text-indigo-600" size={20} />
+              <h3 className="text-lg font-semibold">قوالب الأسئلة الشائعة</h3>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {availableFAQs.map(faq => (
+                <div
+                  key={faq.id}
+                  className={`border-2 rounded-lg p-4 cursor-pointer transition-all hover:shadow-md ${
+                    settings.faqTemplate === faq.id
+                      ? 'border-indigo-500 bg-indigo-50'
+                      : 'border-gray-200 hover:border-gray-300'
+                  }`}
+                  onClick={() => onUpdateSettings({ ...settings, faqTemplate: faq.id })}
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <h4 className="font-medium">{faq.name}</h4>
+                    {settings.faqTemplate === faq.id && (
+                      <div className="w-5 h-5 bg-indigo-500 rounded-full flex items-center justify-center">
+                        <span className="text-white text-xs">✓</span>
+                      </div>
+                    )}
+                  </div>
+                  <p className="text-sm text-gray-600 mb-3">{faq.description}</p>
+                  <div className="flex flex-wrap gap-1">
+                    {faq.features.map(feature => (
+                      <span key={feature} className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">
+                        {feature}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Hero Section */}
       {activeSection === 'hero' && (

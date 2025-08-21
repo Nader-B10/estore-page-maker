@@ -82,6 +82,7 @@ export interface StoreSettings {
   fontFamily: string;
   layout: 'grid' | 'list' | 'masonry';
   headerTemplate: string;
+  heroTemplate: string;
   footerTemplate: string;
   aboutTemplate: string;
   featuresTemplate: string;

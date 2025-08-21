@@ -21,6 +21,7 @@ const defaultSettings: StoreSettings = {
   fontFamily: 'Cairo',
   layout: 'grid',
   headerTemplate: 'modern',
+  heroTemplate: 'hero-variant-a',
   footerTemplate: 'default',
   aboutTemplate: 'modern-about',
   featuresTemplate: 'grid-features',

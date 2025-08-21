@@ -1,7 +1,7 @@
 import React from 'react';
 import { Mail, Phone, MapPin, Star, Truck, Shield, Headphones, Heart, Check, Gift, Clock, ChevronDown, MessageCircle, Package } from 'lucide-react';
 import { StoreData, getThemeById } from '../../types/store';
-import { getHeaderComponent, getFooterComponent, getAboutComponent, getFeaturesComponent, getFAQComponent } from '../../utils/componentRegistry';
+import { getHeaderComponent, getFooterComponent, getHeroComponent, getAboutComponent, getFeaturesComponent, getFAQComponent } from '../../utils/componentRegistry';
 
 interface StorePreviewProps {
   storeData: StoreData;
@@ -13,6 +13,7 @@ export default function StorePreview({ storeData }: StorePreviewProps) {
   
   const HeaderComponent = getHeaderComponent(settings.headerTemplate).component;
   const FooterComponent = getFooterComponent(settings.footerTemplate).component;
+  const HeroComponent = getHeroComponent(settings.heroTemplate).component;
   const AboutComponent = getAboutComponent(settings.aboutTemplate).component;
   const FeaturesComponent = getFeaturesComponent(settings.featuresTemplate).component;
   const FAQComponent = getFAQComponent(settings.faqTemplate).component;
@@ -161,30 +162,7 @@ export default function StorePreview({ storeData }: StorePreviewProps) {
       <HeaderComponent settings={settings} customPages={storeData.customPages} />
 
       {/* Hero Section */}
-      {settings.heroSection.enabled && (
-        <section 
-          className="relative py-20 px-6 text-white text-center"
-          style={{
-            backgroundImage: settings.heroSection.backgroundImage 
-              ? `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url(${settings.heroSection.backgroundImage})`
-              : `linear-gradient(135deg, ${settings.primaryColor}, ${settings.secondaryColor})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center'
-          }}
-        >
-          <div className="max-w-4xl mx-auto">
-            <h2 className="text-4xl md:text-6xl font-bold mb-4">{settings.heroSection.title}</h2>
-            <p className="text-xl md:text-2xl mb-8 opacity-90">{settings.heroSection.subtitle}</p>
-            <a
-              href={settings.heroSection.ctaLink}
-              className="inline-block px-8 py-4 text-lg font-semibold rounded-lg hover:opacity-90 transition-opacity text-white"
-              style={{ backgroundColor: currentTheme.palette.accent }}
-            >
-              {settings.heroSection.ctaText}
-            </a>
-          </div>
-        </section>
-      )}
+      <HeroComponent settings={settings} />
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto py-8 px-6" style={{ backgroundColor: currentTheme.palette.background }}>
