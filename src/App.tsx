@@ -1,44 +1,127 @@
 import React, { useState } from 'react';
-import { Settings, Eye, Download, Palette, Layout, FileText, MessageCircle, Globe } from 'lucide-react';
-import { StoreData } from './types/store';
-import StorePreview from './components/StoreBuilder/StorePreview';
+import { Settings, Package, Eye, Download, Loader } from 'lucide-react';
+import { StoreData, StoreSettings, Product } from './types/store';
 import SettingsPanel from './components/StoreBuilder/SettingsPanel';
 import ProductManager from './components/StoreBuilder/ProductManager';
+import StorePreview from './components/StoreBuilder/StorePreview';
 import SectionsManager from './components/StoreBuilder/SectionsManager';
-import ThemeSelector from './components/StoreBuilder/ThemeSelector';
-import HeaderSettings from './components/StoreBuilder/HeaderSettings';
-import FooterSettings from './components/StoreBuilder/FooterSettings';
-import WhatsAppSettings from './components/StoreBuilder/WhatsAppSettings';
-import PageManager from './components/StoreBuilder/PageManager';
 import { exportStore } from './utils/fileExporter';
 
-interface AppProps {
-  storeData: StoreData;
-}
+const defaultSettings: StoreSettings = {
+  storeName: 'متجري الإلكتروني',
+  description: 'أفضل المنتجات بأسعار منافسة',
+  logo: '',
+  favicon: '',
+  primaryColor: '#3b82f6',
+  secondaryColor: '#1e40af',
+  accentColor: '#f59e0b',
+  fontFamily: 'Cairo',
+  layout: 'grid',
+  headerStyle: 'modern',
+  footerText: '',
+  contactInfo: {
+    email: '',
+    phone: '',
+    address: ''
+  },
+  heroSection: {
+    enabled: true,
+    title: 'مرحباً بك في متجرنا',
+    subtitle: 'اكتشف أفضل المنتجات بأسعار منافسة',
+    backgroundImage: '',
+    ctaText: 'تسوق الآن',
+    ctaLink: '#products'
+  },
+  productSections: {
+    featured: {
+      enabled: true,
+      title: 'المنتجات المميزة',
+      subtitle: 'اختيارنا الأفضل لك',
+      limit: 4
+    },
+    bestSellers: {
+      enabled: true,
+      title: 'الأعلى مبيعاً',
+      subtitle: 'المنتجات الأكثر طلباً',
+      limit: 4
+    },
+    onSale: {
+      enabled: true,
+      title: 'عروض وتخفيضات',
+      subtitle: 'وفر أكثر مع عروضنا الخاصة',
+      limit: 4
+    }
+  },
+  whyChooseUs: {
+    enabled: true,
+    title: 'لماذا تختارنا؟',
+    subtitle: 'نحن نقدم أفضل تجربة تسوق',
+    items: [
+      {
+        id: '1',
+        icon: 'truck',
+        title: 'شحن سريع',
+        description: 'توصيل مجاني خلال 24 ساعة'
+      },
+      {
+        id: '2',
+        icon: 'shield',
+        title: 'ضمان الجودة',
+        description: 'منتجات أصلية مع ضمان شامل'
+      },
+      {
+        id: '3',
+        icon: 'headphones',
+        title: 'دعم 24/7',
+        description: 'خدمة عملاء متاحة على مدار الساعة'
+      }
+    ]
+  },
+  faq: {
+    enabled: true,
+    title: 'الأسئلة الشائعة',
+    subtitle: 'إجابات على أكثر الأسئلة شيوعاً',
+    items: [
+      {
+        id: '1',
+        question: 'كيف يمكنني تتبع طلبي؟',
+        answer: 'يمكنك تتبع طلبك من خلال رقم الطلب المرسل إليك عبر البريد الإلكتروني'
+      },
+      {
+        id: '2',
+        question: 'ما هي طرق الدفع المتاحة؟',
+        answer: 'نقبل جميع بطاقات الائتمان والدفع عند الاستلام'
+      }
+    ]
+  }
+};
 
-export default function App({ storeData: initialStoreData }: AppProps) {
-  const [storeData, setStoreData] = useState<StoreData>(initialStoreData);
-  const [activeTab, setActiveTab] = useState('preview');
+function App() {
+  const [activeTab, setActiveTab] = useState('settings');
   const [isExporting, setIsExporting] = useState(false);
+  const [storeData, setStoreData] = useState<StoreData>({
+    settings: defaultSettings,
+    products: []
+  });
 
-  const handleUpdateSettings = (newSettings: any) => {
+  const handleUpdateSettings = (newSettings: StoreSettings) => {
     setStoreData(prev => ({
       ...prev,
       settings: newSettings
     }));
   };
 
-  const handleAddProduct = (product: any) => {
+  const handleAddProduct = (product: Product) => {
     setStoreData(prev => ({
       ...prev,
       products: [...prev.products, product]
     }));
   };
 
-  const handleEditProduct = (id: string, product: any) => {
+  const handleEditProduct = (id: string, updatedProduct: Product) => {
     setStoreData(prev => ({
       ...prev,
-      products: prev.products.map(p => p.id === id ? product : p)
+      products: prev.products.map(p => p.id === id ? updatedProduct : p)
     }));
   };
 
@@ -46,27 +129,6 @@ export default function App({ storeData: initialStoreData }: AppProps) {
     setStoreData(prev => ({
       ...prev,
       products: prev.products.filter(p => p.id !== id)
-    }));
-  };
-
-  const handleAddPage = (page: any) => {
-    setStoreData(prev => ({
-      ...prev,
-      pages: [...prev.pages, page]
-    }));
-  };
-
-  const handleEditPage = (id: string, page: any) => {
-    setStoreData(prev => ({
-      ...prev,
-      pages: prev.pages.map(p => p.id === id ? page : p)
-    }));
-  };
-
-  const handleDeletePage = (id: string) => {
-    setStoreData(prev => ({
-      ...prev,
-      pages: prev.pages.filter(p => p.id !== id)
     }));
   };
 
@@ -88,181 +150,152 @@ export default function App({ storeData: initialStoreData }: AppProps) {
   };
 
   const tabs = [
-    { id: 'preview', label: 'معاينة المتجر', icon: Eye },
-    { id: 'settings', label: 'الإعدادات العامة', icon: Settings },
-    { id: 'themes', label: 'الثيمات والألوان', icon: Palette },
-    { id: 'header', label: 'إعدادات الهيدر', icon: Layout },
-    { id: 'footer', label: 'إعدادات الفوتر', icon: Globe },
-    { id: 'products', label: 'إدارة المنتجات', icon: Layout },
-    { id: 'sections', label: 'إدارة الأقسام', icon: Layout },
-    { id: 'whatsapp', label: 'إعدادات الواتساب', icon: MessageCircle },
-    { id: 'pages', label: 'إدارة الصفحات', icon: FileText },
+    { id: 'settings', label: 'الإعدادات', icon: Settings },
+    { id: 'sections', label: 'الأقسام', icon: Package },
+    { id: 'products', label: 'المنتجات', icon: Package },
+    { id: 'preview', label: 'معاينة', icon: Eye }
   ];
 
   return (
-    <div className="min-h-screen bg-gray-100" dir="rtl">
+    <div className="min-h-screen bg-gray-50 flex flex-col">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-4">
+      <header className="bg-white shadow-sm border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-4 py-4">
+          <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
-                <Settings className="w-6 h-6 text-white" />
+              <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
+                <Package className="w-6 h-6 text-white" />
               </div>
               <div>
-                <h1 className="text-xl font-bold text-gray-900">أداة بناء المتاجر الإلكترونية</h1>
-                <p className="text-sm text-gray-600">أنشئ متجرك الإلكتروني بسهولة</p>
+                <h1 className="text-xl font-bold text-gray-900">أداة بناء المتاجر</h1>
+                <p className="text-sm text-gray-600">اصنع متجرك الإلكتروني في دقائق</p>
               </div>
             </div>
+            
             <button
               onClick={handleExport}
               disabled={isExporting}
-              className="bg-green-600 text-white px-6 py-2 rounded-lg flex items-center gap-2 hover:bg-green-700 transition-colors disabled:opacity-50"
+              className="bg-gradient-to-r from-green-600 to-green-700 text-white px-6 py-3 rounded-lg flex items-center gap-2 hover:from-green-700 hover:to-green-800 transition-all duration-200 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              <Download size={20} />
-              {isExporting ? 'جاري التصدير...' : 'تصدير المتجر'}
+              {isExporting ? (
+                <>
+                  <Loader className="w-5 h-5 animate-spin" />
+                  جاري التحضير...
+                </>
+              ) : (
+                <>
+                  <Download className="w-5 h-5" />
+                  تحميل المتجر
+                </>
+              )}
             </button>
           </div>
         </div>
       </header>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <div className="flex flex-col lg:flex-row gap-6">
-          {/* Sidebar */}
-          <div className="lg:w-80 space-y-4">
-            <div className="bg-white rounded-lg shadow-sm p-4">
-              <h2 className="font-semibold mb-4">أدوات التحكم</h2>
-              <nav className="space-y-2">
-                {tabs.map((tab) => {
-                  const Icon = tab.icon;
-                  return (
-                    <button
-                      key={tab.id}
-                      onClick={() => setActiveTab(tab.id)}
-                      className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-right transition-colors ${
-                        activeTab === tab.id
-                          ? 'bg-blue-600 text-white'
-                          : 'text-gray-700 hover:bg-gray-100'
-                      }`}
-                    >
-                      <Icon size={20} />
-                      {tab.label}
-                    </button>
-                  );
-                })}
-              </nav>
+      <div className="flex-1 flex">
+        {/* Sidebar */}
+        <aside className="w-80 bg-white shadow-lg border-r border-gray-200 flex flex-col">
+          {/* Tab Navigation */}
+          <div className="p-6 border-b border-gray-200">
+            <div className="flex flex-col gap-2">
+              {tabs.map(tab => {
+                const Icon = tab.icon;
+                return (
+                  <button
+                    key={tab.id}
+                    onClick={() => setActiveTab(tab.id)}
+                    className={`flex items-center gap-3 px-4 py-3 rounded-lg text-right transition-all duration-200 ${
+                      activeTab === tab.id
+                        ? 'bg-blue-50 text-blue-700 border-2 border-blue-200 shadow-sm'
+                        : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900 border-2 border-transparent'
+                    }`}
+                  >
+                    <Icon size={20} />
+                    <span className="font-medium">{tab.label}</span>
+                  </button>
+                );
+              })}
             </div>
+          </div>
 
-            {/* Store Info */}
-            <div className="bg-white rounded-lg shadow-sm p-4">
-              <h3 className="font-semibold mb-2">معلومات المتجر</h3>
-              <div className="space-y-2 text-sm">
-                <div className="flex justify-between">
-                  <span className="text-gray-600">اسم المتجر:</span>
-                  <span className="font-medium">{storeData.settings.storeName}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600">عدد المنتجات:</span>
-                  <span className="font-medium">{storeData.products.length}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600">عدد الصفحات:</span>
-                  <span className="font-medium">{storeData.pages.length}</span>
+          {/* Tab Content */}
+          <div className="flex-1 overflow-auto p-6">
+            {activeTab === 'settings' && (
+              <SettingsPanel
+                settings={storeData.settings}
+                onUpdateSettings={handleUpdateSettings}
+              />
+            )}
+            
+            {activeTab === 'sections' && (
+              <SectionsManager
+                settings={storeData.settings}
+                onUpdateSettings={handleUpdateSettings}
+              />
+            )}
+            
+            {activeTab === 'products' && (
+              <ProductManager
+                products={storeData.products}
+                settings={storeData.settings}
+                onAddProduct={handleAddProduct}
+                onEditProduct={handleEditProduct}
+                onDeleteProduct={handleDeleteProduct}
+              />
+            )}
+          </div>
+        </aside>
+
+        {/* Main Content */}
+        <main className="flex-1 bg-gray-100">
+          {activeTab === 'preview' ? (
+            <div className="h-full">
+              <div className="bg-white border-b border-gray-200 px-6 py-4">
+                <div className="flex items-center justify-between">
+                  <h2 className="text-lg font-semibold text-gray-900">معاينة المتجر</h2>
+                  <div className="flex items-center gap-2 text-sm text-gray-600">
+                    <Eye size={16} />
+                    معاينة مباشرة
+                  </div>
                 </div>
               </div>
+              <StorePreview storeData={storeData} />
             </div>
-          </div>
-
-          {/* Main Content */}
-          <div className="flex-1">
-            <div className="bg-white rounded-lg shadow-sm">
-              {activeTab === 'preview' && (
-                <div className="h-[800px] overflow-hidden rounded-lg">
-                  <StorePreview storeData={storeData} />
+          ) : (
+            <div className="h-full flex items-center justify-center">
+              <div className="text-center">
+                <div className="w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Eye size={48} className="text-blue-600" />
                 </div>
-              )}
-
-              {activeTab === 'settings' && (
-                <div className="p-6">
-                  <SettingsPanel
-                    settings={storeData.settings}
-                    onUpdateSettings={handleUpdateSettings}
-                  />
-                </div>
-              )}
-
-              {activeTab === 'themes' && (
-                <div className="p-6">
-                  <ThemeSelector
-                    settings={storeData.settings}
-                    onUpdateSettings={handleUpdateSettings}
-                  />
-                </div>
-              )}
-
-              {activeTab === 'header' && (
-                <div className="p-6">
-                  <HeaderSettings
-                    settings={storeData.settings}
-                    onUpdateSettings={handleUpdateSettings}
-                  />
-                </div>
-              )}
-
-              {activeTab === 'footer' && (
-                <div className="p-6">
-                  <FooterSettings
-                    settings={storeData.settings}
-                    onUpdateSettings={handleUpdateSettings}
-                  />
-                </div>
-              )}
-
-              {activeTab === 'products' && (
-                <div className="p-6">
-                  <ProductManager
-                    products={storeData.products}
-                    settings={storeData.settings}
-                    onAddProduct={handleAddProduct}
-                    onEditProduct={handleEditProduct}
-                    onDeleteProduct={handleDeleteProduct}
-                  />
-                </div>
-              )}
-
-              {activeTab === 'sections' && (
-                <div className="p-6">
-                  <SectionsManager
-                    settings={storeData.settings}
-                    onUpdateSettings={handleUpdateSettings}
-                  />
-                </div>
-              )}
-
-              {activeTab === 'whatsapp' && (
-                <div className="p-6">
-                  <WhatsAppSettings
-                    settings={storeData.settings}
-                    onUpdateSettings={handleUpdateSettings}
-                  />
-                </div>
-              )}
-
-              {activeTab === 'pages' && (
-                <div className="p-6">
-                  <PageManager
-                    pages={storeData.pages}
-                    settings={storeData.settings}
-                    onAddPage={handleAddPage}
-                    onEditPage={handleEditPage}
-                    onDeletePage={handleDeletePage}
-                  />
-                </div>
-              )}
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">معاينة المتجر</h3>
+                <p className="text-gray-600 mb-4">انقر على تبويب "معاينة" لرؤية متجرك</p>
+                <button
+                  onClick={() => setActiveTab('preview')}
+                  className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+                >
+                  عرض المعاينة
+                </button>
+              </div>
             </div>
+          )}
+        </main>
+      </div>
+
+      {/* Export Status */}
+      {isExporting && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-8 max-w-md w-full mx-4 text-center">
+            <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Loader className="w-8 h-8 text-blue-600 animate-spin" />
+            </div>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">جاري تحضير المتجر...</h3>
+            <p className="text-gray-600">يتم الآن تجهيز وضغط ملفات متجرك</p>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }
+
+export default App;
