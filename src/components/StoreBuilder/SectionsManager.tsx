@@ -260,14 +260,14 @@ export default function SectionsManager({ settings, onUpdateSettings }: Sections
               </button>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium mb-2">العنوان</label>
                 <input
                   type="text"
                   value={settings.productSections.featured.title}
                   onChange={(e) => handleProductSectionChange('featured', 'title', e.target.value)}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
               <div>
@@ -276,7 +276,7 @@ export default function SectionsManager({ settings, onUpdateSettings }: Sections
                   type="text"
                   value={settings.productSections.featured.subtitle}
                   onChange={(e) => handleProductSectionChange('featured', 'subtitle', e.target.value)}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
               <div>
@@ -287,7 +287,7 @@ export default function SectionsManager({ settings, onUpdateSettings }: Sections
                   max="12"
                   value={settings.productSections.featured.limit}
                   onChange={(e) => handleProductSectionChange('featured', 'limit', parseInt(e.target.value))}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
             </div>
@@ -310,14 +310,14 @@ export default function SectionsManager({ settings, onUpdateSettings }: Sections
               </button>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium mb-2">العنوان</label>
                 <input
                   type="text"
                   value={settings.productSections.bestSellers.title}
                   onChange={(e) => handleProductSectionChange('bestSellers', 'title', e.target.value)}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
               <div>
@@ -326,7 +326,7 @@ export default function SectionsManager({ settings, onUpdateSettings }: Sections
                   type="text"
                   value={settings.productSections.bestSellers.subtitle}
                   onChange={(e) => handleProductSectionChange('bestSellers', 'subtitle', e.target.value)}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
               <div>
@@ -337,7 +337,7 @@ export default function SectionsManager({ settings, onUpdateSettings }: Sections
                   max="12"
                   value={settings.productSections.bestSellers.limit}
                   onChange={(e) => handleProductSectionChange('bestSellers', 'limit', parseInt(e.target.value))}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
             </div>
@@ -360,14 +360,14 @@ export default function SectionsManager({ settings, onUpdateSettings }: Sections
               </button>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium mb-2">العنوان</label>
                 <input
                   type="text"
                   value={settings.productSections.onSale.title}
                   onChange={(e) => handleProductSectionChange('onSale', 'title', e.target.value)}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
               <div>
@@ -376,7 +376,7 @@ export default function SectionsManager({ settings, onUpdateSettings }: Sections
                   type="text"
                   value={settings.productSections.onSale.subtitle}
                   onChange={(e) => handleProductSectionChange('onSale', 'subtitle', e.target.value)}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
               <div>
@@ -387,7 +387,7 @@ export default function SectionsManager({ settings, onUpdateSettings }: Sections
                   max="12"
                   value={settings.productSections.onSale.limit}
                   onChange={(e) => handleProductSectionChange('onSale', 'limit', parseInt(e.target.value))}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
             </div>
@@ -426,14 +426,14 @@ export default function SectionsManager({ settings, onUpdateSettings }: Sections
           </div>
 
           <div className="space-y-4 mb-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium mb-2">العنوان</label>
                 <input
                   type="text"
                   value={settings.whyChooseUs.title}
                   onChange={(e) => handleWhyChooseUsChange('title', e.target.value)}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
               <div>
@@ -442,7 +442,7 @@ export default function SectionsManager({ settings, onUpdateSettings }: Sections
                   type="text"
                   value={settings.whyChooseUs.subtitle}
                   onChange={(e) => handleWhyChooseUsChange('subtitle', e.target.value)}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
             </div>
@@ -510,14 +510,14 @@ export default function SectionsManager({ settings, onUpdateSettings }: Sections
           </div>
 
           <div className="space-y-4 mb-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium mb-2">العنوان</label>
                 <input
                   type="text"
                   value={settings.faq.title}
                   onChange={(e) => handleFAQChange('title', e.target.value)}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
               <div>
@@ -526,7 +526,7 @@ export default function SectionsManager({ settings, onUpdateSettings }: Sections
                   type="text"
                   value={settings.faq.subtitle}
                   onChange={(e) => handleFAQChange('subtitle', e.target.value)}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
             </div>
