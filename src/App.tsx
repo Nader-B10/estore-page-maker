@@ -1,7 +1,7 @@
 import React from 'react';
 import { ShoppingCart, Mail, Phone, MapPin, Star, Truck, Shield, Headphones, Heart, Check, Gift, Clock, ChevronDown, MessageCircle, Search, Globe, DollarSign } from 'lucide-react';
-import { StoreData } from '../../types/store';
-import { generateWhatsAppURL } from '../../utils/whatsapp';
+import { StoreData } from '../types/store';
+import { generateWhatsAppURL } from '../utils/whatsapp';
 
 interface StorePreviewProps {
   storeData: StoreData;
