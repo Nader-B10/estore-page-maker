@@ -1,6 +1,6 @@
 import React from 'react';
 import { Upload, Plus, Edit, Trash2, X, Link, ExternalLink } from 'lucide-react';
-import { StoreSettings, LinkItem, CustomPage } from '../../types/store';
+import { StoreSettings, LinkItem, CustomPage, PREDEFINED_THEMES, getThemeById } from '../../types/store';
 
 interface SettingsPanelProps {
   settings: StoreSettings;
@@ -190,8 +190,49 @@ export default function SettingsPanel({ settings, onUpdateSettings, customPages 
       </div>
 
       <div className="bg-white rounded-lg p-6 shadow-sm">
-        <h3 className="text-lg font-semibold mb-4">الألوان والمظهر</h3>
+        <h3 className="text-lg font-semibold mb-4">الثيمات والألوان</h3>
         
+        {/* Predefined Themes */}
+        <div className="mb-6">
+          <label className="block text-sm font-medium mb-3">الثيمات المعدة مسبقاً</label>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+            {PREDEFINED_THEMES.map((theme) => (
+              <button
+                key={theme.id}
+                onClick={() => {
+                  const newSettings = {
+                    ...settings,
+                    themeId: theme.id,
+                    primaryColor: theme.palette.primary,
+                    secondaryColor: theme.palette.secondary,
+                    accentColor: theme.palette.accent,
+                  };
+                  onUpdateSettings(newSettings);
+                }}
+                className={`relative p-3 rounded-lg border-2 transition-all ${
+                  settings.themeId === theme.id
+                    ? 'border-blue-500 ring-2 ring-blue-200'
+                    : 'border-gray-200 hover:border-gray-300'
+                }`}
+              >
+                <div
+                  className="w-full h-12 rounded-md mb-2"
+                  style={{ background: theme.preview }}
+                ></div>
+                <p className="text-sm font-medium text-center">{theme.nameAr}</p>
+                {settings.themeId === theme.id && (
+                  <div className="absolute top-1 right-1 w-5 h-5 bg-blue-500 rounded-full flex items-center justify-center">
+                    <span className="text-white text-xs">✓</span>
+                  </div>
+                )}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Custom Colors */}
+        <div className="border-t pt-4">
+          <h4 className="text-md font-medium mb-3">تخصيص الألوان (متقدم)</h4>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
             <label className="block text-sm font-medium mb-2">اللون الأساسي</label>
@@ -280,6 +321,7 @@ export default function SettingsPanel({ settings, onUpdateSettings, customPages 
             <option value="detailed">المفصل</option>
             <option value="modern">العصري</option>
           </select>
+        </div>
         </div>
       </div>
 

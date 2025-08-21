@@ -1,6 +1,6 @@
 import React from 'react';
 import { Mail, Phone, MapPin, Star, Truck, Shield, Headphones, Heart, Check, Gift, Clock, ChevronDown, MessageCircle, Package } from 'lucide-react';
-import { StoreData } from '../../types/store';
+import { StoreData, getThemeById } from '../../types/store';
 
 interface StorePreviewProps {
   storeData: StoreData;
@@ -8,6 +8,7 @@ interface StorePreviewProps {
 
 export default function StorePreview({ storeData }: StorePreviewProps) {
   const { settings, products } = storeData;
+  const currentTheme = getThemeById(settings.themeId);
 
   const getIcon = (iconName: string) => {
     const icons = {
@@ -80,7 +81,10 @@ export default function StorePreview({ storeData }: StorePreviewProps) {
   };
 
   const ProductCard = ({ product }: { product: any }) => (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow group">
+    <div 
+      className="rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow group"
+      style={{ backgroundColor: currentTheme.palette.surface }}
+    >
       <div className="relative overflow-hidden">
         <img
           src={product.image}
@@ -91,7 +95,7 @@ export default function StorePreview({ storeData }: StorePreviewProps) {
           {product.category && (
             <span 
               className="px-2 py-1 text-xs font-medium text-white rounded-full"
-              style={{ backgroundColor: settings.accentColor }}
+              style={{ backgroundColor: currentTheme.palette.accent }}
             >
               {product.category}
             </span>
@@ -105,14 +109,14 @@ export default function StorePreview({ storeData }: StorePreviewProps) {
       </div>
       <div className="p-4">
         <h3 className="font-semibold text-lg mb-2">{product.name}</h3>
-        <p className="text-gray-600 text-sm mb-3 line-clamp-2">{product.description}</p>
+        <p className="text-sm mb-3 line-clamp-2" style={{ color: currentTheme.palette.textSecondary }}>{product.description}</p>
         <div className="flex justify-between items-center">
           <div className="flex flex-col">
-            <span className="text-xl font-bold" style={{ color: settings.primaryColor }}>
+            <span className="text-xl font-bold" style={{ color: currentTheme.palette.primary }}>
               ${product.price}
             </span>
             {product.originalPrice && product.originalPrice > product.price && (
-              <span className="text-sm text-gray-500 line-through">
+              <span className="text-sm line-through" style={{ color: currentTheme.palette.textSecondary }}>
                 ${product.originalPrice}
               </span>
             )}
@@ -131,7 +135,7 @@ export default function StorePreview({ storeData }: StorePreviewProps) {
           ) : (
             <button
               className="px-4 py-2 text-white rounded-lg opacity-50 cursor-not-allowed"
-              style={{ backgroundColor: settings.secondaryColor }}
+              style={{ backgroundColor: currentTheme.palette.secondary }}
               disabled
             >
               غير متاح
@@ -143,9 +147,27 @@ export default function StorePreview({ storeData }: StorePreviewProps) {
   );
 
   return (
-    <div className="h-full overflow-auto bg-gray-50" style={{ fontFamily: settings.fontFamily }}>
+    <div 
+      className="h-full overflow-auto" 
+      style={{ 
+        fontFamily: settings.fontFamily,
+        backgroundColor: currentTheme.palette.background,
+        color: currentTheme.palette.text,
+        '--primary-color': currentTheme.palette.primary,
+        '--secondary-color': currentTheme.palette.secondary,
+        '--accent-color': currentTheme.palette.accent,
+        '--text-color': currentTheme.palette.text,
+        '--text-secondary': currentTheme.palette.textSecondary,
+        '--background-color': currentTheme.palette.background,
+        '--surface-color': currentTheme.palette.surface,
+        '--border-color': currentTheme.palette.border,
+        '--success-color': currentTheme.palette.success,
+        '--warning-color': currentTheme.palette.warning,
+        '--error-color': currentTheme.palette.error
+      } as React.CSSProperties}
+    >
       {/* Header */}
-      <header className={`${getHeaderClass()} py-6 px-6`} style={{ backgroundColor: settings.primaryColor }}>
+      <header className={`${getHeaderClass()} py-6 px-6`} style={{ backgroundColor: currentTheme.palette.primary }}>
         <div className="max-w-7xl mx-auto">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
@@ -207,8 +229,8 @@ export default function StorePreview({ storeData }: StorePreviewProps) {
             <p className="text-xl md:text-2xl mb-8 opacity-90">{settings.heroSection.subtitle}</p>
             <a
               href={settings.heroSection.ctaLink}
-              className="inline-block px-8 py-4 text-lg font-semibold rounded-lg hover:opacity-90 transition-opacity"
-              style={{ backgroundColor: settings.accentColor }}
+              className="inline-block px-8 py-4 text-lg font-semibold rounded-lg hover:opacity-90 transition-opacity text-white"
+              style={{ backgroundColor: currentTheme.palette.accent }}
             >
               {settings.heroSection.ctaText}
             </a>
@@ -217,16 +239,16 @@ export default function StorePreview({ storeData }: StorePreviewProps) {
       )}
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto py-8 px-6">
+      <main className="max-w-7xl mx-auto py-8 px-6" style={{ backgroundColor: currentTheme.palette.background }}>
         {/* Featured Products */}
         {settings.productSections.featured.enabled && featuredProducts.length > 0 && (
           <section className="mb-16">
             <div className="text-center mb-8">
-              <h2 className="text-3xl font-bold mb-2" style={{ color: settings.primaryColor }}>
+              <h2 className="text-3xl font-bold mb-2" style={{ color: currentTheme.palette.primary }}>
                 {settings.productSections.featured.title}
               </h2>
-              <p className="text-gray-600">{settings.productSections.featured.subtitle}</p>
-              <div className="w-24 h-1 mx-auto mt-4 rounded" style={{ backgroundColor: settings.accentColor }}></div>
+              <p style={{ color: currentTheme.palette.textSecondary }}>{settings.productSections.featured.subtitle}</p>
+              <div className="w-24 h-1 mx-auto mt-4 rounded" style={{ backgroundColor: currentTheme.palette.accent }}></div>
             </div>
             <div className={`grid ${getLayoutClass()} gap-6`}>
               {featuredProducts.map((product) => (
@@ -240,11 +262,11 @@ export default function StorePreview({ storeData }: StorePreviewProps) {
         {settings.productSections.bestSellers.enabled && bestSellerProducts.length > 0 && (
           <section className="mb-16">
             <div className="text-center mb-8">
-              <h2 className="text-3xl font-bold mb-2" style={{ color: settings.primaryColor }}>
+              <h2 className="text-3xl font-bold mb-2" style={{ color: currentTheme.palette.primary }}>
                 {settings.productSections.bestSellers.title}
               </h2>
-              <p className="text-gray-600">{settings.productSections.bestSellers.subtitle}</p>
-              <div className="w-24 h-1 mx-auto mt-4 rounded" style={{ backgroundColor: settings.accentColor }}></div>
+              <p style={{ color: currentTheme.palette.textSecondary }}>{settings.productSections.bestSellers.subtitle}</p>
+              <div className="w-24 h-1 mx-auto mt-4 rounded" style={{ backgroundColor: currentTheme.palette.accent }}></div>
             </div>
             <div className={`grid ${getLayoutClass()} gap-6`}>
               {bestSellerProducts.map((product) => (
@@ -258,11 +280,11 @@ export default function StorePreview({ storeData }: StorePreviewProps) {
         {settings.productSections.onSale.enabled && onSaleProducts.length > 0 && (
           <section className="mb-16">
             <div className="text-center mb-8">
-              <h2 className="text-3xl font-bold mb-2" style={{ color: settings.primaryColor }}>
+              <h2 className="text-3xl font-bold mb-2" style={{ color: currentTheme.palette.primary }}>
                 {settings.productSections.onSale.title}
               </h2>
-              <p className="text-gray-600">{settings.productSections.onSale.subtitle}</p>
-              <div className="w-24 h-1 mx-auto mt-4 rounded" style={{ backgroundColor: settings.accentColor }}></div>
+              <p style={{ color: currentTheme.palette.textSecondary }}>{settings.productSections.onSale.subtitle}</p>
+              <div className="w-24 h-1 mx-auto mt-4 rounded" style={{ backgroundColor: currentTheme.palette.accent }}></div>
             </div>
             <div className={`grid ${getLayoutClass()} gap-6`}>
               {onSaleProducts.map((product) => (
@@ -274,11 +296,11 @@ export default function StorePreview({ storeData }: StorePreviewProps) {
 
         {/* All Products */}
         <div className="mb-8">
-          <h2 className="text-3xl font-bold text-center mb-2" style={{ color: settings.primaryColor }}>
+          <h2 className="text-3xl font-bold text-center mb-2" style={{ color: currentTheme.palette.primary }}>
             جميع المنتجات
           </h2>
-          <p className="text-center text-gray-600">تصفح مجموعتنا الكاملة من المنتجات</p>
-          <div className="w-24 h-1 mx-auto rounded" style={{ backgroundColor: settings.accentColor }}></div>
+          <p className="text-center" style={{ color: currentTheme.palette.textSecondary }}>تصفح مجموعتنا الكاملة من المنتجات</p>
+          <div className="w-24 h-1 mx-auto rounded" style={{ backgroundColor: currentTheme.palette.accent }}></div>
         </div>
 
         {products.length > 0 ? (
@@ -289,25 +311,25 @@ export default function StorePreview({ storeData }: StorePreviewProps) {
           </div>
         ) : (
           <div className="text-center py-12">
-            <div className="text-gray-400 mb-4">
+            <div className="mb-4" style={{ color: currentTheme.palette.textSecondary }}>
               <Package size={64} className="mx-auto" />
             </div>
-            <h3 className="text-xl font-semibold text-gray-600 mb-2">لا توجد منتجات بعد</h3>
-            <p className="text-gray-500">ابدأ بإضافة منتجات إلى متجرك</p>
+            <h3 className="text-xl font-semibold mb-2" style={{ color: currentTheme.palette.textSecondary }}>لا توجد منتجات بعد</h3>
+            <p style={{ color: currentTheme.palette.textSecondary }}>ابدأ بإضافة منتجات إلى متجرك</p>
           </div>
         )}
       </main>
 
       {/* Why Choose Us Section */}
       {settings.whyChooseUs.enabled && settings.whyChooseUs.items.length > 0 && (
-        <section className="py-16 bg-white">
+        <section className="py-16" style={{ backgroundColor: currentTheme.palette.surface }}>
           <div className="max-w-7xl mx-auto px-6">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold mb-2" style={{ color: settings.primaryColor }}>
+              <h2 className="text-3xl font-bold mb-2" style={{ color: currentTheme.palette.primary }}>
                 {settings.whyChooseUs.title}
               </h2>
-              <p className="text-gray-600">{settings.whyChooseUs.subtitle}</p>
-              <div className="w-24 h-1 mx-auto mt-4 rounded" style={{ backgroundColor: settings.accentColor }}></div>
+              <p style={{ color: currentTheme.palette.textSecondary }}>{settings.whyChooseUs.subtitle}</p>
+              <div className="w-24 h-1 mx-auto mt-4 rounded" style={{ backgroundColor: currentTheme.palette.accent }}></div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {settings.whyChooseUs.items.map((item) => {
@@ -316,12 +338,12 @@ export default function StorePreview({ storeData }: StorePreviewProps) {
                   <div key={item.id} className="text-center">
                     <div 
                       className="w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center"
-                      style={{ backgroundColor: `${settings.primaryColor}20` }}
+                      style={{ backgroundColor: `${currentTheme.palette.primary}20` }}
                     >
-                      <Icon size={32} style={{ color: settings.primaryColor }} />
+                      <Icon size={32} style={{ color: currentTheme.palette.primary }} />
                     </div>
                     <h3 className="text-xl font-semibold mb-2">{item.title}</h3>
-                    <p className="text-gray-600">{item.description}</p>
+                    <p style={{ color: currentTheme.palette.textSecondary }}>{item.description}</p>
                   </div>
                 );
               })}
@@ -332,14 +354,14 @@ export default function StorePreview({ storeData }: StorePreviewProps) {
 
       {/* FAQ Section */}
       {settings.faq.enabled && settings.faq.items.length > 0 && (
-        <section className="py-16 bg-gray-50">
+        <section className="py-16" style={{ backgroundColor: currentTheme.palette.background }}>
           <div className="max-w-4xl mx-auto px-6">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold mb-2" style={{ color: settings.primaryColor }}>
+              <h2 className="text-3xl font-bold mb-2" style={{ color: currentTheme.palette.primary }}>
                 {settings.faq.title}
               </h2>
-              <p className="text-gray-600">{settings.faq.subtitle}</p>
-              <div className="w-24 h-1 mx-auto mt-4 rounded" style={{ backgroundColor: settings.accentColor }}></div>
+              <p style={{ color: currentTheme.palette.textSecondary }}>{settings.faq.subtitle}</p>
+              <div className="w-24 h-1 mx-auto mt-4 rounded" style={{ backgroundColor: currentTheme.palette.accent }}></div>
             </div>
             <div className="space-y-4">
               {settings.faq.items.map((item) => (
@@ -417,10 +439,13 @@ function FAQItem({ item, primaryColor }: { item: any; primaryColor: string }) {
   const [isOpen, setIsOpen] = React.useState(false);
 
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+    <div className="rounded-lg shadow-sm border" style={{ 
+      backgroundColor: 'var(--surface-color)', 
+      borderColor: 'var(--border-color)' 
+    }}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full px-6 py-4 text-right flex justify-between items-center hover:bg-gray-50 transition-colors"
+        className="w-full px-6 py-4 text-right flex justify-between items-center hover:opacity-80 transition-colors"
       >
         <span className="font-medium">{item.question}</span>
         <ChevronDown 
@@ -431,7 +456,7 @@ function FAQItem({ item, primaryColor }: { item: any; primaryColor: string }) {
       </button>
       {isOpen && (
         <div className="px-6 pb-4">
-          <p className="text-gray-600">{item.answer}</p>
+          <p style={{ color: 'var(--text-secondary)' }}>{item.answer}</p>
         </div>
       )}
     </div>

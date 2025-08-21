@@ -1,7 +1,9 @@
 import { StoreData } from '../types/store';
+import { getThemeById } from '../types/store';
 
 export const generateStoreHTML = (storeData: StoreData): string => {
   const { settings, products } = storeData;
+  const currentTheme = getThemeById(settings.themeId);
 
   const featuredProducts = products.filter(p => p.isFeatured).slice(0, settings.productSections.featured.limit);
   const bestSellerProducts = products.filter(p => p.isBestSeller).slice(0, settings.productSections.bestSellers.limit);
@@ -293,8 +295,24 @@ export const generateStoreHTML = (storeData: StoreData): string => {
 
 export const generateStoreCSS = (storeData: StoreData): string => {
   const { settings } = storeData;
+  const currentTheme = getThemeById(settings.themeId);
 
-  return `/* Reset and Base Styles */
+  return `/* CSS Variables for Theme */
+:root {
+  --primary-color: ${currentTheme.palette.primary};
+  --secondary-color: ${currentTheme.palette.secondary};
+  --accent-color: ${currentTheme.palette.accent};
+  --text-color: ${currentTheme.palette.text};
+  --text-secondary: ${currentTheme.palette.textSecondary};
+  --background-color: ${currentTheme.palette.background};
+  --surface-color: ${currentTheme.palette.surface};
+  --border-color: ${currentTheme.palette.border};
+  --success-color: ${currentTheme.palette.success};
+  --warning-color: ${currentTheme.palette.warning};
+  --error-color: ${currentTheme.palette.error};
+}
+
+/* Reset and Base Styles */
 * {
     margin: 0;
     padding: 0;
@@ -304,8 +322,8 @@ export const generateStoreCSS = (storeData: StoreData): string => {
 body {
     font-family: '${settings.fontFamily}', sans-serif;
     line-height: 1.6;
-    color: #333;
-    background-color: #f8f9fa;
+    color: var(--text-color);
+    background-color: var(--background-color);
     direction: rtl;
 }
 
@@ -317,22 +335,22 @@ body {
 
 /* Header Styles */
 .header-classic {
-    background-color: #1a1a1a;
+    background-color: var(--primary-color);
     color: white;
     padding: 1.5rem 0;
 }
 
 .header-modern {
-    background: linear-gradient(135deg, ${settings.primaryColor}, ${settings.secondaryColor});
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
     color: white;
     padding: 1.5rem 0;
 }
 
 .header-minimal {
-    background-color: white;
-    color: #333;
+    background-color: var(--surface-color);
+    color: var(--text-color);
     padding: 1.5rem 0;
-    border-bottom: 1px solid #e2e8f0;
+    border-bottom: 1px solid var(--border-color);
 }
 
 .header-content {
@@ -374,7 +392,7 @@ body {
 }
 
 .cart-btn {
-    background: ${settings.accentColor};
+    background: var(--accent-color);
     color: white;
     border: none;
     padding: 0.75rem 1rem;
@@ -428,7 +446,7 @@ body {
 
 .hero-cta {
     display: inline-block;
-    background: ${settings.accentColor};
+    background: var(--accent-color);
     color: white;
     padding: 1rem 2rem;
     border-radius: 8px;
@@ -461,20 +479,20 @@ body {
 .section-title {
     font-size: 2rem;
     font-weight: bold;
-    color: ${settings.primaryColor};
+    color: var(--primary-color);
     margin-bottom: 0.5rem;
 }
 
 .section-subtitle {
     font-size: 1rem;
-    color: #666;
+    color: var(--text-secondary);
     margin-bottom: 0.5rem;
 }
 
 .section-line {
     width: 60px;
     height: 4px;
-    background-color: ${settings.accentColor};
+    background-color: var(--accent-color);
     margin: 0 auto;
     border-radius: 2px;
 }
@@ -500,7 +518,7 @@ body {
 
 /* Product Cards */
 .product-card {
-    background: white;
+    background: var(--surface-color);
     border-radius: 12px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
     overflow: hidden;
@@ -549,7 +567,7 @@ body {
 }
 
 .product-category {
-    background: ${settings.accentColor};
+    background: var(--accent-color);
     color: white;
     padding: 0.25rem 0.5rem;
     border-radius: 12px;
@@ -574,12 +592,12 @@ body {
     font-size: 1.125rem;
     font-weight: 600;
     margin-bottom: 0.5rem;
-    color: #1a1a1a;
+    color: var(--text-color);
 }
 
 .product-description {
     font-size: 0.875rem;
-    color: #666;
+    color: var(--text-secondary);
     margin-bottom: 1rem;
     line-height: 1.5;
 }
@@ -599,17 +617,17 @@ body {
 .product-price {
     font-size: 1.25rem;
     font-weight: bold;
-    color: ${settings.primaryColor};
+    color: var(--primary-color);
 }
 
 .product-original-price {
     font-size: 1rem;
-    color: #999;
+    color: var(--text-secondary);
     text-decoration: line-through;
 }
 
 .add-to-cart-btn {
-    background: ${settings.secondaryColor};
+    background: var(--secondary-color);
     color: white;
     border: none;
     padding: 0.5rem 1rem;
@@ -626,7 +644,7 @@ body {
 
 /* Why Choose Us Section */
 .why-choose-us-section {
-    background: white;
+    background: var(--surface-color);
     padding: 4rem 0;
 }
 
@@ -644,31 +662,31 @@ body {
 .why-choose-us-icon {
     width: 4rem;
     height: 4rem;
-    background: ${settings.primaryColor}20;
+    background: color-mix(in srgb, var(--primary-color) 20%, transparent);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     margin: 0 auto 1rem;
     font-size: 2rem;
-    color: ${settings.primaryColor};
+    color: var(--primary-color);
 }
 
 .why-choose-us-title {
     font-size: 1.25rem;
     font-weight: 600;
     margin-bottom: 0.5rem;
-    color: #1a1a1a;
+    color: var(--text-color);
 }
 
 .why-choose-us-description {
-    color: #666;
+    color: var(--text-secondary);
     line-height: 1.6;
 }
 
 /* FAQ Section */
 .faq-section {
-    background: #f8f9fa;
+    background: var(--background-color);
     padding: 4rem 0;
 }
 
@@ -678,7 +696,7 @@ body {
 }
 
 .faq-item {
-    background: white;
+    background: var(--surface-color);
     border-radius: 8px;
     margin-bottom: 1rem;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
@@ -700,14 +718,14 @@ body {
 }
 
 .faq-question:hover {
-    background: #f8f9fa;
+    background: color-mix(in srgb, var(--background-color) 50%, transparent);
 }
 
 .faq-icon {
     width: 20px;
     height: 20px;
     transition: transform 0.3s ease;
-    color: ${settings.primaryColor};
+    color: var(--primary-color);
 }
 
 .faq-item.active .faq-icon {
@@ -726,7 +744,7 @@ body {
 
 .faq-answer p {
     padding: 0 1.5rem 1.5rem;
-    color: #666;
+    color: var(--text-secondary);
     line-height: 1.6;
 }
 
@@ -734,7 +752,7 @@ body {
 .empty-state {
     text-align: center;
     padding: 4rem 2rem;
-    color: #666;
+    color: var(--text-secondary);
 }
 
 .empty-icon {
@@ -752,12 +770,12 @@ body {
 .empty-state h3 {
     font-size: 1.25rem;
     margin-bottom: 0.5rem;
-    color: #333;
+    color: var(--text-color);
 }
 
 /* Footer */
 .footer {
-    background-color: #1a1a1a;
+    background-color: var(--primary-color);
     color: white;
     padding: 3rem 0 1rem;
     margin-top: 4rem;
@@ -774,7 +792,7 @@ body {
     font-size: 1.125rem;
     font-weight: 600;
     margin-bottom: 1rem;
-    color: ${settings.primaryColor};
+    color: var(--accent-color);
 }
 
 .contact-info {
@@ -809,11 +827,11 @@ body {
 }
 
 .footer-links a:hover {
-    color: ${settings.primaryColor};
+    color: var(--accent-color);
 }
 
 .footer-bottom {
-    border-top: 1px solid #333;
+    border-top: 1px solid color-mix(in srgb, white 20%, transparent);
     padding-top: 1rem;
     text-align: center;
 }

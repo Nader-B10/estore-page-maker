@@ -13,6 +13,7 @@ const defaultSettings: StoreSettings = {
   description: 'أفضل المنتجات بأسعار منافسة',
   logo: '',
   favicon: '',
+  themeId: 'blue-modern',
   primaryColor: '#3b82f6',
   secondaryColor: '#1e40af',
   accentColor: '#f59e0b',
