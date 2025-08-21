@@ -141,7 +141,9 @@ const initialStoreData: StoreData = {
       animation: 'pulse',
       showOnMobile: true,
       showOnDesktop: true
-    }
+    },
+    customThemes: [],
+    currentTheme: 'professional-blue'
   },
   products: [],
   pages: [],
