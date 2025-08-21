@@ -3,6 +3,7 @@ import { Settings, Package, Eye, Download, Loader } from 'lucide-react';
 import { StoreData, StoreSettings, Product } from './types/store';
 import SettingsPanel from './components/StoreBuilder/SettingsPanel';
 import ProductManager from './components/StoreBuilder/ProductManager';
+import PageManager from './components/StoreBuilder/PageManager';
 import StorePreview from './components/StoreBuilder/StorePreview';
 import SectionsManager from './components/StoreBuilder/SectionsManager';
 import { exportStore } from './utils/fileExporter';
@@ -20,6 +21,17 @@ const defaultSettings: StoreSettings = {
   headerTemplate: 'modern',
   footerTemplate: 'default',
   footerText: '',
+  headerLinks: [
+    { id: '1', text: 'الرئيسية', url: '#home', type: 'internal', isVisible: true, order: 1 },
+    { id: '2', text: 'المنتجات', url: '#products', type: 'internal', isVisible: true, order: 2 },
+    { id: '3', text: 'من نحن', url: '#about', type: 'internal', isVisible: true, order: 3 },
+    { id: '4', text: 'اتصل بنا', url: '#contact', type: 'internal', isVisible: true, order: 4 }
+  ],
+  footerLinks: [
+    { id: '1', text: 'سياسة الخصوصية', url: '#privacy', type: 'page', isVisible: true, order: 1 },
+    { id: '2', text: 'شروط الاستخدام', url: '#terms', type: 'page', isVisible: true, order: 2 },
+    { id: '3', text: 'الأسئلة الشائعة', url: '#faq', type: 'internal', isVisible: true, order: 3 }
+  ],
   contactInfo: {
     email: '',
     phone: '',
@@ -111,7 +123,31 @@ function App() {
   const [isExporting, setIsExporting] = useState(false);
   const [storeData, setStoreData] = useState<StoreData>({
     settings: defaultSettings,
-    products: []
+    products: [],
+    customPages: [
+      {
+        id: '1',
+        title: 'سياسة الخصوصية',
+        slug: 'privacy-policy',
+        content: 'نحن نحترم خصوصيتك ونلتزم بحماية معلوماتك الشخصية...',
+        metaTitle: 'سياسة الخصوصية',
+        metaDescription: 'تعرف على سياسة الخصوصية الخاصة بمتجرنا',
+        isPublished: true,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      },
+      {
+        id: '2',
+        title: 'شروط الاستخدام',
+        slug: 'terms-of-service',
+        content: 'شروط وأحكام استخدام متجرنا الإلكتروني...',
+        metaTitle: 'شروط الاستخدام',
+        metaDescription: 'اطلع على شروط وأحكام استخدام متجرنا',
+        isPublished: true,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      }
+    ]
   });
 
   const handleUpdateSettings = (newSettings: StoreSettings) => {
@@ -142,6 +178,26 @@ function App() {
     }));
   };
 
+  const handleAddPage = (page: CustomPage) => {
+    setStoreData(prev => ({
+      ...prev,
+      customPages: [...prev.customPages, page]
+    }));
+  };
+
+  const handleEditPage = (id: string, updatedPage: CustomPage) => {
+    setStoreData(prev => ({
+      ...prev,
+      customPages: prev.customPages.map(p => p.id === id ? updatedPage : p)
+    }));
+  };
+
+  const handleDeletePage = (id: string) => {
+    setStoreData(prev => ({
+      ...prev,
+      customPages: prev.customPages.filter(p => p.id !== id)
+    }));
+  };
   const handleExport = async () => {
     setIsExporting(true);
     try {
@@ -163,6 +219,7 @@ function App() {
     { id: 'settings', label: 'الإعدادات', icon: Settings },
     { id: 'sections', label: 'الأقسام', icon: Package },
     { id: 'products', label: 'المنتجات', icon: Package },
+    { id: 'pages', label: 'الصفحات', icon: Package },
     { id: 'preview', label: 'معاينة', icon: Eye }
   ];
 
@@ -235,6 +292,7 @@ function App() {
               <SettingsPanel
                 settings={storeData.settings}
                 onUpdateSettings={handleUpdateSettings}
+                customPages={storeData.customPages}
               />
             )}
             
@@ -252,6 +310,15 @@ function App() {
                 onAddProduct={handleAddProduct}
                 onEditProduct={handleEditProduct}
                 onDeleteProduct={handleDeleteProduct}
+              />
+            )}
+            
+            {activeTab === 'pages' && (
+              <PageManager
+                pages={storeData.customPages}
+                onAddPage={handleAddPage}
+                onEditPage={handleEditPage}
+                onDeletePage={handleDeletePage}
               />
             )}
           </div>

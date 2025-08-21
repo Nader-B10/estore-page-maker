@@ -1,6 +1,6 @@
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
-import { StoreData } from '../types/store';
+import { StoreData, CustomPage, StoreSettings } from '../types/store';
 import { generateStoreHTML, generateStoreCSS, generateStoreJS } from './storeGenerator';
 
 export const exportStore = async (storeData: StoreData) => {
@@ -74,6 +74,7 @@ ${storeData.settings.description}
 - css/style.css - ملف الأنماط الأساسي
 - js/main.js - ملف الجافا سكريبت للوظائف التفاعلية
 - images/ - مجلد صور المنتجات
+${storeData.customPages.length > 0 ? `\n## الصفحات المخصصة\n${storeData.customPages.map(page => `- ${page.slug}.html - ${page.title}`).join('\n')}` : ''}
 
 ## كيفية الاستخدام
 1. قم برفع الملفات إلى خادم ويب
@@ -88,6 +89,14 @@ ${storeData.settings.description}
 `;
   
   zip.file('README.md', readmeContent);
+  
+  // Create custom pages
+  for (const page of storeData.customPages) {
+    if (page.isPublished) {
+      const pageHTML = generatePageHTML(page, storeData.settings);
+      zip.file(`${page.slug}.html`, pageHTML);
+    }
+  }
   
   // Generate and download the zip file
   try {

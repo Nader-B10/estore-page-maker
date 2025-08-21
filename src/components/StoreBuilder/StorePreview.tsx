@@ -157,6 +157,22 @@ export default function StorePreview({ storeData }: StorePreviewProps) {
                 <p className="text-sm opacity-90">{settings.description}</p>
               </div>
             </div>
+            
+            {/* Header Navigation */}
+            <nav className="hidden md:flex items-center gap-6">
+              {settings.headerLinks.filter(link => link.isVisible).map((link) => (
+                <a
+                  key={link.id}
+                  href={link.url}
+                  className="text-white hover:opacity-80 transition-opacity font-medium"
+                  target={link.type === 'external' ? '_blank' : undefined}
+                  rel={link.type === 'external' ? 'noopener noreferrer' : undefined}
+                >
+                  {link.text}
+                </a>
+              ))}
+            </nav>
+            
             {settings.whatsappSettings.enabled && settings.whatsappSettings.phoneNumber && (
               <div className="flex items-center gap-4">
                 <a
@@ -370,9 +386,17 @@ export default function StorePreview({ storeData }: StorePreviewProps) {
             <div>
               <h3 className="font-semibold mb-3">روابط سريعة</h3>
               <div className="space-y-1">
-                <a href="#" className="block text-sm text-gray-300 hover:text-white">الرئيسية</a>
-                <a href="#" className="block text-sm text-gray-300 hover:text-white">المنتجات</a>
-                <a href="#" className="block text-sm text-gray-300 hover:text-white">اتصل بنا</a>
+                {settings.footerLinks.filter(link => link.isVisible).map((link) => (
+                  <a
+                    key={link.id}
+                    href={link.url}
+                    className="block text-sm text-gray-300 hover:text-white transition-colors"
+                    target={link.type === 'external' ? '_blank' : undefined}
+                    rel={link.type === 'external' ? 'noopener noreferrer' : undefined}
+                  >
+                    {link.text}
+                  </a>
+                ))}
               </div>
             </div>
           </div>

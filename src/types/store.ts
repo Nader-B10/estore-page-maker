@@ -83,6 +83,8 @@ export interface StoreSettings {
   headerTemplate: string;
   footerTemplate: string;
   footerText: string;
+  headerLinks: LinkItem[];
+  footerLinks: LinkItem[];
   contactInfo: {
     email: string;
     phone: string;
@@ -103,7 +105,28 @@ export interface StoreSettings {
   faq: FAQSection;
 }
 
+export interface LinkItem {
+  id: string;
+  text: string;
+  url: string;
+  type: 'internal' | 'external' | 'category' | 'page';
+  isVisible: boolean;
+  order: number;
+}
+
+export interface CustomPage {
+  id: string;
+  title: string;
+  slug: string;
+  content: string;
+  metaTitle?: string;
+  metaDescription?: string;
+  isPublished: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
 export interface StoreData {
   settings: StoreSettings;
   products: Product[];
+  customPages: CustomPage[];
 }
