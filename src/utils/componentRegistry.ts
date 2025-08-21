@@ -5,12 +5,20 @@ import { StoreSettings, CustomPage } from '../types/store';
 import ModernHeader1, { ModernHeader1Config } from '../components/StoreBuilder/sections/headers/ModernHeader1';
 import ClassicHeader, { ClassicHeaderConfig } from '../components/StoreBuilder/sections/headers/ClassicHeader';
 import MinimalHeader, { MinimalHeaderConfig } from '../components/StoreBuilder/sections/headers/MinimalHeader';
+import ElegantHeader, { ElegantHeaderConfig } from '../components/StoreBuilder/sections/headers/ElegantHeader';
+import CorporateHeader, { CorporateHeaderConfig } from '../components/StoreBuilder/sections/headers/CorporateHeader';
+import CreativeHeader, { CreativeHeaderConfig } from '../components/StoreBuilder/sections/headers/CreativeHeader';
 
 // Footer Components
 import DefaultFooter, { DefaultFooterConfig } from '../components/StoreBuilder/sections/footers/DefaultFooter';
+import SimpleFooter, { SimpleFooterConfig } from '../components/StoreBuilder/sections/footers/SimpleFooter';
+import DetailedFooter, { DetailedFooterConfig } from '../components/StoreBuilder/sections/footers/DetailedFooter';
+import ModernFooter, { ModernFooterConfig } from '../components/StoreBuilder/sections/footers/ModernFooter';
 
 // Hero Components
 import HeroVariantA, { HeroVariantAConfig } from '../components/StoreBuilder/sections/hero/HeroVariantA';
+import HeroVariantB, { HeroVariantBConfig } from '../components/StoreBuilder/sections/hero/HeroVariantB';
+import HeroVariantC, { HeroVariantCConfig } from '../components/StoreBuilder/sections/hero/HeroVariantC';
 
 export interface ComponentConfig {
   id: string;
@@ -57,6 +65,18 @@ export const headerComponents: Record<string, {
   'minimal-header': {
     component: MinimalHeader,
     config: MinimalHeaderConfig
+  },
+  'elegant-header': {
+    component: ElegantHeader,
+    config: ElegantHeaderConfig
+  },
+  'corporate-header': {
+    component: CorporateHeader,
+    config: CorporateHeaderConfig
+  },
+  'creative-header': {
+    component: CreativeHeader,
+    config: CreativeHeaderConfig
   }
 };
 
@@ -67,6 +87,18 @@ export const footerComponents: Record<string, {
   'default-footer': {
     component: DefaultFooter,
     config: DefaultFooterConfig
+  },
+  'simple-footer': {
+    component: SimpleFooter,
+    config: SimpleFooterConfig
+  },
+  'detailed-footer': {
+    component: DetailedFooter,
+    config: DetailedFooterConfig
+  },
+  'modern-footer': {
+    component: ModernFooter,
+    config: ModernFooterConfig
   }
 };
 
@@ -77,6 +109,14 @@ export const heroComponents: Record<string, {
   'hero-variant-a': {
     component: HeroVariantA,
     config: HeroVariantAConfig
+  },
+  'hero-variant-b': {
+    component: HeroVariantB,
+    config: HeroVariantBConfig
+  },
+  'hero-variant-c': {
+    component: HeroVariantC,
+    config: HeroVariantCConfig
   }
 };
 
@@ -158,6 +198,122 @@ export const generateHeaderHTML = (templateId: string, settings: StoreSettings):
         </header>
       `;
     
+    case 'elegant-header':
+      return `
+        <header class="bg-white shadow-lg border-b-4 border-gray-100">
+          <div class="bg-gray-50 py-2 px-6 text-sm">
+            <div class="max-w-7xl mx-auto flex justify-between items-center">
+              <div class="flex items-center gap-4 text-gray-600">
+                ${settings.contactInfo.email ? `<span>📧 ${settings.contactInfo.email}</span>` : ''}
+                ${settings.contactInfo.phone ? `<span>📞 ${settings.contactInfo.phone}</span>` : ''}
+              </div>
+            </div>
+          </div>
+          <div class="py-6 px-6">
+            <div class="max-w-7xl mx-auto">
+              <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center gap-4">
+                  ${settings.logo ? `<img src="${settings.logo}" alt="Logo" class="w-16 h-16 object-cover rounded-xl shadow-md border-2 border-gray-100" />` : ''}
+                  <div>
+                    <h1 class="text-3xl font-bold text-gray-800 mb-1">${settings.storeName}</h1>
+                    <p class="text-gray-600 text-sm">${settings.description}</p>
+                  </div>
+                </div>
+              </div>
+              <div class="mb-6">
+                <div class="relative max-w-2xl mx-auto">
+                  <input type="text" placeholder="ابحث عن المنتجات..." class="w-full pl-12 pr-6 py-4 border-2 border-gray-200 rounded-full focus:outline-none focus:border-blue-500 text-lg" />
+                  <button class="absolute left-2 top-1/2 transform -translate-y-1/2 px-6 py-2 rounded-full text-white font-medium" style="background-color: ${settings.primaryColor}">بحث</button>
+                </div>
+              </div>
+              <nav class="flex justify-center">
+                <div class="flex items-center gap-8 bg-gray-50 px-8 py-4 rounded-full">
+                  ${settings.headerLinks.filter(link => link.isVisible).map(link => `
+                    <a href="${link.url}" class="text-gray-700 hover:text-blue-600 transition-colors font-medium text-lg relative group">
+                      ${link.text}
+                    </a>
+                  `).join('')}
+                </div>
+              </nav>
+            </div>
+          </div>
+        </header>
+      `;
+
+    case 'corporate-header':
+      return `
+        <header class="bg-white">
+          <div class="bg-gray-800 text-white py-2 px-6 text-sm">
+            <div class="max-w-7xl mx-auto flex justify-between items-center">
+              <div class="flex items-center gap-6">
+                ${settings.contactInfo.phone ? `<span>📞 ${settings.contactInfo.phone}</span>` : ''}
+                ${settings.contactInfo.email ? `<span>📧 ${settings.contactInfo.email}</span>` : ''}
+              </div>
+            </div>
+          </div>
+          <div class="py-6 px-6 border-b border-gray-200">
+            <div class="max-w-7xl mx-auto">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-6">
+                  ${settings.logo ? `<img src="${settings.logo}" alt="Logo" class="w-20 h-20 object-cover rounded-lg shadow-md" />` : ''}
+                  <div>
+                    <h1 class="text-4xl font-bold text-gray-800 mb-2">${settings.storeName}</h1>
+                    <p class="text-gray-600 text-lg">${settings.description}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="bg-gray-50 py-4 px-6">
+            <div class="max-w-7xl mx-auto">
+              <nav class="flex justify-center">
+                <div class="flex items-center gap-8">
+                  ${settings.headerLinks.filter(link => link.isVisible).map(link => `
+                    <a href="${link.url}" class="text-gray-700 hover:text-blue-600 transition-colors font-semibold text-lg px-4 py-2 rounded-lg hover:bg-white hover:shadow-md">
+                      ${link.text}
+                    </a>
+                  `).join('')}
+                </div>
+              </nav>
+            </div>
+          </div>
+        </header>
+      `;
+
+    case 'creative-header':
+      return `
+        <header class="relative overflow-hidden" style="background: linear-gradient(135deg, ${settings.primaryColor}15, ${settings.secondaryColor}15, ${settings.accentColor}15);">
+          <div class="absolute inset-0 overflow-hidden">
+            <div class="absolute -top-4 -right-4 w-24 h-24 bg-gradient-to-br from-yellow-400/20 to-orange-400/20 rounded-full animate-pulse"></div>
+            <div class="absolute top-1/2 -left-8 w-32 h-32 bg-gradient-to-br from-purple-400/20 to-pink-400/20 rounded-full"></div>
+          </div>
+          <div class="relative z-10 py-8 px-6">
+            <div class="max-w-7xl mx-auto">
+              <div class="text-center mb-8">
+                ${settings.logo ? `
+                  <div class="mb-6 flex justify-center">
+                    <img src="${settings.logo}" alt="Logo" class="w-24 h-24 object-cover rounded-full shadow-2xl border-4 border-white" />
+                  </div>
+                ` : ''}
+                <h1 class="text-5xl md:text-6xl font-black mb-4 bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 bg-clip-text text-transparent">
+                  ${settings.storeName}
+                </h1>
+                <p class="text-xl text-gray-700 mb-6">✨ ${settings.description} ✨</p>
+              </div>
+              <nav class="flex justify-center">
+                <div class="flex items-center gap-2 bg-white/90 backdrop-blur-sm px-6 py-4 rounded-full shadow-xl">
+                  ${settings.headerLinks.filter(link => link.isVisible).map(link => `
+                    <a href="${link.url}" class="px-6 py-3 rounded-full font-semibold transition-all duration-300 hover:shadow-lg" style="background: linear-gradient(135deg, ${settings.primaryColor}20, ${settings.accentColor}20); color: ${settings.primaryColor}">
+                      ${link.text}
+                    </a>
+                  `).join('')}
+                </div>
+              </nav>
+            </div>
+          </div>
+        </header>
+      `;
+
     case 'minimal-header':
       return `
         <header class="py-6 px-6 bg-white border-b border-gray-100 shadow-sm">

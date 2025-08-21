@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { Settings, Package, Eye, Loader, Download } from 'lucide-react';
+import { Settings, Package, Eye, Loader, Download, HelpCircle } from 'lucide-react';
 import { StoreData, StoreSettings, Product } from './types/store';
 import SettingsPanel from './components/StoreBuilder/SettingsPanel';
 import ProductManager from './components/StoreBuilder/ProductManager';
 import PageManager from './components/StoreBuilder/PageManager';
 import StorePreview from './components/StoreBuilder/StorePreview';
 import SectionsManager from './components/StoreBuilder/SectionsManager';
+import DocumentationViewer from './components/Documentation/DocumentationViewer';
 import { exportStore } from './utils/fileExporter';
 
 const defaultSettings: StoreSettings = {
@@ -122,6 +123,7 @@ const defaultSettings: StoreSettings = {
 function App() {
   const [activeTab, setActiveTab] = useState('settings');
   const [isExporting, setIsExporting] = useState(false);
+  const [isDocumentationOpen, setIsDocumentationOpen] = useState(false);
   const [storeData, setStoreData] = useState<StoreData>({
     settings: defaultSettings,
     products: [],
@@ -257,6 +259,14 @@ function App() {
                 </>
               )}
             </button>
+            
+            <button
+              onClick={() => setIsDocumentationOpen(true)}
+              className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-6 py-3 rounded-lg flex items-center gap-2 hover:from-blue-700 hover:to-blue-800 transition-all duration-200 shadow-lg hover:shadow-xl"
+            >
+              <HelpCircle className="w-5 h-5" />
+              دليل المطور
+            </button>
           </div>
         </div>
       </header>
@@ -372,6 +382,12 @@ function App() {
           </div>
         </div>
       )}
+
+      {/* Documentation Viewer */}
+      <DocumentationViewer 
+        isOpen={isDocumentationOpen} 
+        onClose={() => setIsDocumentationOpen(false)} 
+      />
     </div>
   );
 }
