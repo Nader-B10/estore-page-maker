@@ -7,124 +7,143 @@ import { StoreData } from './types/store';
 const initialStoreData: StoreData = {
   settings: {
     storeName: 'متجري الإلكتروني',
-    storeDescription: 'أفضل المنتجات بأسعار منافسة',
+    description: 'أفضل المنتجات بأسعار منافسة',
     logo: '',
-    favicon: '',
-    currency: 'ريال',
-    language: 'ar',
-    theme: 'blue',
-    customColors: {
-      primary: '#3B82F6',
-      secondary: '#64748B',
-      accent: '#F59E0B',
-      background: '#FFFFFF',
-      text: '#1F2937'
+    primaryColor: '#3B82F6',
+    secondaryColor: '#64748B',
+    accentColor: '#F59E0B',
+    fontFamily: 'Inter, sans-serif',
+    layout: 'grid',
+    headerStyle: 'classic',
+    footerText: '',
+    contactInfo: {
+      email: '',
+      phone: '',
+      address: ''
+    },
+    productSections: {
+      featured: {
+        enabled: true,
+        title: 'المنتجات المميزة',
+        subtitle: 'اكتشف أفضل منتجاتنا',
+        limit: 8
+      },
+      bestSellers: {
+        enabled: true,
+        title: 'الأكثر مبيعاً',
+        subtitle: 'المنتجات الأكثر شعبية',
+        limit: 8
+      },
+      onSale: {
+        enabled: true,
+        title: 'عروض خاصة',
+        subtitle: 'منتجات بأسعار مخفضة',
+        limit: 8
+      }
+    },
+    heroSection: {
+      enabled: true,
+      title: 'مرحباً بك في متجرنا',
+      subtitle: 'اكتشف أفضل المنتجات بأسعار منافسة',
+      ctaText: 'تسوق الآن',
+      ctaLink: '#products',
+      backgroundType: 'gradient',
+      backgroundImage: '',
+      overlayOpacity: 50,
+      textAlignment: 'center',
+      height: 'medium',
+      ctaStyle: 'primary',
+      animation: 'fadeIn'
+    },
+    whyChooseUs: {
+      enabled: true,
+      title: 'لماذا تختارنا؟',
+      subtitle: 'نقدم لك أفضل تجربة تسوق',
+      backgroundColor: '#F9FAFB',
+      textColor: '#1F2937',
+      layout: 'grid',
+      columns: 3,
+      items: [
+        {
+          id: '1',
+          title: 'شحن سريع',
+          description: 'توصيل سريع وآمن لجميع المناطق',
+          icon: 'truck'
+        },
+        {
+          id: '2',
+          title: 'ضمان الجودة',
+          description: 'منتجات عالية الجودة مع ضمان شامل',
+          icon: 'shield'
+        },
+        {
+          id: '3',
+          title: 'دعم 24/7',
+          description: 'فريق دعم متاح على مدار الساعة',
+          icon: 'headphones'
+        }
+      ]
+    },
+    faq: {
+      enabled: true,
+      title: 'الأسئلة الشائعة',
+      subtitle: 'إجابات على أكثر الأسئلة شيوعاً',
+      backgroundColor: '#FFFFFF',
+      style: 'accordion',
+      items: [
+        {
+          id: '1',
+          question: 'كيف يمكنني تتبع طلبي؟',
+          answer: 'يمكنك تتبع طلبك من خلال رقم التتبع الذي سيتم إرساله إليك عبر الواتساب'
+        },
+        {
+          id: '2',
+          question: 'ما هي طرق الدفع المتاحة؟',
+          answer: 'نقبل الدفع عند الاستلام والتحويل البنكي'
+        }
+      ]
+    },
+    header: {
+      backgroundColor: '#FFFFFF',
+      textColor: '#1F2937',
+      position: 'sticky',
+      logoSize: 'medium',
+      logoPosition: 'left',
+      layout: 'horizontal',
+      showSearch: true,
+      showLanguage: false,
+      showCurrency: false,
+      navigation: [],
+      topBar: {
+        enabled: false,
+        text: '',
+        backgroundColor: '#1F2937',
+        textColor: '#FFFFFF'
+      },
+      announcement: {
+        enabled: false,
+        text: '',
+        backgroundColor: '#3B82F6',
+        textColor: '#FFFFFF'
+      }
     },
     whatsapp: {
+      enabled: true,
       number: '+966501234567',
       message: 'مرحباً، أريد الاستفسار عن المنتج: {productName}',
       includeProductName: true,
       includeProductPrice: true,
       includeProductDescription: false,
-      includeProductImage: false,
+      buttonText: 'اطلب عبر واتساب',
       buttonStyle: 'primary',
       buttonSize: 'medium',
-      position: 'product',
-      showFloating: true,
+      showFloating: false,
       animation: 'pulse',
       showOnMobile: true,
       showOnDesktop: true
-    },
-    seo: {
-      title: 'متجري الإلكتروني',
-      description: 'أفضل المنتجات بأسعار منافسة',
-      keywords: 'متجر, إلكتروني, منتجات',
-      ogImage: ''
-    },
-    analytics: {
-      googleAnalytics: '',
-      facebookPixel: '',
-      tiktokPixel: ''
-    },
-    social: {
-      facebook: '',
-      twitter: '',
-      instagram: '',
-      youtube: '',
-      tiktok: '',
-      snapchat: ''
     }
   },
-  header: {
-    style: 'modern',
-    layout: 'horizontal',
-    position: 'sticky',
-    showLogo: true,
-    showSearch: true,
-    showLanguage: false,
-    showCurrency: false,
-    navigation: [],
-    customization: {
-      backgroundColor: '#FFFFFF',
-      textColor: '#1F2937',
-      logoHeight: 40,
-      showShadow: true,
-      showBorder: false,
-      borderColor: '#E5E7EB'
-    }
-  },
-  footer: {
-    style: 'modern',
-    showNewsletter: true,
-    showSocial: true,
-    columns: [],
-    customization: {
-      backgroundColor: '#1F2937',
-      textColor: '#FFFFFF',
-      linkColor: '#60A5FA'
-    },
-    newsletter: {
-      title: 'اشترك في النشرة الإخبارية',
-      description: 'احصل على آخر العروض والمنتجات الجديدة',
-      placeholder: 'أدخل بريدك الإلكتروني',
-      buttonText: 'اشتراك'
-    }
-  },
-  products: [],
-  pages: [],
-  sections: {
-    hero: {
-      enabled: true,
-      style: 'modern',
-      title: 'مرحباً بك في متجرنا',
-      subtitle: 'اكتشف أفضل المنتجات بأسعار منافسة',
-      buttonText: 'تسوق الآن',
-      buttonLink: '#products',
-      backgroundType: 'color',
-      backgroundColor: '#F3F4F6',
-      backgroundImage: '',
-      showScrollIndicator: true,
-      animation: 'fadeIn'
-    },
-    features: {
-      enabled: true,
-      style: 'grid',
-      title: 'لماذا تختارنا؟',
-      items: []
-    },
-    testimonials: {
-      enabled: true,
-      style: 'carousel',
-      title: 'آراء العملاء',
-      items: []
-    },
-    faq: {
-      enabled: true,
-      style: 'accordion',
-      title: 'الأسئلة الشائعة',
-      items: []
-    }
-  }
+  products: []
 };
 
 createRoot(document.getElementById('root')!).render(
