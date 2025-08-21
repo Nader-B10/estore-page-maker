@@ -3,6 +3,10 @@ import { StoreData } from '../types/store';
 export const generateStoreHTML = (storeData: StoreData): string => {
   const { settings, products } = storeData;
 
+  const featuredProducts = products.filter(p => p.isFeatured).slice(0, settings.productSections.featured.limit);
+  const bestSellerProducts = products.filter(p => p.isBestSeller).slice(0, settings.productSections.bestSellers.limit);
+  const onSaleProducts = products.filter(p => p.isOnSale).slice(0, settings.productSections.onSale.limit);
+
   const getLayoutClass = () => {
     switch (settings.layout) {
       case 'list':
@@ -25,24 +29,33 @@ export const generateStoreHTML = (storeData: StoreData): string => {
     }
   };
 
-  const productsHTML = products
-    .map(
-      (product) => `
-    <div class="product-card">
+  const generateProductHTML = (product: any) => `
+    <div class="product-card" data-product-id="${product.id}">
       <div class="product-image">
         <img src="images/${product.id}.jpg" alt="${product.name}" />
-        ${product.category ? `<span class="product-category">${product.category}</span>` : ''}
+        <div class="product-badges">
+          ${product.category ? `<span class="product-category">${product.category}</span>` : ''}
+          ${product.isOnSale && product.discountPercentage ? `<span class="discount-badge">-${product.discountPercentage}%</span>` : ''}
+        </div>
       </div>
       <div class="product-content">
         <h3 class="product-title">${product.name}</h3>
         <p class="product-description">${product.description}</p>
         <div class="product-footer">
-          <span class="product-price">$${product.price}</span>
+          <div class="product-price-container">
+            <span class="product-price">$${product.price}</span>
+            ${product.originalPrice && product.originalPrice > product.price ? 
+              `<span class="product-original-price">$${product.originalPrice}</span>` : ''}
+          </div>
           <button class="add-to-cart-btn">أضف للسلة</button>
         </div>
       </div>
     </div>
-  `
+  `;
+
+  const productsHTML = products
+    .map(
+      (product) => generateProductHTML(product)
     )
     .join('');
 
@@ -53,6 +66,7 @@ export const generateStoreHTML = (storeData: StoreData): string => {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>${settings.storeName}</title>
     <meta name="description" content="${settings.description}">
+    ${settings.favicon ? `<link rel="icon" type="image/x-icon" href="${settings.favicon}">` : ''}
     <link href="https://fonts.googleapis.com/css2?family=${settings.fontFamily.replace(' ', '+')}:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
 </head>
@@ -79,11 +93,66 @@ export const generateStoreHTML = (storeData: StoreData): string => {
         </div>
     </header>
 
+    ${settings.heroSection.enabled ? `
+    <section class="hero-section" ${settings.heroSection.backgroundImage ? 
+      `style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('${settings.heroSection.backgroundImage}')"` : 
+      `style="background: linear-gradient(135deg, ${settings.primaryColor}, ${settings.secondaryColor})"`
+    }>
+        <div class="container">
+            <div class="hero-content">
+                <h2 class="hero-title">${settings.heroSection.title}</h2>
+                <p class="hero-subtitle">${settings.heroSection.subtitle}</p>
+                <a href="${settings.heroSection.ctaLink}" class="hero-cta">${settings.heroSection.ctaText}</a>
+            </div>
+        </div>
+    </section>
+    ` : ''}
+
     <main class="main-content">
         <div class="container">
+            ${settings.productSections.featured.enabled && featuredProducts.length > 0 ? `
+            <section class="products-section" id="featured">
+                <div class="section-header">
+                    <h2 class="section-title">${settings.productSections.featured.title}</h2>
+                    <p class="section-subtitle">${settings.productSections.featured.subtitle}</p>
+                    <div class="section-line"></div>
+                </div>
+                <div class="products-container ${getLayoutClass()}">
+                    ${featuredProducts.map(product => generateProductHTML(product)).join('')}
+                </div>
+            </section>
+            ` : ''}
+
+            ${settings.productSections.bestSellers.enabled && bestSellerProducts.length > 0 ? `
+            <section class="products-section" id="bestsellers">
+                <div class="section-header">
+                    <h2 class="section-title">${settings.productSections.bestSellers.title}</h2>
+                    <p class="section-subtitle">${settings.productSections.bestSellers.subtitle}</p>
+                    <div class="section-line"></div>
+                </div>
+                <div class="products-container ${getLayoutClass()}">
+                    ${bestSellerProducts.map(product => generateProductHTML(product)).join('')}
+                </div>
+            </section>
+            ` : ''}
+
+            ${settings.productSections.onSale.enabled && onSaleProducts.length > 0 ? `
+            <section class="products-section" id="onsale">
+                <div class="section-header">
+                    <h2 class="section-title">${settings.productSections.onSale.title}</h2>
+                    <p class="section-subtitle">${settings.productSections.onSale.subtitle}</p>
+                    <div class="section-line"></div>
+                </div>
+                <div class="products-container ${getLayoutClass()}">
+                    ${onSaleProducts.map(product => generateProductHTML(product)).join('')}
+                </div>
+            </section>
+            ` : ''}
+
             <section class="products-section">
                 <div class="section-header">
-                    <h2 class="section-title">منتجاتنا</h2>
+                    <h2 class="section-title">جميع المنتجات</h2>
+                    <p class="section-subtitle">تصفح مجموعتنا الكاملة من المنتجات</p>
                     <div class="section-line"></div>
                 </div>
 
@@ -105,6 +174,56 @@ export const generateStoreHTML = (storeData: StoreData): string => {
             </section>
         </div>
     </main>
+
+    ${settings.whyChooseUs.enabled && settings.whyChooseUs.items.length > 0 ? `
+    <section class="why-choose-us-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">${settings.whyChooseUs.title}</h2>
+                <p class="section-subtitle">${settings.whyChooseUs.subtitle}</p>
+                <div class="section-line"></div>
+            </div>
+            <div class="why-choose-us-grid">
+                ${settings.whyChooseUs.items.map(item => `
+                <div class="why-choose-us-item">
+                    <div class="why-choose-us-icon">
+                        <i class="icon-${item.icon}"></i>
+                    </div>
+                    <h3 class="why-choose-us-title">${item.title}</h3>
+                    <p class="why-choose-us-description">${item.description}</p>
+                </div>
+                `).join('')}
+            </div>
+        </div>
+    </section>
+    ` : ''}
+
+    ${settings.faq.enabled && settings.faq.items.length > 0 ? `
+    <section class="faq-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">${settings.faq.title}</h2>
+                <p class="section-subtitle">${settings.faq.subtitle}</p>
+                <div class="section-line"></div>
+            </div>
+            <div class="faq-container">
+                ${settings.faq.items.map((item, index) => `
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFAQ(${index})">
+                        <span>${item.question}</span>
+                        <svg class="faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </button>
+                    <div class="faq-answer" id="faq-${index}">
+                        <p>${item.answer}</p>
+                    </div>
+                </div>
+                `).join('')}
+            </div>
+        </div>
+    </section>
+    ` : ''}
 
     <footer class="footer">
         <div class="container">
@@ -278,6 +397,53 @@ body {
     height: 20px;
 }
 
+/* Hero Section */
+.hero-section {
+    background-size: cover;
+    background-position: center;
+    color: white;
+    text-align: center;
+    padding: 5rem 0;
+    position: relative;
+}
+
+.hero-content {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.hero-title {
+    font-size: 3rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.hero-subtitle {
+    font-size: 1.25rem;
+    margin-bottom: 2rem;
+    opacity: 0.9;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+}
+
+.hero-cta {
+    display: inline-block;
+    background: ${settings.accentColor};
+    color: white;
+    padding: 1rem 2rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.hero-cta:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+}
+
 /* Main Content */
 .main-content {
     padding: 3rem 0;
@@ -296,6 +462,12 @@ body {
     font-size: 2rem;
     font-weight: bold;
     color: ${settings.primaryColor};
+    margin-bottom: 0.5rem;
+}
+
+.section-subtitle {
+    font-size: 1rem;
+    color: #666;
     margin-bottom: 0.5rem;
 }
 
@@ -367,16 +539,31 @@ body {
     transform: scale(1.05);
 }
 
-.product-category {
+.product-badges {
     position: absolute;
     top: 0.5rem;
     right: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.product-category {
     background: ${settings.accentColor};
     color: white;
     padding: 0.25rem 0.5rem;
     border-radius: 12px;
     font-size: 0.75rem;
     font-weight: 500;
+}
+
+.discount-badge {
+    background: #ef4444;
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: bold;
 }
 
 .product-content {
@@ -403,10 +590,22 @@ body {
     align-items: center;
 }
 
+.product-price-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
 .product-price {
     font-size: 1.25rem;
     font-weight: bold;
     color: ${settings.primaryColor};
+}
+
+.product-original-price {
+    font-size: 1rem;
+    color: #999;
+    text-decoration: line-through;
 }
 
 .add-to-cart-btn {
@@ -423,6 +622,112 @@ body {
 .add-to-cart-btn:hover {
     opacity: 0.9;
     transform: translateY(-1px);
+}
+
+/* Why Choose Us Section */
+.why-choose-us-section {
+    background: white;
+    padding: 4rem 0;
+}
+
+.why-choose-us-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+}
+
+.why-choose-us-item {
+    text-align: center;
+    padding: 2rem 1rem;
+}
+
+.why-choose-us-icon {
+    width: 4rem;
+    height: 4rem;
+    background: ${settings.primaryColor}20;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem;
+    font-size: 2rem;
+    color: ${settings.primaryColor};
+}
+
+.why-choose-us-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #1a1a1a;
+}
+
+.why-choose-us-description {
+    color: #666;
+    line-height: 1.6;
+}
+
+/* FAQ Section */
+.faq-section {
+    background: #f8f9fa;
+    padding: 4rem 0;
+}
+
+.faq-container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.faq-item {
+    background: white;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.faq-question {
+    width: 100%;
+    padding: 1.5rem;
+    background: none;
+    border: none;
+    text-align: right;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background-color 0.3s ease;
+}
+
+.faq-question:hover {
+    background: #f8f9fa;
+}
+
+.faq-icon {
+    width: 20px;
+    height: 20px;
+    transition: transform 0.3s ease;
+    color: ${settings.primaryColor};
+}
+
+.faq-item.active .faq-icon {
+    transform: rotate(180deg);
+}
+
+.faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+}
+
+.faq-answer.active {
+    max-height: 200px;
+}
+
+.faq-answer p {
+    padding: 0 1.5rem 1.5rem;
+    color: #666;
+    line-height: 1.6;
 }
 
 /* Empty State */
@@ -524,6 +829,14 @@ body {
         text-align: center;
     }
     
+    .hero-title {
+        font-size: 2rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1rem;
+    }
+    
     .product-list .product-card {
         flex-direction: column;
     }
@@ -534,6 +847,11 @@ body {
     
     .product-grid {
         grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 1.5rem;
+    }
+    
+    .why-choose-us-grid {
+        grid-template-columns: 1fr;
         gap: 1.5rem;
     }
     
@@ -555,6 +873,14 @@ body {
     
     .product-grid {
         grid-template-columns: 1fr;
+    }
+    
+    .hero-section {
+        padding: 3rem 0;
+    }
+    
+    .hero-title {
+        font-size: 1.75rem;
     }
     
     .main-content {
@@ -771,6 +1097,17 @@ class Store {
                 product.style.display = 'none';
             }
         });
+    }
+}
+
+// FAQ Toggle Function
+function toggleFAQ(index) {
+    const faqItem = document.querySelector(\`.faq-item:nth-child(\${index + 1})\`);
+    const faqAnswer = document.getElementById(\`faq-\${index}\`);
+    
+    if (faqItem && faqAnswer) {
+        faqItem.classList.toggle('active');
+        faqAnswer.classList.toggle('active');
     }
 }
 

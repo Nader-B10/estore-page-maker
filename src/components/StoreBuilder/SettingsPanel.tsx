@@ -86,6 +86,39 @@ export default function SettingsPanel({ settings, onUpdateSettings }: SettingsPa
               )}
             </div>
           </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-2">أيقونة المتجر (Favicon)</label>
+            <div className="flex items-center gap-3">
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                      handleChange('favicon', e.target?.result as string);
+                    };
+                    reader.readAsDataURL(file);
+                  }
+                }}
+                className="hidden"
+                id="favicon-upload"
+              />
+              <label
+                htmlFor="favicon-upload"
+                className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 cursor-pointer hover:bg-blue-700 transition-colors"
+              >
+                <Upload size={20} />
+                رفع الأيقونة
+              </label>
+              {settings.favicon && (
+                <img src={settings.favicon} alt="Favicon" className="w-8 h-8 object-cover rounded" />
+              )}
+            </div>
+            <p className="text-xs text-gray-500 mt-1">يفضل أن تكون الصورة مربعة (32x32 أو 64x64 بكسل)</p>
+          </div>
         </div>
       </div>
 

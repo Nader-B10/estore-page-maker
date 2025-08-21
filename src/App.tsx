@@ -4,12 +4,14 @@ import { StoreData, StoreSettings, Product } from './types/store';
 import SettingsPanel from './components/StoreBuilder/SettingsPanel';
 import ProductManager from './components/StoreBuilder/ProductManager';
 import StorePreview from './components/StoreBuilder/StorePreview';
+import SectionsManager from './components/StoreBuilder/SectionsManager';
 import { exportStore } from './utils/fileExporter';
 
 const defaultSettings: StoreSettings = {
   storeName: 'متجري الإلكتروني',
   description: 'أفضل المنتجات بأسعار منافسة',
   logo: '',
+  favicon: '',
   primaryColor: '#3b82f6',
   secondaryColor: '#1e40af',
   accentColor: '#f59e0b',
@@ -21,6 +23,76 @@ const defaultSettings: StoreSettings = {
     email: '',
     phone: '',
     address: ''
+  },
+  heroSection: {
+    enabled: true,
+    title: 'مرحباً بك في متجرنا',
+    subtitle: 'اكتشف أفضل المنتجات بأسعار منافسة',
+    backgroundImage: '',
+    ctaText: 'تسوق الآن',
+    ctaLink: '#products'
+  },
+  productSections: {
+    featured: {
+      enabled: true,
+      title: 'المنتجات المميزة',
+      subtitle: 'اختيارنا الأفضل لك',
+      limit: 4
+    },
+    bestSellers: {
+      enabled: true,
+      title: 'الأعلى مبيعاً',
+      subtitle: 'المنتجات الأكثر طلباً',
+      limit: 4
+    },
+    onSale: {
+      enabled: true,
+      title: 'عروض وتخفيضات',
+      subtitle: 'وفر أكثر مع عروضنا الخاصة',
+      limit: 4
+    }
+  },
+  whyChooseUs: {
+    enabled: true,
+    title: 'لماذا تختارنا؟',
+    subtitle: 'نحن نقدم أفضل تجربة تسوق',
+    items: [
+      {
+        id: '1',
+        icon: 'truck',
+        title: 'شحن سريع',
+        description: 'توصيل مجاني خلال 24 ساعة'
+      },
+      {
+        id: '2',
+        icon: 'shield',
+        title: 'ضمان الجودة',
+        description: 'منتجات أصلية مع ضمان شامل'
+      },
+      {
+        id: '3',
+        icon: 'headphones',
+        title: 'دعم 24/7',
+        description: 'خدمة عملاء متاحة على مدار الساعة'
+      }
+    ]
+  },
+  faq: {
+    enabled: true,
+    title: 'الأسئلة الشائعة',
+    subtitle: 'إجابات على أكثر الأسئلة شيوعاً',
+    items: [
+      {
+        id: '1',
+        question: 'كيف يمكنني تتبع طلبي؟',
+        answer: 'يمكنك تتبع طلبك من خلال رقم الطلب المرسل إليك عبر البريد الإلكتروني'
+      },
+      {
+        id: '2',
+        question: 'ما هي طرق الدفع المتاحة؟',
+        answer: 'نقبل جميع بطاقات الائتمان والدفع عند الاستلام'
+      }
+    ]
   }
 };
 
@@ -79,6 +151,7 @@ function App() {
 
   const tabs = [
     { id: 'settings', label: 'الإعدادات', icon: Settings },
+    { id: 'sections', label: 'الأقسام', icon: Package },
     { id: 'products', label: 'المنتجات', icon: Package },
     { id: 'preview', label: 'معاينة', icon: Eye }
   ];
@@ -155,9 +228,17 @@ function App() {
               />
             )}
             
+            {activeTab === 'sections' && (
+              <SectionsManager
+                settings={storeData.settings}
+                onUpdateSettings={handleUpdateSettings}
+              />
+            )}
+            
             {activeTab === 'products' && (
               <ProductManager
                 products={storeData.products}
+                settings={storeData.settings}
                 onAddProduct={handleAddProduct}
                 onEditProduct={handleEditProduct}
                 onDeleteProduct={handleDeleteProduct}

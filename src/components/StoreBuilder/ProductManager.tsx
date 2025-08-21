@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { Plus, Edit, Trash2, Upload, X } from 'lucide-react';
-import { Product } from '../../types/store';
+import { Product, StoreSettings } from '../../types/store';
 
 interface ProductManagerProps {
   products: Product[];
+  settings: StoreSettings;
   onAddProduct: (product: Product) => void;
   onEditProduct: (id: string, product: Product) => void;
   onDeleteProduct: (id: string) => void;
@@ -11,6 +12,7 @@ interface ProductManagerProps {
 
 export default function ProductManager({
   products,
+  settings,
   onAddProduct,
   onEditProduct,
   onDeleteProduct,
@@ -21,8 +23,14 @@ export default function ProductManager({
     name: '',
     description: '',
     price: 0,
+    originalPrice: 0,
     category: '',
     image: '',
+    isFeatured: false,
+    isBestSeller: false,
+    isOnSale: false,
+    discountPercentage: 0,
+    tags: [] as string[],
   });
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -52,8 +60,14 @@ export default function ProductManager({
       name: formData.name,
       description: formData.description,
       price: formData.price,
+      originalPrice: formData.originalPrice || undefined,
       category: formData.category,
       image: formData.image,
+      isFeatured: formData.isFeatured,
+      isBestSeller: formData.isBestSeller,
+      isOnSale: formData.isOnSale,
+      discountPercentage: formData.discountPercentage || undefined,
+      tags: formData.tags,
     };
 
     if (editingProduct) {
@@ -70,8 +84,14 @@ export default function ProductManager({
       name: '',
       description: '',
       price: 0,
+      originalPrice: 0,
       category: '',
       image: '',
+      isFeatured: false,
+      isBestSeller: false,
+      isOnSale: false,
+      discountPercentage: 0,
+      tags: [],
     });
     setEditingProduct(null);
     setIsModalOpen(false);
@@ -83,8 +103,14 @@ export default function ProductManager({
       name: product.name,
       description: product.description,
       price: product.price,
+      originalPrice: product.originalPrice || 0,
       category: product.category,
       image: product.image,
+      isFeatured: product.isFeatured,
+      isBestSeller: product.isBestSeller,
+      isOnSale: product.isOnSale,
+      discountPercentage: product.discountPercentage || 0,
+      tags: product.tags,
     });
     setIsModalOpen(true);
   };
@@ -113,10 +139,28 @@ export default function ProductManager({
             <div className="p-4">
               <h4 className="font-semibold text-lg mb-2">{product.name}</h4>
               <p className="text-gray-600 text-sm mb-2">{product.description}</p>
+              <div className="flex flex-wrap gap-1 mb-2">
+                {product.isFeatured && (
+                  <span className="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-full">مميز</span>
+                )}
+                {product.isBestSeller && (
+                  <span className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">الأعلى مبيعاً</span>
+                )}
+                {product.isOnSale && (
+                  <span className="bg-red-100 text-red-800 text-xs px-2 py-1 rounded-full">عرض</span>
+                )}
+              </div>
               <div className="flex justify-between items-center">
-                <span className="text-lg font-bold text-green-600">
-                  ${product.price}
-                </span>
+                <div className="flex flex-col">
+                  <span className="text-lg font-bold text-green-600">
+                    ${product.price}
+                  </span>
+                  {product.originalPrice && product.originalPrice > product.price && (
+                    <span className="text-sm text-gray-500 line-through">
+                      ${product.originalPrice}
+                    </span>
+                  )}
+                </div>
                 <div className="flex gap-2">
                   <button
                     onClick={() => handleEdit(product)}
@@ -138,8 +182,8 @@ export default function ProductManager({
       </div>
 
       {isModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 w-full max-w-md max-h-[90vh] overflow-y-auto">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-lg font-semibold">
                 {editingProduct ? 'تعديل المنتج' : 'إضافة منتج جديد'}
@@ -153,15 +197,27 @@ export default function ProductManager({
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium mb-2">اسم المنتج *</label>
-                <input
-                  type="text"
-                  value={formData.name}
-                  onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
-                  className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  required
-                />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium mb-2">اسم المنتج *</label>
+                  <input
+                    type="text"
+                    value={formData.name}
+                    onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+                    className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium mb-2">الفئة</label>
+                  <input
+                    type="text"
+                    value={formData.category}
+                    onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value }))}
+                    className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  />
+                </div>
               </div>
 
               <div>
@@ -174,25 +230,56 @@ export default function ProductManager({
                 />
               </div>
 
-              <div>
-                <label className="block text-sm font-medium mb-2">السعر *</label>
-                <input
-                  type="number"
-                  step="0.01"
-                  value={formData.price}
-                  onChange={(e) => setFormData(prev => ({ ...prev, price: parseFloat(e.target.value) }))}
-                  className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  required
-                />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium mb-2">السعر الحالي *</label>
+                  <input
+                    type="number"
+                    step="0.01"
+                    value={formData.price}
+                    onChange={(e) => setFormData(prev => ({ ...prev, price: parseFloat(e.target.value) }))}
+                    className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium mb-2">السعر الأصلي (قبل الخصم)</label>
+                  <input
+                    type="number"
+                    step="0.01"
+                    value={formData.originalPrice}
+                    onChange={(e) => setFormData(prev => ({ ...prev, originalPrice: parseFloat(e.target.value) }))}
+                    className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  />
+                </div>
               </div>
 
+              {formData.isOnSale && (
+                <div>
+                  <label className="block text-sm font-medium mb-2">نسبة الخصم (%)</label>
+                  <input
+                    type="number"
+                    min="0"
+                    max="100"
+                    value={formData.discountPercentage}
+                    onChange={(e) => setFormData(prev => ({ ...prev, discountPercentage: parseFloat(e.target.value) }))}
+                    className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  />
+                </div>
+              )}
+
               <div>
-                <label className="block text-sm font-medium mb-2">الفئة</label>
+                <label className="block text-sm font-medium mb-2">العلامات (مفصولة بفاصلة)</label>
                 <input
                   type="text"
-                  value={formData.category}
-                  onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value }))}
+                  value={formData.tags.join(', ')}
+                  onChange={(e) => setFormData(prev => ({ 
+                    ...prev, 
+                    tags: e.target.value.split(',').map(tag => tag.trim()).filter(tag => tag) 
+                  }))}
                   className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="جديد, مميز, عرض خاص"
                 />
               </div>
 
@@ -213,6 +300,47 @@ export default function ProductManager({
                 )}
               </div>
 
+              {/* Product Sections */}
+              <div className="border-t pt-4">
+                <h4 className="font-medium mb-3">إعدادات العرض</h4>
+                <div className="space-y-3">
+                  {settings.productSections.featured.enabled && (
+                    <label className="flex items-center gap-2">
+                      <input
+                        type="checkbox"
+                        checked={formData.isFeatured}
+                        onChange={(e) => setFormData(prev => ({ ...prev, isFeatured: e.target.checked }))}
+                        className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                      />
+                      <span className="text-sm">منتج مميز</span>
+                    </label>
+                  )}
+
+                  {settings.productSections.bestSellers.enabled && (
+                    <label className="flex items-center gap-2">
+                      <input
+                        type="checkbox"
+                        checked={formData.isBestSeller}
+                        onChange={(e) => setFormData(prev => ({ ...prev, isBestSeller: e.target.checked }))}
+                        className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                      />
+                      <span className="text-sm">من الأعلى مبيعاً</span>
+                    </label>
+                  )}
+
+                  {settings.productSections.onSale.enabled && (
+                    <label className="flex items-center gap-2">
+                      <input
+                        type="checkbox"
+                        checked={formData.isOnSale}
+                        onChange={(e) => setFormData(prev => ({ ...prev, isOnSale: e.target.checked }))}
+                        className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                      />
+                      <span className="text-sm">عليه عرض/تخفيض</span>
+                    </label>
+                  )}
+                </div>
+              </div>
               <div className="flex gap-3 pt-4">
                 <button
                   type="submit"
