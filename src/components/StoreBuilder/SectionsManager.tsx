@@ -120,6 +120,7 @@ export default function SectionsManager({ settings, onUpdateSettings }: Sections
   const sections = [
     { id: 'hero', label: 'قسم البطل (Hero)' },
     { id: 'products', label: 'أقسام المنتجات' },
+    { id: 'about', label: 'قسم من نحن' },
     { id: 'why-choose-us', label: 'لماذا تختارنا' },
     { id: 'faq', label: 'الأسئلة الشائعة' },
   ];
@@ -238,6 +239,11 @@ export default function SectionsManager({ settings, onUpdateSettings }: Sections
             </div>
           </div>
         </div>
+      )}
+
+      {/* About Section */}
+      {activeSection === 'about' && (
+        <AboutSectionManager settings={settings} onUpdateSettings={onUpdateSettings} />
       )}
 
       {/* Product Sections */}
@@ -591,6 +597,117 @@ export default function SectionsManager({ settings, onUpdateSettings }: Sections
           }}
         />
       )}
+    </div>
+  );
+}
+
+// About Section Manager Component
+function AboutSectionManager({ 
+  settings, 
+  onUpdateSettings 
+}: { 
+  settings: StoreSettings; 
+  onUpdateSettings: (settings: StoreSettings) => void; 
+}) {
+  const handleAboutChange = (field: string, value: any) => {
+    onUpdateSettings({
+      ...settings,
+      aboutSection: {
+        ...settings.aboutSection,
+        [field]: value,
+      },
+    });
+  };
+
+  const handleAboutImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        handleAboutChange('image', e.target?.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  return (
+    <div className="bg-white rounded-lg p-6 shadow-sm">
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="text-lg font-semibold">قسم من نحن</h3>
+        <button
+          onClick={() => handleAboutChange('enabled', !settings.aboutSection.enabled)}
+          className={`flex items-center gap-2 px-3 py-1 rounded-lg text-sm ${
+            settings.aboutSection.enabled
+              ? 'bg-green-100 text-green-700'
+              : 'bg-gray-100 text-gray-700'
+          }`}
+        >
+          {settings.aboutSection.enabled ? <Eye size={16} /> : <EyeOff size={16} />}
+          {settings.aboutSection.enabled ? 'مفعل' : 'غير مفعل'}
+        </button>
+      </div>
+
+      <div className="space-y-4">
+        <div>
+          <label className="block text-sm font-medium mb-2">العنوان</label>
+          <input
+            type="text"
+            value={settings.aboutSection.title}
+            onChange={(e) => handleAboutChange('title', e.target.value)}
+            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            placeholder="من نحن"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium mb-2">العنوان الفرعي</label>
+          <input
+            type="text"
+            value={settings.aboutSection.subtitle}
+            onChange={(e) => handleAboutChange('subtitle', e.target.value)}
+            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            placeholder="تعرف على قصتنا ورؤيتنا"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium mb-2">المحتوى</label>
+          <textarea
+            value={settings.aboutSection.content}
+            onChange={(e) => handleAboutChange('content', e.target.value)}
+            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            rows={4}
+            placeholder="اكتب نبذة عن متجرك وقصة نجاحك..."
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium mb-2">صورة القسم</label>
+          <div className="flex items-center gap-3">
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleAboutImageUpload}
+              className="hidden"
+              id="about-image-upload"
+            />
+            <label
+              htmlFor="about-image-upload"
+              className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 cursor-pointer hover:bg-blue-700 transition-colors"
+            >
+              <Upload size={20} />
+              رفع صورة
+            </label>
+            {settings.aboutSection.image && (
+              <img 
+                src={settings.aboutSection.image} 
+                alt="About" 
+                className="w-16 h-16 object-cover rounded" 
+              />
+            )}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

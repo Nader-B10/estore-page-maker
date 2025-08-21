@@ -20,6 +20,18 @@ import HeroVariantA, { HeroVariantAConfig } from '../components/StoreBuilder/sec
 import HeroVariantB, { HeroVariantBConfig } from '../components/StoreBuilder/sections/hero/HeroVariantB';
 import HeroVariantC, { HeroVariantCConfig } from '../components/StoreBuilder/sections/hero/HeroVariantC';
 
+// About Components
+import ModernAbout, { ModernAboutConfig } from '../components/StoreBuilder/sections/about/ModernAbout';
+import SimpleAbout, { SimpleAboutConfig } from '../components/StoreBuilder/sections/about/SimpleAbout';
+
+// Features Components
+import GridFeatures, { GridFeaturesConfig } from '../components/StoreBuilder/sections/features/GridFeatures';
+import IconFeatures, { IconFeaturesConfig } from '../components/StoreBuilder/sections/features/IconFeatures';
+
+// FAQ Components
+import AccordionFAQ, { AccordionFAQConfig } from '../components/StoreBuilder/sections/faq/AccordionFAQ';
+import SimpleFAQ, { SimpleFAQConfig } from '../components/StoreBuilder/sections/faq/SimpleFAQ';
+
 export interface ComponentConfig {
   id: string;
   name: string;
@@ -46,6 +58,18 @@ export interface FooterComponentProps {
 }
 
 export interface HeroComponentProps {
+  settings: StoreSettings;
+}
+
+export interface AboutComponentProps {
+  settings: StoreSettings;
+}
+
+export interface FeaturesComponentProps {
+  settings: StoreSettings;
+}
+
+export interface FAQComponentProps {
   settings: StoreSettings;
 }
 
@@ -120,6 +144,48 @@ export const heroComponents: Record<string, {
   }
 };
 
+export const aboutComponents: Record<string, {
+  component: ComponentType<AboutComponentProps>;
+  config: ComponentConfig;
+}> = {
+  'modern-about': {
+    component: ModernAbout,
+    config: ModernAboutConfig
+  },
+  'simple-about': {
+    component: SimpleAbout,
+    config: SimpleAboutConfig
+  }
+};
+
+export const featuresComponents: Record<string, {
+  component: ComponentType<FeaturesComponentProps>;
+  config: ComponentConfig;
+}> = {
+  'grid-features': {
+    component: GridFeatures,
+    config: GridFeaturesConfig
+  },
+  'icon-features': {
+    component: IconFeatures,
+    config: IconFeaturesConfig
+  }
+};
+
+export const faqComponents: Record<string, {
+  component: ComponentType<FAQComponentProps>;
+  config: ComponentConfig;
+}> = {
+  'accordion-faq': {
+    component: AccordionFAQ,
+    config: AccordionFAQConfig
+  },
+  'simple-faq': {
+    component: SimpleFAQ,
+    config: SimpleFAQConfig
+  }
+};
+
 // Helper functions
 export const getHeaderComponent = (templateId: string) => {
   return headerComponents[templateId] || headerComponents['classic-header'];
@@ -131,6 +197,18 @@ export const getFooterComponent = (templateId: string) => {
 
 export const getHeroComponent = (templateId: string) => {
   return heroComponents[templateId] || heroComponents['hero-variant-a'];
+};
+
+export const getAboutComponent = (templateId: string) => {
+  return aboutComponents[templateId] || aboutComponents['modern-about'];
+};
+
+export const getFeaturesComponent = (templateId: string) => {
+  return featuresComponents[templateId] || featuresComponents['grid-features'];
+};
+
+export const getFAQComponent = (templateId: string) => {
+  return faqComponents[templateId] || faqComponents['accordion-faq'];
 };
 
 export const getAvailableHeaders = () => {
@@ -149,6 +227,27 @@ export const getAvailableFooters = () => {
 
 export const getAvailableHeros = () => {
   return Object.entries(heroComponents).map(([id, { config }]) => ({
+    id,
+    ...config
+  }));
+};
+
+export const getAvailableAbouts = () => {
+  return Object.entries(aboutComponents).map(([id, { config }]) => ({
+    id,
+    ...config
+  }));
+};
+
+export const getAvailableFeatures = () => {
+  return Object.entries(featuresComponents).map(([id, { config }]) => ({
+    id,
+    ...config
+  }));
+};
+
+export const getAvailableFAQs = () => {
+  return Object.entries(faqComponents).map(([id, { config }]) => ({
     id,
     ...config
   }));

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Upload, Plus, Edit, Trash2, X, Link, ExternalLink } from 'lucide-react';
 import { StoreSettings, LinkItem, CustomPage, PREDEFINED_THEMES, getThemeById } from '../../types/store';
-import { getAvailableHeaders, getAvailableFooters } from '../../utils/componentRegistry';
+import { getAvailableHeaders, getAvailableFooters, getAvailableAbouts, getAvailableFeatures, getAvailableFAQs } from '../../utils/componentRegistry';
 
 interface SettingsPanelProps {
   settings: StoreSettings;
@@ -21,6 +21,9 @@ export default function SettingsPanel({ settings, onUpdateSettings, customPages 
 
   const availableHeaders = getAvailableHeaders();
   const availableFooters = getAvailableFooters();
+  const availableAbouts = getAvailableAbouts();
+  const availableFeatures = getAvailableFeatures();
+  const availableFAQs = getAvailableFAQs();
 
   const handleChange = (field: string, value: any) => {
     onUpdateSettings({
@@ -330,6 +333,60 @@ export default function SettingsPanel({ settings, onUpdateSettings, customPages 
             </select>
             <p className="text-xs text-gray-500 mt-1">
               {availableFooters.find(f => f.id === settings.footerTemplate)?.description}
+            </p>
+          </div>
+
+          <div className="mt-4">
+            <label className="block text-sm font-medium mb-2">قالب من نحن</label>
+            <select
+              value={settings.aboutTemplate}
+              onChange={(e) => handleChange('aboutTemplate', e.target.value)}
+              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            >
+              {availableAbouts.map(about => (
+                <option key={about.id} value={about.id}>
+                  {about.name}
+                </option>
+              ))}
+            </select>
+            <p className="text-xs text-gray-500 mt-1">
+              {availableAbouts.find(a => a.id === settings.aboutTemplate)?.description}
+            </p>
+          </div>
+
+          <div className="mt-4">
+            <label className="block text-sm font-medium mb-2">قالب الميزات</label>
+            <select
+              value={settings.featuresTemplate}
+              onChange={(e) => handleChange('featuresTemplate', e.target.value)}
+              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            >
+              {availableFeatures.map(feature => (
+                <option key={feature.id} value={feature.id}>
+                  {feature.name}
+                </option>
+              ))}
+            </select>
+            <p className="text-xs text-gray-500 mt-1">
+              {availableFeatures.find(f => f.id === settings.featuresTemplate)?.description}
+            </p>
+          </div>
+
+          <div className="mt-4">
+            <label className="block text-sm font-medium mb-2">قالب الأسئلة الشائعة</label>
+            <select
+              value={settings.faqTemplate}
+              onChange={(e) => handleChange('faqTemplate', e.target.value)}
+              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            >
+              {availableFAQs.map(faq => (
+                <option key={faq.id} value={faq.id}>
+                  {faq.name}
+                </option>
+              ))}
+            </select>
+            <p className="text-xs text-gray-500 mt-1">
+              {availableFAQs.find(f => f.id === settings.faqTemplate)?.description}
             </p>
           </div>
         </div>

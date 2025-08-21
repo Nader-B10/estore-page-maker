@@ -22,6 +22,9 @@ const defaultSettings: StoreSettings = {
   layout: 'grid',
   headerTemplate: 'modern',
   footerTemplate: 'default',
+  aboutTemplate: 'modern-about',
+  featuresTemplate: 'grid-features',
+  faqTemplate: 'accordion-faq',
   footerText: '',
   headerLinks: [
     { id: '1', text: 'الرئيسية', url: '#home', type: 'internal', isVisible: true, order: 1 },
@@ -75,6 +78,55 @@ const defaultSettings: StoreSettings = {
       subtitle: 'وفر أكثر مع عروضنا الخاصة',
       limit: 4
     }
+  },
+  aboutSection: {
+    enabled: true,
+    title: 'من نحن',
+    subtitle: 'تعرف على قصتنا ورؤيتنا',
+    content: 'نحن فريق متخصص في تقديم أفضل المنتجات والخدمات لعملائنا. بدأت رحلتنا من شغفنا بالجودة والتميز، ونسعى دائماً لتحقيق رضا عملائنا وتجاوز توقعاتهم.',
+    image: '',
+    stats: [
+      {
+        id: '1',
+        number: '1000+',
+        label: 'عميل سعيد',
+        icon: 'users'
+      },
+      {
+        id: '2',
+        number: '5+',
+        label: 'سنوات خبرة',
+        icon: 'calendar'
+      },
+      {
+        id: '3',
+        number: '500+',
+        label: 'منتج متميز',
+        icon: 'package'
+      },
+      {
+        id: '4',
+        number: '24/7',
+        label: 'دعم العملاء',
+        icon: 'headphones'
+      }
+    ],
+    team: [
+      {
+        id: '1',
+        name: 'أحمد محمد',
+        position: 'المدير التنفيذي',
+        image: '',
+        bio: 'خبرة 10 سنوات في إدارة الأعمال والتجارة الإلكترونية'
+      },
+      {
+        id: '2',
+        name: 'فاطمة أحمد',
+        position: 'مديرة التسويق',
+        image: '',
+        bio: 'متخصصة في التسويق الرقمي ووسائل التواصل الاجتماعي'
+      }
+    ]
   },
   whyChooseUs: {
     enabled: true,

@@ -83,6 +83,9 @@ export interface StoreSettings {
   layout: 'grid' | 'list' | 'masonry';
   headerTemplate: string;
   footerTemplate: string;
+  aboutTemplate: string;
+  featuresTemplate: string;
+  faqTemplate: string;
   footerText: string;
   headerLinks: LinkItem[];
   footerLinks: LinkItem[];
@@ -102,10 +105,35 @@ export interface StoreSettings {
   };
   heroSection: HeroSection;
   productSections: ProductSection;
+  aboutSection: AboutSection;
   whyChooseUs: WhyChooseUsSection;
   faq: FAQSection;
 }
 
+export interface AboutSection {
+  enabled: boolean;
+  title: string;
+  subtitle: string;
+  content: string;
+  image: string;
+  stats: AboutStat[];
+  team: TeamMember[];
+}
+
+export interface AboutStat {
+  id: string;
+  number: string;
+  label: string;
+  icon: string;
+}
+
+export interface TeamMember {
+  id: string;
+  name: string;
+  position: string;
+  image: string;
+  bio: string;
+}
 export interface LinkItem {
   id: string;
   text: string;

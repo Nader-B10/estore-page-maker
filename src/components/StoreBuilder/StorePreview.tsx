@@ -1,7 +1,7 @@
 import React from 'react';
 import { Mail, Phone, MapPin, Star, Truck, Shield, Headphones, Heart, Check, Gift, Clock, ChevronDown, MessageCircle, Package } from 'lucide-react';
 import { StoreData, getThemeById } from '../../types/store';
-import { getHeaderComponent, getFooterComponent } from '../../utils/componentRegistry';
+import { getHeaderComponent, getFooterComponent, getAboutComponent, getFeaturesComponent, getFAQComponent } from '../../utils/componentRegistry';
 
 interface StorePreviewProps {
   storeData: StoreData;
@@ -13,6 +13,9 @@ export default function StorePreview({ storeData }: StorePreviewProps) {
   
   const HeaderComponent = getHeaderComponent(settings.headerTemplate).component;
   const FooterComponent = getFooterComponent(settings.footerTemplate).component;
+  const AboutComponent = getAboutComponent(settings.aboutTemplate).component;
+  const FeaturesComponent = getFeaturesComponent(settings.featuresTemplate).component;
+  const FAQComponent = getFAQComponent(settings.faqTemplate).component;
 
   const getIcon = (iconName: string) => {
     const icons = {
@@ -265,57 +268,14 @@ export default function StorePreview({ storeData }: StorePreviewProps) {
         )}
       </main>
 
-      {/* Why Choose Us Section */}
-      {settings.whyChooseUs.enabled && settings.whyChooseUs.items.length > 0 && (
-        <section className="py-16" style={{ backgroundColor: currentTheme.palette.surface }}>
-          <div className="max-w-7xl mx-auto px-6">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold mb-2" style={{ color: currentTheme.palette.primary }}>
-                {settings.whyChooseUs.title}
-              </h2>
-              <p style={{ color: currentTheme.palette.textSecondary }}>{settings.whyChooseUs.subtitle}</p>
-              <div className="w-24 h-1 mx-auto mt-4 rounded" style={{ backgroundColor: currentTheme.palette.accent }}></div>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {settings.whyChooseUs.items.map((item) => {
-                const Icon = getIcon(item.icon);
-                return (
-                  <div key={item.id} className="text-center">
-                    <div 
-                      className="w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center"
-                      style={{ backgroundColor: `${currentTheme.palette.primary}20` }}
-                    >
-                      <Icon size={32} style={{ color: currentTheme.palette.primary }} />
-                    </div>
-                    <h3 className="text-xl font-semibold mb-2">{item.title}</h3>
-                    <p style={{ color: currentTheme.palette.textSecondary }}>{item.description}</p>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </section>
-      )}
+      {/* About Section */}
+      <AboutComponent settings={settings} />
+
+      {/* Features Section */}
+      <FeaturesComponent settings={settings} />
 
       {/* FAQ Section */}
-      {settings.faq.enabled && settings.faq.items.length > 0 && (
-        <section className="py-16" style={{ backgroundColor: currentTheme.palette.background }}>
-          <div className="max-w-4xl mx-auto px-6">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold mb-2" style={{ color: currentTheme.palette.primary }}>
-                {settings.faq.title}
-              </h2>
-              <p style={{ color: currentTheme.palette.textSecondary }}>{settings.faq.subtitle}</p>
-              <div className="w-24 h-1 mx-auto mt-4 rounded" style={{ backgroundColor: currentTheme.palette.accent }}></div>
-            </div>
-            <div className="space-y-4">
-              {settings.faq.items.map((item) => (
-                <FAQItem key={item.id} item={item} primaryColor={settings.primaryColor} />
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
+      <FAQComponent settings={settings} />
 
       {/* Footer */}
 
