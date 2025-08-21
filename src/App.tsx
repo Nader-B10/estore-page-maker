@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Settings, Package, Eye, Download, Loader } from 'lucide-react';
 import { StoreData, StoreSettings, Product } from './types/store';
 import SettingsPanel from './components/StoreBuilder/SettingsPanel';
 import ProductManager from './components/StoreBuilder/ProductManager';
