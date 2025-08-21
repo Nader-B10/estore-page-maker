@@ -1,6 +1,7 @@
 import React from 'react';
 import { Upload, Plus, Edit, Trash2, X, Link, ExternalLink } from 'lucide-react';
 import { StoreSettings, LinkItem, CustomPage, PREDEFINED_THEMES, getThemeById } from '../../types/store';
+import { getAvailableHeaders, getAvailableFooters } from '../../utils/componentRegistry';
 
 interface SettingsPanelProps {
   settings: StoreSettings;
@@ -17,6 +18,9 @@ export default function SettingsPanel({ settings, onUpdateSettings, customPages 
     url: '',
     type: 'internal' as LinkItem['type'],
   });
+
+  const availableHeaders = getAvailableHeaders();
+  const availableFooters = getAvailableFooters();
 
   const handleChange = (field: string, value: any) => {
     onUpdateSettings({
@@ -300,13 +304,15 @@ export default function SettingsPanel({ settings, onUpdateSettings, customPages 
               onChange={(e) => handleChange('headerTemplate', e.target.value)}
               className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
-              <option value="classic">الكلاسيكي</option>
-              <option value="modern">العصري</option>
-              <option value="minimal">البسيط</option>
-              <option value="elegant">الأنيق</option>
-              <option value="corporate">المؤسسي</option>
-              <option value="creative">الإبداعي</option>
+              {availableHeaders.map(header => (
+                <option key={header.id} value={header.id}>
+                  {header.name}
+                </option>
+              ))}
             </select>
+            <p className="text-xs text-gray-500 mt-1">
+              {availableHeaders.find(h => h.id === settings.headerTemplate)?.description}
+            </p>
           </div>
 
           <div className="mt-4">
@@ -316,11 +322,15 @@ export default function SettingsPanel({ settings, onUpdateSettings, customPages 
               onChange={(e) => handleChange('footerTemplate', e.target.value)}
               className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
-              <option value="default">الافتراضي</option>
-              <option value="minimal">البسيط</option>
-              <option value="detailed">المفصل</option>
-              <option value="modern">العصري</option>
+              {availableFooters.map(footer => (
+                <option key={footer.id} value={footer.id}>
+                  {footer.name}
+                </option>
+              ))}
             </select>
+            <p className="text-xs text-gray-500 mt-1">
+              {availableFooters.find(f => f.id === settings.footerTemplate)?.description}
+            </p>
           </div>
         </div>
       </div>

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Mail, Phone, MapPin, Star, Truck, Shield, Headphones, Heart, Check, Gift, Clock, ChevronDown, MessageCircle, Package } from 'lucide-react';
 import { StoreData, getThemeById } from '../../types/store';
+import { getHeaderComponent, getFooterComponent } from '../../utils/componentRegistry';
 
 interface StorePreviewProps {
   storeData: StoreData;
@@ -9,6 +10,9 @@ interface StorePreviewProps {
 export default function StorePreview({ storeData }: StorePreviewProps) {
   const { settings, products } = storeData;
   const currentTheme = getThemeById(settings.themeId);
+  
+  const HeaderComponent = getHeaderComponent(settings.headerTemplate).component;
+  const FooterComponent = getFooterComponent(settings.footerTemplate).component;
 
   const getIcon = (iconName: string) => {
     const icons = {
@@ -39,22 +43,6 @@ export default function StorePreview({ storeData }: StorePreviewProps) {
     }
   };
 
-  const getHeaderClass = () => {
-    switch (settings.headerTemplate) {
-      case 'modern':
-        return 'bg-gradient-to-r from-blue-600 to-purple-600 text-white';
-      case 'minimal':
-        return 'bg-white border-b border-gray-200 text-gray-800';
-      case 'elegant':
-        return 'bg-gradient-to-r from-gray-900 to-gray-700 text-white';
-      case 'corporate':
-        return 'bg-white border-b-2 border-blue-600 text-gray-800';
-      case 'creative':
-        return 'bg-gradient-to-45deg from-purple-600 via-pink-600 to-blue-600 text-white';
-      default:
-        return 'bg-gray-900 text-white';
-    }
-  };
 
   const generateWhatsAppMessage = (product: any) => {
     if (!settings.whatsappSettings.enabled || !settings.whatsappSettings.phoneNumber) {
@@ -167,50 +155,7 @@ export default function StorePreview({ storeData }: StorePreviewProps) {
       } as React.CSSProperties}
     >
       {/* Header */}
-      <header className={`${getHeaderClass()} py-6 px-6`} style={{ backgroundColor: currentTheme.palette.primary }}>
-        <div className="max-w-7xl mx-auto">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              {settings.logo && (
-                <img src={settings.logo} alt="Logo" className="w-12 h-12 object-cover rounded" />
-              )}
-              <div>
-                <h1 className="text-2xl font-bold">{settings.storeName}</h1>
-                <p className="text-sm opacity-90">{settings.description}</p>
-              </div>
-            </div>
-            
-            {/* Header Navigation */}
-            <nav className="hidden md:flex items-center gap-6">
-              {settings.headerLinks.filter(link => link.isVisible).map((link) => (
-                <a
-                  key={link.id}
-                  href={link.url}
-                  className="text-white hover:opacity-80 transition-opacity font-medium"
-                  target={link.type === 'external' ? '_blank' : undefined}
-                  rel={link.type === 'external' ? 'noopener noreferrer' : undefined}
-                >
-                  {link.text}
-                </a>
-              ))}
-            </nav>
-            
-            {settings.whatsappSettings.enabled && settings.whatsappSettings.phoneNumber && (
-              <div className="flex items-center gap-4">
-                <a
-                  href={`https://wa.me/${settings.whatsappSettings.phoneNumber}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition-colors"
-                >
-                  <MessageCircle size={20} />
-                  تواصل معنا
-                </a>
-              </div>
-            )}
-          </div>
-        </div>
-      </header>
+      <HeaderComponent settings={settings} customPages={storeData.customPages} />
 
       {/* Hero Section */}
       {settings.heroSection.enabled && (
@@ -373,63 +318,10 @@ export default function StorePreview({ storeData }: StorePreviewProps) {
       )}
 
       {/* Footer */}
-      <footer className="bg-gray-800 text-white py-8 px-6 mt-12">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div>
-              <h3 className="font-semibold mb-3">معلومات الاتصال</h3>
-              <div className="space-y-2">
-                {settings.contactInfo.email && (
-                  <div className="flex items-center gap-2">
-                    <Mail size={16} />
-                    <span>{settings.contactInfo.email}</span>
-                  </div>
-                )}
-                {settings.contactInfo.phone && (
-                  <div className="flex items-center gap-2">
-                    <Phone size={16} />
-                    <span>{settings.contactInfo.phone}</span>
-                  </div>
-                )}
-                {settings.contactInfo.address && (
-                  <div className="flex items-center gap-2">
-                    <MapPin size={16} />
-                    <span>{settings.contactInfo.address}</span>
-                  </div>
-                )}
-              </div>
-            </div>
 
-            <div>
-              <h3 className="font-semibold mb-3">حول المتجر</h3>
-              <p className="text-sm text-gray-300">{settings.description}</p>
-            </div>
 
-            <div>
-              <h3 className="font-semibold mb-3">روابط سريعة</h3>
-              <div className="space-y-1">
-                {settings.footerLinks.filter(link => link.isVisible).map((link) => (
-                  <a
-                    key={link.id}
-                    href={link.url}
-                    className="block text-sm text-gray-300 hover:text-white transition-colors"
-                    target={link.type === 'external' ? '_blank' : undefined}
-                    rel={link.type === 'external' ? 'noopener noreferrer' : undefined}
-                  >
-                    {link.text}
-                  </a>
-                ))}
-              </div>
-            </div>
-          </div>
 
-          <div className="border-t border-gray-700 mt-6 pt-4 text-center">
-            <p className="text-sm text-gray-400">
-              {settings.footerText || `© ${new Date().getFullYear()} ${settings.storeName}. جميع الحقوق محفوظة.`}
-            </p>
-          </div>
-        </div>
-      </footer>
+      <FooterComponent settings={settings} customPages={storeData.customPages} />
     </div>
   );
 }

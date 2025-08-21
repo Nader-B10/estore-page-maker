@@ -1,5 +1,6 @@
 import { StoreData } from '../types/store';
 import { getThemeById } from '../types/store';
+import { generateHeaderHTML } from './componentRegistry';
 
 export const generateStoreHTML = (storeData: StoreData): string => {
   const { settings, products } = storeData;
@@ -20,16 +21,6 @@ export const generateStoreHTML = (storeData: StoreData): string => {
     }
   };
 
-  const getHeaderClass = () => {
-    switch (settings.headerStyle) {
-      case 'modern':
-        return 'header-modern';
-      case 'minimal':
-        return 'header-minimal';
-      default:
-        return 'header-classic';
-    }
-  };
 
   const generateProductHTML = (product: any) => `
     <div class="product-card" data-product-id="${product.id}">
@@ -73,27 +64,7 @@ export const generateStoreHTML = (storeData: StoreData): string => {
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <header class="${getHeaderClass()}">
-        <div class="container">
-            <div class="header-content">
-                <div class="logo-section">
-                    ${settings.logo ? `<img src="${settings.logo}" alt="Logo" class="logo" />` : ''}
-                    <div class="store-info">
-                        <h1 class="store-name">${settings.storeName}</h1>
-                        <p class="store-description">${settings.description}</p>
-                    </div>
-                </div>
-                <div class="header-actions">
-                    <button class="cart-btn">
-                        <svg class="cart-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293A1 1 0 005 17v0a1 1 0 001 1h1M17 13v6a2 2 0 01-2 2H9a2 2 0 01-2-2v-6.5"></path>
-                        </svg>
-                        السلة
-                    </button>
-                </div>
-            </div>
-        </div>
-    </header>
+    ${generateHeaderHTML(settings.headerTemplate, settings)}
 
     ${settings.heroSection.enabled ? `
     <section class="hero-section" ${settings.heroSection.backgroundImage ? 
