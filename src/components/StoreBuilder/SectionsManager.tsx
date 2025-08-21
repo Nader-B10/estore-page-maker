@@ -267,7 +267,7 @@ export default function SectionsManager({ settings, onUpdateSettings }: Sections
                   type="text"
                   value={settings.productSections.featured.title}
                   onChange={(e) => handleProductSectionChange('featured', 'title', e.target.value)}
-                  className="w-full p-2 border border-gray-300 rounded-lg"
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
               <div>
@@ -276,7 +276,7 @@ export default function SectionsManager({ settings, onUpdateSettings }: Sections
                   type="text"
                   value={settings.productSections.featured.subtitle}
                   onChange={(e) => handleProductSectionChange('featured', 'subtitle', e.target.value)}
-                  className="w-full p-2 border border-gray-300 rounded-lg"
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
               <div>
@@ -287,7 +287,7 @@ export default function SectionsManager({ settings, onUpdateSettings }: Sections
                   max="12"
                   value={settings.productSections.featured.limit}
                   onChange={(e) => handleProductSectionChange('featured', 'limit', parseInt(e.target.value))}
-                  className="w-full p-2 border border-gray-300 rounded-lg"
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
             </div>
@@ -317,7 +317,7 @@ export default function SectionsManager({ settings, onUpdateSettings }: Sections
                   type="text"
                   value={settings.productSections.bestSellers.title}
                   onChange={(e) => handleProductSectionChange('bestSellers', 'title', e.target.value)}
-                  className="w-full p-2 border border-gray-300 rounded-lg"
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
               <div>
@@ -326,7 +326,7 @@ export default function SectionsManager({ settings, onUpdateSettings }: Sections
                   type="text"
                   value={settings.productSections.bestSellers.subtitle}
                   onChange={(e) => handleProductSectionChange('bestSellers', 'subtitle', e.target.value)}
-                  className="w-full p-2 border border-gray-300 rounded-lg"
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
               <div>
@@ -337,7 +337,7 @@ export default function SectionsManager({ settings, onUpdateSettings }: Sections
                   max="12"
                   value={settings.productSections.bestSellers.limit}
                   onChange={(e) => handleProductSectionChange('bestSellers', 'limit', parseInt(e.target.value))}
-                  className="w-full p-2 border border-gray-300 rounded-lg"
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
             </div>
@@ -367,7 +367,7 @@ export default function SectionsManager({ settings, onUpdateSettings }: Sections
                   type="text"
                   value={settings.productSections.onSale.title}
                   onChange={(e) => handleProductSectionChange('onSale', 'title', e.target.value)}
-                  className="w-full p-2 border border-gray-300 rounded-lg"
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
               <div>
@@ -376,7 +376,7 @@ export default function SectionsManager({ settings, onUpdateSettings }: Sections
                   type="text"
                   value={settings.productSections.onSale.subtitle}
                   onChange={(e) => handleProductSectionChange('onSale', 'subtitle', e.target.value)}
-                  className="w-full p-2 border border-gray-300 rounded-lg"
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
               <div>
@@ -387,7 +387,7 @@ export default function SectionsManager({ settings, onUpdateSettings }: Sections
                   max="12"
                   value={settings.productSections.onSale.limit}
                   onChange={(e) => handleProductSectionChange('onSale', 'limit', parseInt(e.target.value))}
-                  className="w-full p-2 border border-gray-300 rounded-lg"
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
             </div>
@@ -433,7 +433,7 @@ export default function SectionsManager({ settings, onUpdateSettings }: Sections
                   type="text"
                   value={settings.whyChooseUs.title}
                   onChange={(e) => handleWhyChooseUsChange('title', e.target.value)}
-                  className="w-full p-2 border border-gray-300 rounded-lg"
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
               <div>
@@ -442,7 +442,7 @@ export default function SectionsManager({ settings, onUpdateSettings }: Sections
                   type="text"
                   value={settings.whyChooseUs.subtitle}
                   onChange={(e) => handleWhyChooseUsChange('subtitle', e.target.value)}
-                  className="w-full p-2 border border-gray-300 rounded-lg"
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
             </div>
@@ -517,7 +517,7 @@ export default function SectionsManager({ settings, onUpdateSettings }: Sections
                   type="text"
                   value={settings.faq.title}
                   onChange={(e) => handleFAQChange('title', e.target.value)}
-                  className="w-full p-2 border border-gray-300 rounded-lg"
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
               <div>
@@ -526,7 +526,7 @@ export default function SectionsManager({ settings, onUpdateSettings }: Sections
                   type="text"
                   value={settings.faq.subtitle}
                   onChange={(e) => handleFAQChange('subtitle', e.target.value)}
-                  className="w-full p-2 border border-gray-300 rounded-lg"
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
             </div>
@@ -649,7 +649,7 @@ function WhyChooseUsModal({
             <select
               value={formData.icon}
               onChange={(e) => setFormData(prev => ({ ...prev, icon: e.target.value }))}
-              className="w-full p-2 border border-gray-300 rounded-lg"
+              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
               {iconOptions.map(option => (
                 <option key={option.value} value={option.value}>
@@ -665,7 +665,7 @@ function WhyChooseUsModal({
               type="text"
               value={formData.title}
               onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
-              className="w-full p-2 border border-gray-300 rounded-lg"
+              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               required
             />
           </div>
@@ -675,7 +675,7 @@ function WhyChooseUsModal({
             <textarea
               value={formData.description}
               onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
-              className="w-full p-2 border border-gray-300 rounded-lg"
+              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               rows={3}
               required
             />
@@ -745,7 +745,7 @@ function FAQModal({
               type="text"
               value={formData.question}
               onChange={(e) => setFormData(prev => ({ ...prev, question: e.target.value }))}
-              className="w-full p-2 border border-gray-300 rounded-lg"
+              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               required
             />
           </div>
@@ -755,7 +755,7 @@ function FAQModal({
             <textarea
               value={formData.answer}
               onChange={(e) => setFormData(prev => ({ ...prev, answer: e.target.value }))}
-              className="w-full p-2 border border-gray-300 rounded-lg"
+              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               rows={4}
               required
             />
