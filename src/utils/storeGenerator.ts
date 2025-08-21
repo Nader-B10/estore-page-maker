@@ -914,32 +914,14 @@ export const generateStoreJS = (): string => {
   return `// Store JavaScript Functionality
 class Store {
     constructor() {
-        this.cart = [];
         this.init();
     }
 
     init() {
         this.bindEvents();
-        this.updateCartDisplay();
     }
 
     bindEvents() {
-        // Add to cart buttons
-        document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.preventDefault();
-                this.addToCart(e.target.closest('.product-card'));
-            });
-        });
-
-        // Cart button
-        const cartBtn = document.querySelector('.cart-btn');
-        if (cartBtn) {
-            cartBtn.addEventListener('click', () => {
-                this.showCart();
-            });
-        }
-
         // Search functionality
         const searchInput = document.querySelector('.search-input');
         if (searchInput) {
@@ -947,139 +929,15 @@ class Store {
                 this.filterProducts(e.target.value);
             });
         }
-    }
 
-    addToCart(productCard) {
-        const productId = productCard.dataset.productId || Math.random().toString(36).substr(2, 9);
-        const productName = productCard.querySelector('.product-title')?.textContent || '';
-        const productPrice = productCard.querySelector('.product-price')?.textContent || '';
-        const productImage = productCard.querySelector('.product-image img')?.src || '';
-
-        const existingItem = this.cart.find(item => item.id === productId);
-        
-        if (existingItem) {
-            existingItem.quantity += 1;
-        } else {
-            this.cart.push({
-                id: productId,
-                name: productName,
-                price: productPrice,
-                image: productImage,
-                quantity: 1
+        // WhatsApp button analytics (optional)
+        document.querySelectorAll('.whatsapp-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                // Track WhatsApp clicks for analytics
+                const productName = e.target.closest('.product-card')?.querySelector('.product-title')?.textContent;
+                console.log('WhatsApp order initiated for:', productName);
             });
-        }
-
-        this.updateCartDisplay();
-        this.showCartNotification();
-    }
-
-    removeFromCart(productId) {
-        this.cart = this.cart.filter(item => item.id !== productId);
-        this.updateCartDisplay();
-    }
-
-    updateCartDisplay() {
-        const cartCount = this.cart.reduce((total, item) => total + item.quantity, 0);
-        const cartBtn = document.querySelector('.cart-btn');
-        
-        if (cartBtn) {
-            const countElement = cartBtn.querySelector('.cart-count') || document.createElement('span');
-            countElement.className = 'cart-count';
-            countElement.textContent = cartCount;
-            
-            if (cartCount > 0 && !cartBtn.querySelector('.cart-count')) {
-                cartBtn.appendChild(countElement);
-            } else if (cartCount === 0 && cartBtn.querySelector('.cart-count')) {
-                cartBtn.removeChild(countElement);
-            }
-        }
-    }
-
-    showCart() {
-        if (this.cart.length === 0) {
-            alert('السلة فارغة');
-            return;
-        }
-
-        let cartHTML = \`
-            <div class="cart-modal">
-                <div class="cart-content">
-                    <div class="cart-header">
-                        <h3>سلة التسوق</h3>
-                        <button class="close-cart">×</button>
-                    </div>
-                    <div class="cart-items">
-                        \${this.cart.map(item => \`
-                            <div class="cart-item">
-                                <img src="\${item.image}" alt="\${item.name}" />
-                                <div class="cart-item-details">
-                                    <h4>\${item.name}</h4>
-                                    <p>\${item.price}</p>
-                                    <div class="quantity-controls">
-                                        <button onclick="store.updateQuantity('\${item.id}', -1)">-</button>
-                                        <span>\${item.quantity}</span>
-                                        <button onclick="store.updateQuantity('\${item.id}', 1)">+</button>
-                                    </div>
-                                </div>
-                                <button onclick="store.removeFromCart('\${item.id}')" class="remove-item">حذف</button>
-                            </div>
-                        \`).join('')}
-                    </div>
-                    <div class="cart-footer">
-                        <button class="checkout-btn">إتمام الشراء</button>
-                    </div>
-                </div>
-            </div>
-        \`;
-
-        document.body.insertAdjacentHTML('beforeend', cartHTML);
-        
-        // Close cart functionality
-        document.querySelector('.close-cart').addEventListener('click', () => {
-            document.querySelector('.cart-modal').remove();
         });
-
-        // Close on background click
-        document.querySelector('.cart-modal').addEventListener('click', (e) => {
-            if (e.target.classList.contains('cart-modal')) {
-                document.querySelector('.cart-modal').remove();
-            }
-        });
-    }
-
-    updateQuantity(productId, change) {
-        const item = this.cart.find(item => item.id === productId);
-        if (item) {
-            item.quantity += change;
-            if (item.quantity <= 0) {
-                this.removeFromCart(productId);
-            }
-            this.updateCartDisplay();
-            // Refresh cart modal if open
-            const cartModal = document.querySelector('.cart-modal');
-            if (cartModal) {
-                cartModal.remove();
-                this.showCart();
-            }
-        }
-    }
-
-    showCartNotification() {
-        const notification = document.createElement('div');
-        notification.className = 'cart-notification';
-        notification.textContent = 'تم إضافة المنتج للسلة!';
-        document.body.appendChild(notification);
-
-        setTimeout(() => {
-            notification.classList.add('show');
-        }, 100);
-
-        setTimeout(() => {
-            notification.classList.remove('show');
-            setTimeout(() => {
-                document.body.removeChild(notification);
-            }, 300);
-        }, 2000);
     }
 
     filterProducts(searchTerm) {
@@ -1098,6 +956,27 @@ class Store {
             }
         });
     }
+
+    // Utility function to show notifications
+    showNotification(message, type = 'success') {
+        const notification = document.createElement('div');
+        notification.className = \`notification notification-\${type}\`;
+        notification.textContent = message;
+        document.body.appendChild(notification);
+
+        setTimeout(() => {
+            notification.classList.add('show');
+        }, 100);
+
+        setTimeout(() => {
+            notification.classList.remove('show');
+            setTimeout(() => {
+                if (document.body.contains(notification)) {
+                    document.body.removeChild(notification);
+                }
+            }, 300);
+        }, 3000);
+    }
 }
 
 // FAQ Toggle Function
@@ -1114,132 +993,36 @@ function toggleFAQ(index) {
 // Initialize store
 const store = new Store();
 
-// Add some additional CSS for cart modal and notifications
+// Add some additional CSS for notifications
 const additionalCSS = \`
-    .cart-modal {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.5);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 1000;
-    }
-
-    .cart-content {
-        background: white;
-        padding: 2rem;
-        border-radius: 12px;
-        max-width: 500px;
-        width: 90%;
-        max-height: 80vh;
-        overflow-y: auto;
-    }
-
-    .cart-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 1rem;
-        padding-bottom: 1rem;
-        border-bottom: 1px solid #eee;
-    }
-
-    .close-cart {
-        background: none;
-        border: none;
-        font-size: 1.5rem;
-        cursor: pointer;
-        color: #666;
-    }
-
-    .cart-item {
-        display: flex;
-        gap: 1rem;
-        padding: 1rem 0;
-        border-bottom: 1px solid #eee;
-        align-items: center;
-    }
-
-    .cart-item img {
-        width: 60px;
-        height: 60px;
-        object-fit: cover;
-        border-radius: 8px;
-    }
-
-    .cart-item-details {
-        flex: 1;
-    }
-
-    .quantity-controls {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        margin-top: 0.5rem;
-    }
-
-    .quantity-controls button {
-        width: 30px;
-        height: 30px;
-        border: 1px solid #ddd;
-        background: white;
-        border-radius: 4px;
-        cursor: pointer;
-    }
-
-    .remove-item {
-        background: #dc3545;
-        color: white;
-        border: none;
-        padding: 0.5rem 1rem;
-        border-radius: 4px;
-        cursor: pointer;
-    }
-
-    .checkout-btn {
-        width: 100%;
-        background: #28a745;
-        color: white;
-        border: none;
-        padding: 1rem;
-        border-radius: 8px;
-        font-size: 1rem;
-        cursor: pointer;
-        margin-top: 1rem;
-    }
-
-    .cart-count {
-        background: #dc3545;
-        color: white;
-        border-radius: 50%;
-        width: 20px;
-        height: 20px;
-        font-size: 12px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-left: 0.5rem;
-    }
-
-    .cart-notification {
+    .notification {
         position: fixed;
         top: 20px;
         right: 20px;
-        background: #28a745;
+        background: #25D366;
         color: white;
         padding: 1rem 1.5rem;
         border-radius: 8px;
         transform: translateX(400px);
         transition: transform 0.3s ease;
         z-index: 1001;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     }
 
-    .cart-notification.show {
+    .notification.show {
         transform: translateX(0);
+    }
+
+    .notification-success {
+        background: #25D366;
+    }
+
+    .notification-error {
+        background: #dc3545;
+    }
+
+    .notification-info {
+        background: #17a2b8;
     }
 \`;
 
