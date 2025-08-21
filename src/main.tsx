@@ -148,7 +148,7 @@ const initialStoreData: StoreData = {
           ]
         }
       ],
-      socialLinks: [
+      socialMedia: [
         { platform: 'facebook', url: '#' },
         { platform: 'twitter', url: '#' },
         { platform: 'instagram', url: '#' }
