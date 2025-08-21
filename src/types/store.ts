@@ -80,12 +80,22 @@ export interface StoreSettings {
   accentColor: string;
   fontFamily: string;
   layout: 'grid' | 'list' | 'masonry';
-  headerStyle: 'classic' | 'modern' | 'minimal';
+  headerTemplate: string;
+  footerTemplate: string;
   footerText: string;
   contactInfo: {
     email: string;
     phone: string;
     address: string;
+  };
+  whatsappSettings: {
+    enabled: boolean;
+    phoneNumber: string;
+    messageTemplate: string;
+    includeProductName: boolean;
+    includeProductDescription: boolean;
+    includeProductPrice: boolean;
+    includeStoreInfo: boolean;
   };
   heroSection: HeroSection;
   productSections: ProductSection;

@@ -186,16 +186,148 @@ export default function SettingsPanel({ settings, onUpdateSettings }: SettingsPa
         </div>
 
         <div className="mt-4">
-          <label className="block text-sm font-medium mb-2">نمط الرأس</label>
+          <label className="block text-sm font-medium mb-2">قالب الرأس</label>
           <select
-            value={settings.headerStyle}
-            onChange={(e) => handleChange('headerStyle', e.target.value)}
+            value={settings.headerTemplate}
+            onChange={(e) => handleChange('headerTemplate', e.target.value)}
             className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           >
-            <option value="classic">كلاسيكي</option>
-            <option value="modern">عصري</option>
-            <option value="minimal">بسيط</option>
+            <option value="classic">الكلاسيكي</option>
+            <option value="modern">العصري</option>
+            <option value="minimal">البسيط</option>
+            <option value="elegant">الأنيق</option>
+            <option value="corporate">المؤسسي</option>
+            <option value="creative">الإبداعي</option>
           </select>
+        </div>
+
+        <div className="mt-4">
+          <label className="block text-sm font-medium mb-2">قالب التذييل</label>
+          <select
+            value={settings.footerTemplate}
+            onChange={(e) => handleChange('footerTemplate', e.target.value)}
+            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          >
+            <option value="default">الافتراضي</option>
+            <option value="minimal">البسيط</option>
+            <option value="detailed">المفصل</option>
+            <option value="modern">العصري</option>
+          </select>
+        </div>
+      </div>
+
+      <div className="bg-white rounded-lg p-6 shadow-sm">
+        <h3 className="text-lg font-semibold mb-4">إعدادات الواتساب</h3>
+        
+        <div className="space-y-4">
+          <div>
+            <label className="flex items-center gap-2 mb-4">
+              <input
+                type="checkbox"
+                checked={settings.whatsappSettings.enabled}
+                onChange={(e) => handleChange('whatsappSettings', {
+                  ...settings.whatsappSettings,
+                  enabled: e.target.checked
+                })}
+                className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+              />
+              <span className="text-sm font-medium">تفعيل الشراء عبر الواتساب</span>
+            </label>
+          </div>
+
+          {settings.whatsappSettings.enabled && (
+            <>
+              <div>
+                <label className="block text-sm font-medium mb-2">رقم الواتساب (مع رمز البلد)</label>
+                <input
+                  type="tel"
+                  value={settings.whatsappSettings.phoneNumber}
+                  onChange={(e) => handleChange('whatsappSettings', {
+                    ...settings.whatsappSettings,
+                    phoneNumber: e.target.value
+                  })}
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="966501234567"
+                  dir="ltr"
+                />
+                <p className="text-xs text-gray-500 mt-1">مثال: 966501234567 (بدون علامة +)</p>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-2">قالب الرسالة</label>
+                <textarea
+                  value={settings.whatsappSettings.messageTemplate}
+                  onChange={(e) => handleChange('whatsappSettings', {
+                    ...settings.whatsappSettings,
+                    messageTemplate: e.target.value
+                  })}
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  rows={4}
+                  placeholder="مرحباً، أريد شراء هذا المنتج..."
+                />
+                <p className="text-xs text-gray-500 mt-1">
+                  يمكنك استخدام: {'{productName}'}, {'{productPrice}'}, {'{productDescription}'}, {'{storeName}'}
+                </p>
+              </div>
+
+              <div className="border-t pt-4">
+                <h4 className="font-medium mb-3">ما يتم تضمينه في الرسالة:</h4>
+                <div className="space-y-2">
+                  <label className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      checked={settings.whatsappSettings.includeProductName}
+                      onChange={(e) => handleChange('whatsappSettings', {
+                        ...settings.whatsappSettings,
+                        includeProductName: e.target.checked
+                      })}
+                      className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                    />
+                    <span className="text-sm">اسم المنتج</span>
+                  </label>
+
+                  <label className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      checked={settings.whatsappSettings.includeProductDescription}
+                      onChange={(e) => handleChange('whatsappSettings', {
+                        ...settings.whatsappSettings,
+                        includeProductDescription: e.target.checked
+                      })}
+                      className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                    />
+                    <span className="text-sm">وصف المنتج</span>
+                  </label>
+
+                  <label className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      checked={settings.whatsappSettings.includeProductPrice}
+                      onChange={(e) => handleChange('whatsappSettings', {
+                        ...settings.whatsappSettings,
+                        includeProductPrice: e.target.checked
+                      })}
+                      className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                    />
+                    <span className="text-sm">سعر المنتج</span>
+                  </label>
+
+                  <label className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      checked={settings.whatsappSettings.includeStoreInfo}
+                      onChange={(e) => handleChange('whatsappSettings', {
+                        ...settings.whatsappSettings,
+                        includeStoreInfo: e.target.checked
+                      })}
+                      className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                    />
+                    <span className="text-sm">معلومات المتجر</span>
+                  </label>
+                </div>
+              </div>
+            </>
+          )}
         </div>
       </div>
 

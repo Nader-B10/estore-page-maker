@@ -1,5 +1,5 @@
 import React from 'react';
-import { ShoppingCart, Mail, Phone, MapPin, Star, Truck, Shield, Headphones, Heart, Check, Gift, Clock, ChevronDown } from 'lucide-react';
+import { Mail, Phone, MapPin, Star, Truck, Shield, Headphones, Heart, Check, Gift, Clock, ChevronDown, MessageCircle, Package } from 'lucide-react';
 import { StoreData } from '../../types/store';
 
 interface StorePreviewProps {
@@ -39,14 +39,44 @@ export default function StorePreview({ storeData }: StorePreviewProps) {
   };
 
   const getHeaderClass = () => {
-    switch (settings.headerStyle) {
+    switch (settings.headerTemplate) {
       case 'modern':
         return 'bg-gradient-to-r from-blue-600 to-purple-600 text-white';
       case 'minimal':
         return 'bg-white border-b border-gray-200 text-gray-800';
+      case 'elegant':
+        return 'bg-gradient-to-r from-gray-900 to-gray-700 text-white';
+      case 'corporate':
+        return 'bg-white border-b-2 border-blue-600 text-gray-800';
+      case 'creative':
+        return 'bg-gradient-to-45deg from-purple-600 via-pink-600 to-blue-600 text-white';
       default:
         return 'bg-gray-900 text-white';
     }
+  };
+
+  const generateWhatsAppMessage = (product: any) => {
+    if (!settings.whatsappSettings.enabled || !settings.whatsappSettings.phoneNumber) {
+      return '#';
+    }
+
+    let message = settings.whatsappSettings.messageTemplate;
+    
+    if (settings.whatsappSettings.includeProductName) {
+      message = message.replace('{productName}', product.name);
+    }
+    if (settings.whatsappSettings.includeProductPrice) {
+      message = message.replace('{productPrice}', `$${product.price}`);
+    }
+    if (settings.whatsappSettings.includeProductDescription) {
+      message = message.replace('{productDescription}', product.description);
+    }
+    if (settings.whatsappSettings.includeStoreInfo) {
+      message = message.replace('{storeName}', settings.storeName);
+    }
+
+    const encodedMessage = encodeURIComponent(message);
+    return `https://wa.me/${settings.whatsappSettings.phoneNumber}?text=${encodedMessage}`;
   };
 
   const ProductCard = ({ product }: { product: any }) => (
@@ -87,12 +117,26 @@ export default function StorePreview({ storeData }: StorePreviewProps) {
               </span>
             )}
           </div>
-          <button
-            className="px-4 py-2 text-white rounded-lg hover:opacity-90 transition-opacity"
-            style={{ backgroundColor: settings.secondaryColor }}
-          >
-            أضف للسلة
-          </button>
+          {settings.whatsappSettings.enabled && settings.whatsappSettings.phoneNumber ? (
+            <a
+              href={generateWhatsAppMessage(product)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-4 py-2 text-white rounded-lg hover:opacity-90 transition-all duration-200 flex items-center gap-2 hover:scale-105"
+              style={{ backgroundColor: '#25D366' }}
+            >
+              <MessageCircle size={16} />
+              شراء الآن
+            </a>
+          ) : (
+            <button
+              className="px-4 py-2 text-white rounded-lg opacity-50 cursor-not-allowed"
+              style={{ backgroundColor: settings.secondaryColor }}
+              disabled
+            >
+              غير متاح
+            </button>
+          )}
         </div>
       </div>
     </div>
@@ -113,9 +157,19 @@ export default function StorePreview({ storeData }: StorePreviewProps) {
                 <p className="text-sm opacity-90">{settings.description}</p>
               </div>
             </div>
-            <div className="flex items-center gap-4">
-              <ShoppingCart size={24} />
-            </div>
+            {settings.whatsappSettings.enabled && settings.whatsappSettings.phoneNumber && (
+              <div className="flex items-center gap-4">
+                <a
+                  href={`https://wa.me/${settings.whatsappSettings.phoneNumber}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition-colors"
+                >
+                  <MessageCircle size={20} />
+                  تواصل معنا
+                </a>
+              </div>
+            )}
           </div>
         </div>
       </header>
@@ -220,7 +274,7 @@ export default function StorePreview({ storeData }: StorePreviewProps) {
         ) : (
           <div className="text-center py-12">
             <div className="text-gray-400 mb-4">
-              <ShoppingCart size={64} className="mx-auto" />
+              <Package size={64} className="mx-auto" />
             </div>
             <h3 className="text-xl font-semibold text-gray-600 mb-2">لا توجد منتجات بعد</h3>
             <p className="text-gray-500">ابدأ بإضافة منتجات إلى متجرك</p>

@@ -17,12 +17,22 @@ const defaultSettings: StoreSettings = {
   accentColor: '#f59e0b',
   fontFamily: 'Cairo',
   layout: 'grid',
-  headerStyle: 'modern',
+  headerTemplate: 'modern',
+  footerTemplate: 'default',
   footerText: '',
   contactInfo: {
     email: '',
     phone: '',
     address: ''
+  },
+  whatsappSettings: {
+    enabled: true,
+    phoneNumber: '',
+    messageTemplate: 'مرحباً، أريد شراء هذا المنتج:\n\n📦 *{productName}*\n💰 السعر: {productPrice}\n\n{productDescription}\n\nشكراً لكم',
+    includeProductName: true,
+    includeProductDescription: true,
+    includeProductPrice: true,
+    includeStoreInfo: true,
   },
   heroSection: {
     enabled: true,
