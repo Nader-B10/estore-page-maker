@@ -244,7 +244,7 @@ export default function SectionsManager({ settings, onUpdateSettings }: Sections
       {activeSection === 'products' && (
         <div className="space-y-6">
           {/* Featured Products */}
-          <div className="bg-white rounded-lg p-6 shadow-sm">
+          <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold">المنتجات المميزة</h3>
               <button
@@ -267,7 +267,7 @@ export default function SectionsManager({ settings, onUpdateSettings }: Sections
                   type="text"
                   value={settings.productSections.featured.title}
                   onChange={(e) => handleProductSectionChange('featured', 'title', e.target.value)}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                 />
               </div>
               <div>
@@ -276,7 +276,7 @@ export default function SectionsManager({ settings, onUpdateSettings }: Sections
                   type="text"
                   value={settings.productSections.featured.subtitle}
                   onChange={(e) => handleProductSectionChange('featured', 'subtitle', e.target.value)}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                 />
               </div>
               <div>
@@ -287,14 +287,14 @@ export default function SectionsManager({ settings, onUpdateSettings }: Sections
                   max="12"
                   value={settings.productSections.featured.limit}
                   onChange={(e) => handleProductSectionChange('featured', 'limit', parseInt(e.target.value))}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                 />
               </div>
             </div>
           </div>
 
           {/* Best Sellers */}
-          <div className="bg-white rounded-lg p-6 shadow-sm">
+          <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold">الأعلى مبيعاً</h3>
               <button
@@ -317,7 +317,7 @@ export default function SectionsManager({ settings, onUpdateSettings }: Sections
                   type="text"
                   value={settings.productSections.bestSellers.title}
                   onChange={(e) => handleProductSectionChange('bestSellers', 'title', e.target.value)}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                 />
               </div>
               <div>
@@ -326,7 +326,7 @@ export default function SectionsManager({ settings, onUpdateSettings }: Sections
                   type="text"
                   value={settings.productSections.bestSellers.subtitle}
                   onChange={(e) => handleProductSectionChange('bestSellers', 'subtitle', e.target.value)}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                 />
               </div>
               <div>
@@ -337,14 +337,14 @@ export default function SectionsManager({ settings, onUpdateSettings }: Sections
                   max="12"
                   value={settings.productSections.bestSellers.limit}
                   onChange={(e) => handleProductSectionChange('bestSellers', 'limit', parseInt(e.target.value))}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                 />
               </div>
             </div>
           </div>
 
           {/* On Sale */}
-          <div className="bg-white rounded-lg p-6 shadow-sm">
+          <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold">عروض وتخفيضات</h3>
               <button
@@ -367,7 +367,7 @@ export default function SectionsManager({ settings, onUpdateSettings }: Sections
                   type="text"
                   value={settings.productSections.onSale.title}
                   onChange={(e) => handleProductSectionChange('onSale', 'title', e.target.value)}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                 />
               </div>
               <div>
@@ -376,7 +376,7 @@ export default function SectionsManager({ settings, onUpdateSettings }: Sections
                   type="text"
                   value={settings.productSections.onSale.subtitle}
                   onChange={(e) => handleProductSectionChange('onSale', 'subtitle', e.target.value)}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                 />
               </div>
               <div>
@@ -387,7 +387,7 @@ export default function SectionsManager({ settings, onUpdateSettings }: Sections
                   max="12"
                   value={settings.productSections.onSale.limit}
                   onChange={(e) => handleProductSectionChange('onSale', 'limit', parseInt(e.target.value))}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                 />
               </div>
             </div>
@@ -397,7 +397,7 @@ export default function SectionsManager({ settings, onUpdateSettings }: Sections
 
       {/* Why Choose Us Section */}
       {activeSection === 'why-choose-us' && (
-        <div className="bg-white rounded-lg p-6 shadow-sm">
+        <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-lg font-semibold">لماذا تختارنا</h3>
             <div className="flex items-center gap-3">
@@ -433,7 +433,7 @@ export default function SectionsManager({ settings, onUpdateSettings }: Sections
                   type="text"
                   value={settings.whyChooseUs.title}
                   onChange={(e) => handleWhyChooseUsChange('title', e.target.value)}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                 />
               </div>
               <div>
@@ -442,7 +442,7 @@ export default function SectionsManager({ settings, onUpdateSettings }: Sections
                   type="text"
                   value={settings.whyChooseUs.subtitle}
                   onChange={(e) => handleWhyChooseUsChange('subtitle', e.target.value)}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                 />
               </div>
             </div>
@@ -450,7 +450,7 @@ export default function SectionsManager({ settings, onUpdateSettings }: Sections
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {settings.whyChooseUs.items.map((item) => (
-              <div key={item.id} className="border border-gray-200 rounded-lg p-4">
+              <div key={item.id} className="border border-gray-200 rounded-lg p-4 bg-gray-50">
                 <div className="flex justify-between items-start mb-2">
                   <h4 className="font-medium">{item.title}</h4>
                   <div className="flex gap-1">
@@ -481,7 +481,7 @@ export default function SectionsManager({ settings, onUpdateSettings }: Sections
 
       {/* FAQ Section */}
       {activeSection === 'faq' && (
-        <div className="bg-white rounded-lg p-6 shadow-sm">
+        <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-lg font-semibold">الأسئلة الشائعة</h3>
             <div className="flex items-center gap-3">
@@ -517,7 +517,7 @@ export default function SectionsManager({ settings, onUpdateSettings }: Sections
                   type="text"
                   value={settings.faq.title}
                   onChange={(e) => handleFAQChange('title', e.target.value)}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                 />
               </div>
               <div>
@@ -526,7 +526,7 @@ export default function SectionsManager({ settings, onUpdateSettings }: Sections
                   type="text"
                   value={settings.faq.subtitle}
                   onChange={(e) => handleFAQChange('subtitle', e.target.value)}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                 />
               </div>
             </div>
@@ -534,7 +534,7 @@ export default function SectionsManager({ settings, onUpdateSettings }: Sections
 
           <div className="space-y-3">
             {settings.faq.items.map((item) => (
-              <div key={item.id} className="border border-gray-200 rounded-lg p-4">
+              <div key={item.id} className="border border-gray-200 rounded-lg p-4 bg-gray-50">
                 <div className="flex justify-between items-start mb-2">
                   <h4 className="font-medium">{item.question}</h4>
                   <div className="flex gap-1">
