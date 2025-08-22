@@ -181,6 +181,24 @@ export default function StorePreview({ storeData }: StorePreviewProps) {
                 <ProductCard key={product.id} product={product} />
               ))}
             </div>
+            
+            {/* View More Button */}
+            <div className="text-center mt-8">
+              <button 
+                onClick={() => window.open('/products?filter=featured', '_blank')}
+                className="inline-flex items-center gap-2 px-8 py-3 rounded-full font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg"
+                style={{
+                  backgroundColor: `${currentTheme.palette.primary}10`,
+                  color: currentTheme.palette.primary,
+                  border: `2px solid ${currentTheme.palette.primary}20`
+                }}
+              >
+                <span>عرض جميع المنتجات المميزة</span>
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+              </button>
+            </div>
           </section>
         )}
 
@@ -198,6 +216,24 @@ export default function StorePreview({ storeData }: StorePreviewProps) {
               {bestSellerProducts.map((product) => (
                 <ProductCard key={product.id} product={product} />
               ))}
+            </div>
+            
+            {/* View More Button */}
+            <div className="text-center mt-8">
+              <button 
+                onClick={() => window.open('/products?filter=bestsellers', '_blank')}
+                className="inline-flex items-center gap-2 px-8 py-3 rounded-full font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg"
+                style={{
+                  backgroundColor: `${currentTheme.palette.secondary}10`,
+                  color: currentTheme.palette.secondary,
+                  border: `2px solid ${currentTheme.palette.secondary}20`
+                }}
+              >
+                <span>عرض جميع الأعلى مبيعاً</span>
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+              </button>
             </div>
           </section>
         )}
@@ -217,33 +253,28 @@ export default function StorePreview({ storeData }: StorePreviewProps) {
                 <ProductCard key={product.id} product={product} />
               ))}
             </div>
+            
+            {/* View More Button */}
+            <div className="text-center mt-8">
+              <button 
+                onClick={() => window.open('/products?filter=onsale', '_blank')}
+                className="inline-flex items-center gap-2 px-8 py-3 rounded-full font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg"
+                style={{
+                  backgroundColor: `${currentTheme.palette.accent}10`,
+                  color: currentTheme.palette.accent,
+                  border: `2px solid ${currentTheme.palette.accent}20`
+                }}
+              >
+                <span>عرض جميع العروض والتخفيضات</span>
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+              </button>
+            </div>
           </section>
         )}
 
         {/* All Products */}
-        <div className="mb-8">
-          <h2 className="text-3xl font-bold text-center mb-2" style={{ color: currentTheme.palette.primary }}>
-            جميع المنتجات
-          </h2>
-          <p className="text-center" style={{ color: currentTheme.palette.textSecondary }}>تصفح مجموعتنا الكاملة من المنتجات</p>
-          <div className="w-24 h-1 mx-auto rounded" style={{ backgroundColor: currentTheme.palette.accent }}></div>
-        </div>
-
-        {products.length > 0 ? (
-          <div className={`grid ${getLayoutClass()} gap-6`}>
-            {products.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
-          </div>
-        ) : (
-          <div className="text-center py-12">
-            <div className="mb-4" style={{ color: currentTheme.palette.textSecondary }}>
-              <Package size={64} className="mx-auto" />
-            </div>
-            <h3 className="text-xl font-semibold mb-2" style={{ color: currentTheme.palette.textSecondary }}>لا توجد منتجات بعد</h3>
-            <p style={{ color: currentTheme.palette.textSecondary }}>ابدأ بإضافة منتجات إلى متجرك</p>
-          </div>
-        )}
       </main>
 
       {/* About Section */}

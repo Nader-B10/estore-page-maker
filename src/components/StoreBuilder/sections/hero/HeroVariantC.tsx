@@ -99,7 +99,11 @@ export default function HeroVariantC({ settings }: HeroVariantCProps) {
             <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
               <a
                 href={heroSection.ctaLink}
-                className="group relative inline-flex items-center justify-center gap-4 text-white font-black py-6 px-12 rounded-full text-xl transition-all duration-300 transform hover:scale-110 hover:shadow-2xl"
+                onClick={(e) => {
+                  e.preventDefault();
+                  window.open('/products', '_blank');
+                }}
+                className="group relative inline-flex items-center justify-center gap-4 text-white font-black py-6 px-12 rounded-full text-xl transition-all duration-300 transform hover:scale-110 hover:shadow-2xl cursor-pointer"
                 style={{
                   background: `linear-gradient(135deg, ${settings.primaryColor}, ${settings.secondaryColor}, ${settings.accentColor})`,
                   boxShadow: `0 20px 40px ${settings.primaryColor}50`

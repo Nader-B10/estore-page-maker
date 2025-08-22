@@ -106,6 +106,10 @@ export const exportStore = async (storeData: StoreData) => {
   const jsContent = generateStoreJS();
   jsFolder?.file('main.js', jsContent);
   
+  // Create products page
+  const productsHTML = generateProductsPageHTML(storeData);
+  zip.file('products.html', productsHTML);
+  
   // Create images folder and add product images
   const imagesFolder = zip.folder('images');
   

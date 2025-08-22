@@ -93,6 +93,14 @@ export const generateStoreHTML = (storeData: StoreData): string => {
                 <div class="products-container ${getLayoutClass()}">
                     ${featuredProducts.map(product => generateProductHTML(product)).join('')}
                 </div>
+                <div class="text-center mt-8">
+                    <a href="products.html?filter=featured" class="inline-flex items-center gap-2 px-8 py-3 rounded-full font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg border-2" style="background-color: ${settings.primaryColor}10; color: ${settings.primaryColor}; border-color: ${settings.primaryColor}20;">
+                        <span>عرض جميع المنتجات المميزة</span>
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                        </svg>
+                    </a>
+                </div>
             </section>
             ` : ''}
 
@@ -105,6 +113,14 @@ export const generateStoreHTML = (storeData: StoreData): string => {
                 </div>
                 <div class="products-container ${getLayoutClass()}">
                     ${bestSellerProducts.map(product => generateProductHTML(product)).join('')}
+                </div>
+                <div class="text-center mt-8">
+                    <a href="products.html?filter=bestsellers" class="inline-flex items-center gap-2 px-8 py-3 rounded-full font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg border-2" style="background-color: ${settings.secondaryColor}10; color: ${settings.secondaryColor}; border-color: ${settings.secondaryColor}20;">
+                        <span>عرض جميع الأعلى مبيعاً</span>
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                        </svg>
+                    </a>
                 </div>
             </section>
             ` : ''}
@@ -119,6 +135,14 @@ export const generateStoreHTML = (storeData: StoreData): string => {
                 <div class="products-container ${getLayoutClass()}">
                     ${onSaleProducts.map(product => generateProductHTML(product)).join('')}
                 </div>
+                <div class="text-center mt-8">
+                    <a href="products.html?filter=onsale" class="inline-flex items-center gap-2 px-8 py-3 rounded-full font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg border-2" style="background-color: ${settings.accentColor}10; color: ${settings.accentColor}; border-color: ${settings.accentColor}20;">
+                        <span>عرض جميع العروض والتخفيضات</span>
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                        </svg>
+                    </a>
+                </div>
             </section>
             ` : ''}
 
@@ -129,21 +153,14 @@ export const generateStoreHTML = (storeData: StoreData): string => {
                     <div class="section-line"></div>
                 </div>
 
-                ${
-                  products.length > 0
-                    ? `<div class="products-container ${getLayoutClass()}">${productsHTML}</div>`
-                    : `
-                <div class="empty-state">
-                    <div class="empty-icon">
-                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293A1 1 0 005 17v0a1 1 0 001 1h1M17 13v6a2 2 0 01-2 2H9a2 2 0 01-2-2v-6.5"></path>
+                <div class="text-center py-12">
+                    <a href="products.html" class="inline-flex items-center gap-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold py-4 px-8 rounded-full hover:shadow-lg transition-all duration-300">
+                        <span>تصفح جميع المنتجات</span>
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
                         </svg>
-                    </div>
-                    <h3>لا توجد منتجات بعد</h3>
-                    <p>ابدأ بإضافة منتجات إلى متجرك</p>
+                    </a>
                 </div>
-                `
-                }
             </section>
         </div>
     </main>
