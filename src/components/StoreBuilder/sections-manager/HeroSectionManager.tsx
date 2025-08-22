@@ -1,7 +1,7 @@
 import React from 'react';
 import { Upload } from 'lucide-react';
 import { StoreSettings } from '../../../types/store';
-import { getAvailableHeros } from '../../../utils/componentRegistry';
+import { getAvailableHeros } from '../../../registry/componentRegistry';
 
 interface HeroSectionManagerProps {
   settings: StoreSettings;
