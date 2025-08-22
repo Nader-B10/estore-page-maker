@@ -107,6 +107,11 @@ export default function StorePreview({ storeData }: StorePreviewProps) {
             <span className="text-lg font-bold" style={{ color: currentTheme.palette.primary }}>
               ${product.price}
             </span>
+            {product.originalPrice && product.originalPrice > product.price && (
+              <span className="text-sm text-gray-500 line-through">
+                ${product.originalPrice}
+              </span>
+            )}
           </div>
           {settings.whatsappSettings.enabled && settings.whatsappSettings.phoneNumber ? (
             <a

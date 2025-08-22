@@ -29,8 +29,7 @@ export default function IconFeatures({ settings }: IconFeaturesProps) {
 
   return (
     <section 
-      className="relative py-20 overflow-hidden"
-      style={{ backgroundColor: settings.surface }}
+      className="relative py-20 overflow-hidden bg-gray-50"
     >
       {/* Subtle Background Pattern */}
       <div className="absolute inset-0">
@@ -63,9 +62,8 @@ export default function IconFeatures({ settings }: IconFeaturesProps) {
         {/* Section Header */}
         <div className="text-center mb-16">
           <div 
-            className="inline-flex items-center gap-2 border rounded-full px-6 py-3 mb-6"
+            className="inline-flex items-center gap-2 border rounded-full px-6 py-3 mb-6 bg-white shadow-lg"
             style={{
-              background: `linear-gradient(135deg, ${settings.primaryColor}05, ${settings.accentColor}05)`,
               borderColor: `${settings.primaryColor}20`
             }}
           >
@@ -82,15 +80,13 @@ export default function IconFeatures({ settings }: IconFeaturesProps) {
           </div>
           
           <h2 
-            className="text-4xl md:text-5xl font-black mb-4"
-            style={{ color: settings.text }}
+            className="text-4xl md:text-5xl font-black mb-4 text-gray-800"
           >
             {whyChooseUs.title}
           </h2>
           
           <p 
-            className="text-lg md:text-xl max-w-2xl mx-auto"
-            style={{ color: settings.textSecondary }}
+            className="text-lg md:text-xl max-w-2xl mx-auto text-gray-600"
           >
             {whyChooseUs.subtitle}
           </p>
@@ -110,9 +106,8 @@ export default function IconFeatures({ settings }: IconFeaturesProps) {
                 {/* Icon Container */}
                 <div className="relative mb-6">
                   <div 
-                    className="w-20 h-20 border-2 rounded-2xl flex items-center justify-center mx-auto group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 shadow-lg group-hover:shadow-xl"
+                    className="w-20 h-20 border-2 rounded-2xl flex items-center justify-center mx-auto group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 shadow-lg group-hover:shadow-xl bg-white"
                     style={{
-                      backgroundColor: `${settings.primaryColor}05`,
                       borderColor: `${settings.primaryColor}20`
                     }}
                   >
@@ -132,15 +127,13 @@ export default function IconFeatures({ settings }: IconFeaturesProps) {
                 {/* Content */}
                 <div className="space-y-3">
                   <h3 
-                    className="text-xl font-bold group-hover:opacity-80 transition-colors duration-300"
-                    style={{ color: settings.text }}
+                    className="text-xl font-bold group-hover:opacity-80 transition-colors duration-300 text-gray-800"
                   >
                     {item.title}
                   </h3>
                   
                   <p 
-                    className="text-sm leading-relaxed"
-                    style={{ color: settings.textSecondary }}
+                    className="text-sm leading-relaxed text-gray-600"
                   >
                     {item.description}
                   </p>
@@ -156,28 +149,6 @@ export default function IconFeatures({ settings }: IconFeaturesProps) {
               </div>
             );
           })}
-        </div>
-
-        {/* Bottom Decoration */}
-        <div className="text-center mt-16">
-          <div className="inline-flex items-center gap-4">
-            <div 
-              className="w-12 h-0.5"
-              style={{
-                background: `linear-gradient(90deg, transparent, ${settings.primaryColor})`
-              }}
-            ></div>
-            <div 
-              className="w-3 h-3 rounded-full animate-pulse"
-              style={{ backgroundColor: settings.primaryColor }}
-            ></div>
-            <div 
-              className="w-12 h-0.5"
-              style={{
-                background: `linear-gradient(90deg, ${settings.primaryColor}, transparent)`
-              }}
-            ></div>
-          </div>
         </div>
       </div>
     </section>

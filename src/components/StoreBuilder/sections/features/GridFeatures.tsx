@@ -93,8 +93,7 @@ export default function GridFeatures({ settings }: GridFeaturesProps) {
           </h2>
           
           <p 
-            className="text-xl md:text-2xl max-w-3xl mx-auto leading-relaxed"
-            style={{ color: settings.textSecondary }}
+            className="text-xl md:text-2xl max-w-3xl mx-auto leading-relaxed text-gray-600"
           >
             {whyChooseUs.subtitle}
           </p>
@@ -108,16 +107,15 @@ export default function GridFeatures({ settings }: GridFeaturesProps) {
         </div>
 
         {/* Features Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {whyChooseUs.items.map((item, index) => {
             const Icon = getIcon(item.icon);
             
             return (
               <div 
                 key={item.id} 
-                className="group relative backdrop-blur-sm border rounded-3xl p-8 transition-all duration-500 hover:scale-105 hover:shadow-2xl"
+                className="group relative backdrop-blur-sm border rounded-3xl p-8 transition-all duration-500 hover:scale-105 hover:shadow-2xl bg-white/50"
                 style={{ 
-                  backgroundColor: `${settings.primaryColor}05`,
                   borderColor: `${settings.primaryColor}10`,
                   animationDelay: `${index * 0.1}s` 
                 }}
@@ -153,15 +151,13 @@ export default function GridFeatures({ settings }: GridFeaturesProps) {
                 {/* Content */}
                 <div className="text-center space-y-4">
                   <h3 
-                    className="text-2xl font-bold group-hover:text-opacity-80 transition-colors duration-300"
-                    style={{ color: settings.text }}
+                    className="text-2xl font-bold group-hover:text-opacity-80 transition-colors duration-300 text-gray-800"
                   >
                     {item.title}
                   </h3>
                   
                   <p 
-                    className="leading-relaxed text-lg"
-                    style={{ color: settings.textSecondary }}
+                    className="leading-relaxed text-lg text-gray-600"
                   >
                     {item.description}
                   </p>
@@ -178,66 +174,6 @@ export default function GridFeatures({ settings }: GridFeaturesProps) {
             );
           })}
         </div>
-
-        {/* Call to Action */}
-        <div className="text-center">
-          <div className="relative inline-block">
-            <div 
-              className="backdrop-blur-sm border rounded-3xl p-12 shadow-2xl max-w-2xl mx-auto"
-              style={{
-                backgroundColor: `${settings.primaryColor}05`,
-                borderColor: `${settings.primaryColor}10`
-              }}
-            >
-              <div className="space-y-6">
-                <div 
-                  className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto"
-                  style={{
-                    background: `linear-gradient(135deg, ${settings.primaryColor}, ${settings.secondaryColor})`
-                  }}
-                >
-                  <Zap className="w-8 h-8 text-white" />
-                </div>
-                
-                <h3 
-                  className="text-3xl font-bold"
-                  style={{ color: settings.text }}
-                >
-                  مستعد للبدء؟
-                </h3>
-                
-                <p 
-                  className="text-lg leading-relaxed"
-                  style={{ color: settings.textSecondary }}
-                >
-                  انضم إلى آلاف العملاء الراضين واكتشف الفرق معنا
-                </p>
-                
-                <button 
-                  className="group relative inline-flex items-center gap-3 text-white font-bold py-4 px-8 rounded-2xl transition-all duration-300 transform hover:scale-105 hover:shadow-2xl"
-                  style={{
-                    background: `linear-gradient(135deg, ${settings.primaryColor}, ${settings.secondaryColor})`,
-                    boxShadow: `0 10px 25px ${settings.primaryColor}25`
-                  }}
-                >
-                  <span>ابدأ التسوق الآن</span>
-                  <div 
-                    className="w-2 h-2 rounded-full animate-ping"
-                    style={{ backgroundColor: settings.accentColor }}
-                  ></div>
-                </button>
-              </div>
-            </div>
-            
-            {/* Background Decoration */}
-            <div 
-              className="absolute -inset-4 rounded-3xl blur-xl -z-10 opacity-30"
-              style={{
-                background: `linear-gradient(135deg, ${settings.primaryColor}40, ${settings.secondaryColor}40)`
-              }}
-            ></div>
-          </div>
-        </div>
       </div>
     </section>
   );
@@ -249,7 +185,7 @@ export const GridFeaturesConfig = {
   description: 'عرض الميزات في شبكة أنيقة مع تأثيرات بصرية متقدمة وحركات سلسة',
   preview: '/previews/grid-features.jpg',
   category: 'modern',
-  features: ['شبكة متجاوبة', 'تأثيرات حركية', 'تدرجات متقدمة', 'دعوة للعمل'],
+  features: ['شبكة متجاوبة', 'تأثيرات حركية', 'تدرجات متقدمة', 'تصميم عصري'],
   customizable: {
     colors: true,
     layout: true,
