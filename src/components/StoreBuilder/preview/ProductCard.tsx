@@ -33,10 +33,16 @@ export default function ProductCard({ product, settings, currentTheme }: Product
     return `https://wa.me/${settings.whatsappSettings.phoneNumber}?text=${encodedMessage}`;
   };
 
+  const handleProductClick = () => {
+    // Open product detail page
+    window.open(`product-${product.id}.html`, '_blank');
+  };
+
   return (
     <div 
-      className="rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 group transform hover:-translate-y-2"
+      className="rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 group transform hover:-translate-y-2 cursor-pointer"
       style={{ backgroundColor: currentTheme.palette.surface }}
+      onClick={handleProductClick}
     >
       <div className="relative overflow-hidden">
         <img
@@ -83,7 +89,7 @@ export default function ProductCard({ product, settings, currentTheme }: Product
       </div>
 
       <div className="p-6">
-        <h3 className="font-bold text-xl mb-3 text-gray-800 group-hover:text-opacity-80 transition-colors">
+        <h3 className="font-bold text-xl mb-3 text-gray-800 group-hover:text-blue-600 transition-colors">
           {product.name}
         </h3>
         <p className="text-gray-600 mb-4 line-clamp-2 leading-relaxed">
@@ -107,6 +113,7 @@ export default function ProductCard({ product, settings, currentTheme }: Product
               href={generateWhatsAppMessage(product)}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={(e) => e.stopPropagation()}
               className="px-6 py-3 text-white rounded-xl hover:opacity-90 transition-all duration-200 flex items-center gap-2 hover:scale-105 shadow-lg font-bold"
               style={{ backgroundColor: '#25D366' }}
             >

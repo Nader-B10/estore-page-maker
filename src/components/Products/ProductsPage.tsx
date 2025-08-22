@@ -114,6 +114,11 @@ export default function ProductsPage({ storeData }: ProductsPageProps) {
     return `https://wa.me/${settings.whatsappSettings.phoneNumber}?text=${encodedMessage}`;
   };
 
+  const handleProductClick = (product: Product) => {
+    // Open product detail page
+    window.open(`product-${product.id}.html`, '_blank');
+  };
+
   return (
     <div className="min-h-screen bg-gray-50" style={{ fontFamily: settings.fontFamily }}>
       {/* Header */}
@@ -334,15 +339,16 @@ export default function ProductsPage({ storeData }: ProductsPageProps) {
                 {filteredProducts.map((product) => (
                   <div 
                     key={product.id} 
-                    className={`bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow ${
+                    className={`bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-all cursor-pointer group ${
                       viewMode === 'list' ? 'flex items-center' : ''
                     }`}
+                    onClick={() => handleProductClick(product)}
                   >
                     <div className={`relative ${viewMode === 'list' ? 'w-48 h-48 flex-shrink-0' : ''}`}>
                       <img
                         src={product.image}
                         alt={product.name}
-                        className={`object-cover ${viewMode === 'list' ? 'w-full h-full' : 'w-full h-48'}`}
+                        className={`object-cover group-hover:scale-105 transition-transform duration-300 ${viewMode === 'list' ? 'w-full h-full' : 'w-full h-48'}`}
                       />
                       <div className="absolute top-2 right-2 flex flex-col gap-1">
                         {product.category && (
@@ -359,7 +365,7 @@ export default function ProductsPage({ storeData }: ProductsPageProps) {
                     </div>
                     
                     <div className="p-4 flex-1">
-                      <h3 className="font-semibold text-lg mb-2">{product.name}</h3>
+                      <h3 className="font-semibold text-lg mb-2 group-hover:text-blue-600 transition-colors">{product.name}</h3>
                       <p className="text-gray-600 text-sm mb-3 line-clamp-2">{product.description}</p>
                       
                       <div className="flex flex-wrap gap-1 mb-3">
@@ -391,6 +397,7 @@ export default function ProductsPage({ storeData }: ProductsPageProps) {
                             href={generateWhatsAppMessage(product)}
                             target="_blank"
                             rel="noopener noreferrer"
+                            onClick={(e) => e.stopPropagation()}
                             className="flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition-colors"
                           >
                             <ShoppingCart size={16} />
