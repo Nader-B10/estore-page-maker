@@ -2,8 +2,6 @@ import React from 'react';
 import { StoreData, getThemeById } from '../../types';
 import { getHeaderComponent, getFooterComponent, getHeroComponent, getAboutComponent, getFeaturesComponent, getFAQComponent } from '../../registry';
 import ProductSection from './preview/ProductSection';
-import CategoriesSection from './preview/CategoriesSection';
-import AdvancedSearch from './preview/AdvancedSearch';
 
 interface StorePreviewProps {
   storeData: StoreData;
@@ -12,18 +10,6 @@ interface StorePreviewProps {
 export default function StorePreview({ storeData }: StorePreviewProps) {
   const { settings } = storeData;
   const currentTheme = getThemeById(settings.themeId);
-  const [filteredProducts, setFilteredProducts] = React.useState(storeData.products);
-  
-  // حساب عدد المنتجات لكل فئة
-  const productCounts = React.useMemo(() => {
-    const counts: Record<string, number> = {};
-    storeData.products.forEach(product => {
-      if (product.category) {
-        counts[product.category] = (counts[product.category] || 0) + 1;
-      }
-    });
-    return counts;
-  }, [storeData.products]);
   
   const HeaderComponent = getHeaderComponent(settings.headerTemplate).component;
   const FooterComponent = getFooterComponent(settings.footerTemplate).component;
@@ -39,35 +25,11 @@ export default function StorePreview({ storeData }: StorePreviewProps) {
       case 'hero':
         return <HeroComponent key={key} settings={settings} />;
       
-      case 'categories':
-        return (
-          <CategoriesSection
-            key={key}
-            categories={storeData.categories}
-            settings={settings}
-            productCounts={productCounts}
-          />
-        );
-      
-      case 'search':
-        return (
-          <div key={key} className="py-8 px-6">
-            <div className="max-w-4xl mx-auto">
-              <AdvancedSearch
-                products={storeData.products}
-                categories={storeData.categories}
-                settings={settings}
-                onProductsFiltered={setFilteredProducts}
-              />
-            </div>
-          </div>
-        );
-      
       case 'featured':
         return (
           <ProductSection
             key={key}
-            storeData={{ ...storeData, products: filteredProducts }}
+            storeData={storeData}
             sectionType="featured"
             currentTheme={currentTheme}
           />
@@ -77,7 +39,7 @@ export default function StorePreview({ storeData }: StorePreviewProps) {
         return (
           <ProductSection
             key={key}
-            storeData={{ ...storeData, products: filteredProducts }}
+            storeData={storeData}
             sectionType="bestSellers"
             currentTheme={currentTheme}
           />
@@ -87,7 +49,7 @@ export default function StorePreview({ storeData }: StorePreviewProps) {
         return (
           <ProductSection
             key={key}
-            storeData={{ ...storeData, products: filteredProducts }}
+            storeData={storeData}
             sectionType="onSale"
             currentTheme={currentTheme}
           />

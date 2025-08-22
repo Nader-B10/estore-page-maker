@@ -27,9 +27,6 @@ function App() {
     handleAddPage,
     handleEditPage,
     handleDeletePage,
-    handleAddCategory,
-    handleEditCategory,
-    handleDeleteCategory,
     resetStoreData,
     exportStoreData,
     importStoreData,
@@ -124,9 +121,6 @@ function App() {
             onAddPage={handleAddPage}
             onEditPage={handleEditPage}
             onDeletePage={handleDeletePage}
-            onAddCategory={handleAddCategory}
-            onEditCategory={handleEditCategory}
-            onDeleteCategory={handleDeleteCategory}
           />
 
           <AppMain storeData={storeData} />

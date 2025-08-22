@@ -5,8 +5,6 @@ import SettingsPanel from '../StoreBuilder/SettingsPanel';
 import ProductManager from '../StoreBuilder/ProductManager';
 import PageManager from '../StoreBuilder/PageManager';
 import SectionsManager from '../StoreBuilder/SectionsManager';
-import CategoryManager from '../StoreBuilder/CategoryManager';
-import SearchSettings from '../StoreBuilder/SearchSettings';
 
 interface AppSidebarProps {
   activeTab: string;
@@ -19,9 +17,6 @@ interface AppSidebarProps {
   onAddPage: (page: CustomPage) => void;
   onEditPage: (id: string, page: CustomPage) => void;
   onDeletePage: (id: string) => void;
-  onAddCategory: (category: any) => void;
-  onEditCategory: (id: string, category: any) => void;
-  onDeleteCategory: (id: string) => void;
 }
 
 export default function AppSidebar({
@@ -35,16 +30,11 @@ export default function AppSidebar({
   onAddPage,
   onEditPage,
   onDeletePage
-  onAddCategory,
-  onEditCategory,
-  onDeleteCategory
 }: AppSidebarProps) {
   const tabs = [
     { id: 'settings', label: 'الإعدادات', icon: Settings },
     { id: 'sections', label: 'الأقسام', icon: Package },
     { id: 'products', label: 'المنتجات', icon: Package },
-    { id: 'categories', label: 'الفئات', icon: Package },
-    { id: 'search', label: 'البحث', icon: Package },
     { id: 'pages', label: 'الصفحات', icon: Package },
   ];
 
@@ -107,22 +97,6 @@ export default function AppSidebar({
             onAddPage={onAddPage}
             onEditPage={onEditPage}
             onDeletePage={onDeletePage}
-          />
-        )}
-        
-        {activeTab === 'categories' && (
-          <CategoryManager
-            categories={storeData.categories}
-            onAddCategory={onAddCategory}
-            onEditCategory={onEditCategory}
-            onDeleteCategory={onDeleteCategory}
-          />
-        )}
-        
-        {activeTab === 'search' && (
-          <SearchSettings
-            settings={storeData.settings}
-            onUpdateSettings={onUpdateSettings}
           />
         )}
       </div>

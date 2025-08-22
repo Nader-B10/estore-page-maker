@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { StoreData, StoreSettings, Product, CustomPage, Category } from '../types';
+import { StoreData, StoreSettings, Product, CustomPage } from '../types/store';
 import { defaultSettings } from '../utils/defaultSettings';
 import { useErrorHandler } from './useErrorHandler';
 import { useLocalStorage } from './useLocalStorage';
@@ -11,30 +11,6 @@ export function useStoreData() {
   const initialStoreData: StoreData = {
     settings: defaultSettings,
     products: [],
-    categories: [
-      {
-        id: '1',
-        name: 'إلكترونيات',
-        description: 'أحدث الأجهزة الإلكترونية والتقنية',
-        image: '',
-        slug: 'electronics',
-        isVisible: true,
-        order: 1,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
-      },
-      {
-        id: '2',
-        name: 'أزياء',
-        description: 'أحدث صيحات الموضة والأزياء',
-        image: '',
-        slug: 'fashion',
-        isVisible: true,
-        order: 2,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
-      }
-    ],
     customPages: [
       {
         id: '1',
@@ -126,26 +102,6 @@ export function useStoreData() {
     }));
   }, 'handleDeletePage');
 
-  const handleAddCategory = withErrorHandling((category: Category) => {
-    setStoreData(prev => ({
-      ...prev,
-      categories: [...prev.categories, category]
-    }));
-  }, 'handleAddCategory');
-
-  const handleEditCategory = withErrorHandling((id: string, updatedCategory: Category) => {
-    setStoreData(prev => ({
-      ...prev,
-      categories: prev.categories.map(c => c.id === id ? updatedCategory : c)
-    }));
-  }, 'handleEditCategory');
-
-  const handleDeleteCategory = withErrorHandling((id: string) => {
-    setStoreData(prev => ({
-      ...prev,
-      categories: prev.categories.filter(c => c.id !== id)
-    }));
-  }, 'handleDeleteCategory');
   const resetStoreData = withErrorHandling(() => {
     setStoreData(initialStoreData);
   }, 'resetStoreData');
@@ -182,9 +138,6 @@ export function useStoreData() {
     handleAddPage,
     handleEditPage,
     handleDeletePage,
-    handleAddCategory,
-    handleEditCategory,
-    handleDeleteCategory,
     resetStoreData,
     exportStoreData,
     importStoreData,

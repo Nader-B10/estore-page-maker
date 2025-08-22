@@ -18,7 +18,7 @@ export const defaultSettings: StoreSettings = {
   featuresTemplate: 'grid-features',
   faqTemplate: 'accordion-faq',
   footerText: '',
-  sectionsOrder: ['hero', 'categories', 'search', 'featured', 'bestSellers', 'onSale', 'about', 'whyChooseUs', 'faq'],
+  sectionsOrder: ['hero', 'featured', 'bestSellers', 'onSale', 'about', 'whyChooseUs', 'faq'],
   headerLinks: [
     { id: '1', text: 'الرئيسية', url: '#home', type: 'internal', isVisible: true, order: 1 },
     { id: '2', text: 'المنتجات', url: '#products', type: 'internal', isVisible: true, order: 2 },
@@ -73,28 +73,6 @@ export const defaultSettings: StoreSettings = {
       limit: 4
     }
   },
-  },
-  categorySettings: {
-    showCategoryImages: true,
-    showCategoryDescription: true,
-    showProductCount: true,
-    categoriesPerRow: 4,
-    enableCategoryFilter: true
-  },
-  searchSettings: {
-    enabled: true,
-    placeholder: 'ابحث عن المنتجات...',
-    showSuggestions: true,
-    enableVoiceSearch: false,
-    searchFields: [
-      { field: 'name', enabled: true, weight: 3 },
-      { field: 'description', enabled: true, weight: 2 },
-      { field: 'category', enabled: true, weight: 2 },
-      { field: 'tags', enabled: true, weight: 1 }
-    ],
-    resultsPerPage: 12,
-    enableFilters: true,
-    enableSorting: true
   productDetailSettings: {
     showRating: true,
     showReviewsCount: true,

@@ -5,7 +5,6 @@ import ThemeSettings from './settings/ThemeSettings';
 import WhatsAppSettings from './settings/WhatsAppSettings';
 import LinksManager from './settings/LinksManager';
 import ContactSettings from './settings/ContactSettings';
-import CategorySettings from './CategorySettings';
 
 interface SettingsPanelProps {
   settings: StoreSettings;
@@ -20,7 +19,6 @@ export default function SettingsPanel({ settings, onUpdateSettings, customPages 
       <ThemeSettings settings={settings} onUpdateSettings={onUpdateSettings} />
       <WhatsAppSettings settings={settings} onUpdateSettings={onUpdateSettings} />
       <LinksManager settings={settings} onUpdateSettings={onUpdateSettings} customPages={customPages} />
-      <CategorySettings settings={settings} onUpdateSettings={onUpdateSettings} />
       <ContactSettings settings={settings} onUpdateSettings={onUpdateSettings} />
     </div>
   );
