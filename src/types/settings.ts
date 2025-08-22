@@ -1,4 +1,5 @@
 import { LinkItem } from './common';
+import { CategorySettings, SearchSettings } from './category';
 
 export interface StoreSettings {
   storeName: string;
@@ -42,6 +43,8 @@ export interface StoreSettings {
   aboutSection: AboutSection;
   whyChooseUs: WhyChooseUsSection;
   faq: FAQSection;
+  categorySettings: CategorySettings;
+  searchSettings: SearchSettings;
 }
 
 export interface ProductDetailSettings {

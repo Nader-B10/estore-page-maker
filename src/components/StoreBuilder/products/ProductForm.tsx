@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Upload, X } from 'lucide-react';
-import { Product, StoreSettings } from '../../../types/store';
+import { Product, StoreSettings } from '../../../types';
 
 interface ProductFormProps {
   product?: Product | null;
@@ -154,8 +154,7 @@ export default function ProductForm({ product, settings, onSave, onCancel }: Pro
 
           <div>
             <label className="block text-sm font-medium mb-2">العلامات (مفصولة بفاصلة)</label>
-            <input
-              type="text"
+            <select
               value={formData.tags.join(', ')}
               onChange={(e) => setFormData(prev => ({ 
                 ...prev, 
@@ -173,7 +172,14 @@ export default function ProductForm({ product, settings, onSave, onCancel }: Pro
               accept="image/*"
               onChange={handleImageUpload}
               className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            />
+            >
+              <option value="">اختر الفئة</option>
+              {settings.categories?.map(category => (
+                <option key={category.id} value={category.name}>
+                  {category.name}
+                </option>
+              )) || []}
+            </select>
             {formData.image && (
               <img
                 src={formData.image}

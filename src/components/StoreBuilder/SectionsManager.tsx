@@ -19,6 +19,8 @@ export default function SectionsManager({ settings, onUpdateSettings }: Sections
 
   const allSections = [
     { id: 'hero', label: 'قسم البطل (Hero)', icon: '🦸', color: 'bg-purple-100 text-purple-700' },
+    { id: 'categories', label: 'الفئات', icon: '📁', color: 'bg-blue-100 text-blue-700' },
+    { id: 'search', label: 'البحث المتقدم', icon: '🔍', color: 'bg-green-100 text-green-700' },
     { id: 'featured', label: 'المنتجات المميزة', icon: '⭐', color: 'bg-yellow-100 text-yellow-700' },
     { id: 'bestSellers', label: 'الأعلى مبيعاً', icon: '🏆', color: 'bg-green-100 text-green-700' },
     { id: 'onSale', label: 'العروض والتخفيضات', icon: '🔥', color: 'bg-red-100 text-red-700' },
