@@ -337,7 +337,7 @@ export const generateFooterHTML = (templateId: string, settings: StoreSettings):
         </footer>
       `;
 
-    case 'default-footer':
+    default: // default-footer
       return `
         <footer class="bg-gray-900 text-white py-12 px-6 mt-12">
           <div class="max-w-7xl mx-auto">
