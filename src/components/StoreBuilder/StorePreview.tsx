@@ -164,6 +164,15 @@ export default function StorePreview({ storeData }: StorePreviewProps) {
       {/* Hero Section */}
       <HeroComponent settings={settings} />
 
+      {/* About Section */}
+      <AboutComponent settings={settings} />
+
+      {/* Why Choose Us Section */}
+      <FeaturesComponent settings={settings} />
+
+      {/* FAQ Section */}
+      <FAQComponent settings={settings} />
+
       {/* Main Content */}
       <main className="max-w-7xl mx-auto py-8 px-6" style={{ backgroundColor: currentTheme.palette.background }}>
         {/* Featured Products */}
@@ -274,6 +283,9 @@ export default function StorePreview({ storeData }: StorePreviewProps) {
           </section>
         )}
       </main>
+
+      {/* Footer */}
+      <FooterComponent settings={settings} customPages={storeData.customPages} />
     </div>
   );
 }
