@@ -99,10 +99,6 @@ export default function HeroVariantC({ settings }: HeroVariantCProps) {
             <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
               <a
                 href={heroSection.ctaLink}
-                onClick={(e) => {
-                  e.preventDefault();
-                  window.open('/products', '_blank');
-                }}
                 className="group relative inline-flex items-center justify-center gap-4 text-white font-black py-6 px-12 rounded-full text-xl transition-all duration-300 transform hover:scale-110 hover:shadow-2xl cursor-pointer"
                 style={{
                   background: `linear-gradient(135deg, ${settings.primaryColor}, ${settings.secondaryColor}, ${settings.accentColor})`,
@@ -148,32 +144,11 @@ export default function HeroVariantC({ settings }: HeroVariantCProps) {
               </div>
             </div>
 
-            {/* Trust Indicators */}
-            <div 
-              className="flex flex-wrap justify-center items-center gap-8"
-              style={{ color: settings.textSecondary }}
-            >
-              <div className="flex items-center gap-2">
-                <Zap 
-                  className="w-5 h-5"
-                  style={{ color: settings.accentColor }}
-                />
-                <span className="font-medium">معالجة فورية</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Crown 
-                  className="w-5 h-5"
-                  style={{ color: settings.primaryColor }}
-                />
-                <span className="font-medium">دفع آمن</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Gift 
-                  className="w-5 h-5"
-                  style={{ color: settings.secondaryColor }}
-                />
-                <span className="font-medium">خدمة مميزة</span>
-              </div>
+            {/* Simple CTA Text */}
+            <div className="text-center">
+              <p className="text-xl" style={{ color: settings.textSecondary }}>
+                اكتشف مجموعتنا المتنوعة من المنتجات عالية الجودة
+              </p>
             </div>
           </div>
         </div>

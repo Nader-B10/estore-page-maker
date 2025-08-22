@@ -16,7 +16,7 @@ interface FAQItem {
 export default function FAQSectionManager({ settings, onUpdateSettings }: FAQSectionManagerProps) {
   const [showModal, setShowModal] = useState(false);
   const [editingFAQ, setEditingFAQ] = useState<FAQItem | null>(null);
-  const [formData, setFormData] = useState({
+  const [itemFormData, setItemFormData] = useState({
     question: '',
     answer: ''
   });
@@ -41,13 +41,13 @@ export default function FAQSectionManager({ settings, onUpdateSettings }: FAQSec
   const openModal = (faq?: FAQItem) => {
     if (faq) {
       setEditingFAQ(faq);
-      setFormData({
+      setItemFormData({
         question: faq.question,
         answer: faq.answer
       });
     } else {
       setEditingFAQ(null);
-      setFormData({
+      setItemFormData({
         question: '',
         answer: ''
       });
@@ -58,41 +58,41 @@ export default function FAQSectionManager({ settings, onUpdateSettings }: FAQSec
   const closeModal = () => {
     setShowModal(false);
     setEditingFAQ(null);
-    setFormData({
+    setItemFormData({
       question: '',
       answer: ''
     });
   };
 
   const handleSave = () => {
-    if (!formData.question.trim() || !formData.answer.trim()) return;
+    if (!itemFormData.question.trim() || !itemFormData.answer.trim()) return;
 
-    const currentFAQs = settings.faqSection.faqs || [];
+    const currentFAQs = settings.faq.items || [];
     let updatedFAQs;
 
     if (editingFAQ) {
       updatedFAQs = currentFAQs.map(faq =>
         faq.id === editingFAQ.id
-          ? { ...faq, question: formData.question, answer: formData.answer }
+          ? { ...faq, question: itemFormData.question, answer: itemFormData.answer }
           : faq
       );
     } else {
       const newFAQ: FAQItem = {
         id: Date.now().toString(),
-        question: formData.question,
-        answer: formData.answer
+        question: itemFormData.question,
+        answer: itemFormData.answer
       };
       updatedFAQs = [...currentFAQs, newFAQ];
     }
 
-    handleSectionChange('faqs', updatedFAQs);
+    handleSectionChange('items', updatedFAQs);
     closeModal();
   };
 
   const handleDelete = (faqId: string) => {
-    const currentFAQs = settings.faqSection.faqs || [];
+    const currentFAQs = settings.faq.items || [];
     const updatedFAQs = currentFAQs.filter(faq => faq.id !== faqId);
-    handleSectionChange('faqs', updatedFAQs);
+    handleSectionChange('items', updatedFAQs);
   };
 
   const availableTemplates = [

@@ -53,10 +53,6 @@ export default function HeroVariantB({ settings }: HeroVariantBProps) {
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-          {/* Content */}
-          <div className="space-y-8">
-            {/* Trust Badge */}
-            <div 
               className="inline-flex items-center gap-3 backdrop-blur-sm border rounded-full px-6 py-3 shadow-lg"
               style={{
                 backgroundColor: `${settings.primaryColor}10`,
@@ -105,77 +101,16 @@ export default function HeroVariantB({ settings }: HeroVariantBProps) {
             </div>
 
             {/* Stats */}
-            <div className="grid grid-cols-3 gap-8">
-              <div className="text-center group">
-                <div className="flex items-center justify-center gap-2 mb-2">
-                  <Users 
-                    className="w-6 h-6 group-hover:scale-110 transition-transform duration-300"
-                    style={{ color: settings.primaryColor }}
-                  />
-                  <span 
-                    className="text-3xl font-black"
-                    style={{ color: settings.text }}
-                  >
-                    1000+
-                  </span>
-                </div>
-                <span 
-                  className="text-sm font-medium"
-                  style={{ color: settings.textSecondary }}
-                >
-                  عميل سعيد
-                </span>
-              </div>
-              <div className="text-center group">
-                <div className="flex items-center justify-center gap-2 mb-2">
-                  <Award 
-                    className="w-6 h-6 group-hover:scale-110 transition-transform duration-300"
-                    style={{ color: settings.accentColor }}
-                  />
-                  <span 
-                    className="text-3xl font-black"
-                    style={{ color: settings.text }}
-                  >
-                    5+
-                  </span>
-                </div>
-                <span 
-                  className="text-sm font-medium"
-                  style={{ color: settings.textSecondary }}
-                >
-                  سنوات خبرة
-                </span>
-              </div>
-              <div className="text-center group">
-                <div className="flex items-center justify-center gap-2 mb-2">
-                  <Heart 
-                    className="w-6 h-6 group-hover:scale-110 transition-transform duration-300"
-                    style={{ color: settings.secondaryColor }}
-                  />
-                  <span 
-                    className="text-3xl font-black"
-                    style={{ color: settings.text }}
-                  >
-                    99%
-                  </span>
-                </div>
-                <span 
-                  className="text-sm font-medium"
-                  style={{ color: settings.textSecondary }}
-                >
-                  رضا العملاء
-                </span>
-              </div>
+            <div className="text-center">
+              <p className="text-lg" style={{ color: settings.textSecondary }}>
+                انضم إلى آلاف العملاء الراضين واكتشف الفرق معنا
+              </p>
             </div>
             
             {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row gap-4">
               <a
                 href={heroSection.ctaLink}
-                onClick={(e) => {
-                  e.preventDefault();
-                  window.open('/products', '_blank');
-                }}
                 className="group relative inline-flex items-center justify-center gap-3 text-white font-bold py-4 px-8 rounded-2xl transition-all duration-300 transform hover:scale-105 hover:shadow-2xl cursor-pointer"
                 style={{
                   background: `linear-gradient(135deg, ${settings.primaryColor}, ${settings.secondaryColor})`,
@@ -200,57 +135,6 @@ export default function HeroVariantB({ settings }: HeroVariantBProps) {
               </button>
             </div>
 
-            {/* Features List */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="flex items-center gap-3">
-                <CheckCircle 
-                  className="w-5 h-5"
-                  style={{ color: settings.accentColor }}
-                />
-                <span 
-                  className="font-medium"
-                  style={{ color: settings.text }}
-                >
-                  شحن مجاني
-                </span>
-              </div>
-              <div className="flex items-center gap-3">
-                <CheckCircle 
-                  className="w-5 h-5"
-                  style={{ color: settings.accentColor }}
-                />
-                <span 
-                  className="font-medium"
-                  style={{ color: settings.text }}
-                >
-                  ضمان شامل
-                </span>
-              </div>
-              <div className="flex items-center gap-3">
-                <CheckCircle 
-                  className="w-5 h-5"
-                  style={{ color: settings.accentColor }}
-                />
-                <span 
-                  className="font-medium"
-                  style={{ color: settings.text }}
-                >
-                  دعم 24/7
-                </span>
-              </div>
-              <div className="flex items-center gap-3">
-                <CheckCircle 
-                  className="w-5 h-5"
-                  style={{ color: settings.accentColor }}
-                />
-                <span 
-                  className="font-medium"
-                  style={{ color: settings.text }}
-                >
-                  إرجاع مجاني
-                </span>
-              </div>
-            </div>
           </div>
 
           {/* Visual */}

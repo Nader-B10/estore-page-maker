@@ -104,15 +104,8 @@ export default function StorePreview({ storeData }: StorePreviewProps) {
         <p className="text-sm mb-3 line-clamp-2" style={{ color: currentTheme.palette.textSecondary }}>{product.description}</p>
         <div className="flex justify-between items-center">
           <div className="flex flex-col">
-            <span className="text-xl font-bold" style={{ color: currentTheme.palette.primary }}>
+      {settings.productSections.featured.enabled && (
               ${product.price}
-            </span>
-            {product.originalPrice && product.originalPrice > product.price && (
-              <span className="text-sm line-through" style={{ color: currentTheme.palette.textSecondary }}>
-                ${product.originalPrice}
-              </span>
-            )}
-          </div>
           {settings.whatsappSettings.enabled && settings.whatsappSettings.phoneNumber ? (
             <a
               href={generateWhatsAppMessage(product)}
@@ -271,53 +264,102 @@ export default function StorePreview({ storeData }: StorePreviewProps) {
                 </svg>
               </button>
             </div>
-          </section>
+      {settings.productSections.bestSellers.enabled && (
         )}
-
-        {/* All Products */}
-      </main>
-
-      {/* About Section */}
-      <AboutComponent settings={settings} />
-
-      {/* Features Section */}
-      <FeaturesComponent settings={settings} />
-
-      {/* FAQ Section */}
-      <FAQComponent settings={settings} />
-
-      {/* Footer */}
-
-
-
-      <FooterComponent settings={settings} customPages={storeData.customPages} />
-    </div>
-  );
-}
-
-// FAQ Item Component with Accordion
-function FAQItem({ item, primaryColor }: { item: any; primaryColor: string }) {
-  const [isOpen, setIsOpen] = React.useState(false);
-
-  return (
-    <div className="rounded-lg shadow-sm border" style={{ 
-      backgroundColor: 'var(--surface-color)', 
-      borderColor: 'var(--border-color)' 
-    }}>
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="w-full px-6 py-4 text-right flex justify-between items-center hover:opacity-80 transition-colors"
-      >
-        <span className="font-medium">{item.question}</span>
-        <ChevronDown 
-          size={20} 
-          className={`transform transition-transform ${isOpen ? 'rotate-180' : ''}`}
-          style={{ color: primaryColor }}
-        />
-      </button>
-      {isOpen && (
-        <div className="px-6 pb-4">
-          <p style={{ color: 'var(--text-secondary)' }}>{item.answer}</p>
+          {bestSellerProducts.length > 0 ? (
+            <>
+              <div className="text-center mb-8">
+                <h2 className="text-3xl font-bold mb-2" style={{ color: currentTheme.palette.primary }}>
+                  {settings.productSections.bestSellers.title}
+                </h2>
+                <p style={{ color: currentTheme.palette.textSecondary }}>{settings.productSections.bestSellers.subtitle}</p>
+                <div className="w-24 h-1 mx-auto mt-4 rounded" style={{ backgroundColor: currentTheme.palette.accent }}></div>
+              </div>
+              <div className={`grid ${getLayoutClass()} gap-6`}>
+                {bestSellerProducts.map((product) => (
+                  <ProductCard key={product.id} product={product} />
+                ))}
+              </div>
+              
+              {/* View More Button */}
+              <div className="text-center mt-8">
+                <button 
+                  onClick={() => window.open('/products?filter=bestsellers', '_blank')}
+                  className="inline-flex items-center gap-2 px-8 py-3 rounded-full font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg"
+                  style={{
+                    backgroundColor: `${currentTheme.palette.secondary}10`,
+                    color: currentTheme.palette.secondary,
+                    border: `2px solid ${currentTheme.palette.secondary}20`
+                  }}
+                >
+                  <span>عرض جميع الأعلى مبيعاً</span>
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  </svg>
+                </button>
+              </div>
+            </>
+          ) : (
+            <div className="text-center py-12 bg-white rounded-lg border border-gray-200">
+              <div className="mb-4 text-gray-400">
+                <svg className="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                </svg>
+              </div>
+              <h3 className="text-lg font-semibold text-gray-600 mb-2">لا توجد منتجات أعلى مبيعاً</h3>
+              <p className="text-gray-500">قم بإضافة منتجات وتحديد الأعلى مبيعاً منها</p>
+            </div>
+          )}
+              </div>
+              <div className={`grid ${getLayoutClass()} gap-6`}>
+                {featuredProducts.map((product) => (
+                  <ProductCard key={product.id} product={product} />
+      {settings.productSections.onSale.enabled && (
+              </div>
+          {onSaleProducts.length > 0 ? (
+            <>
+              <div className="text-center mb-8">
+                <h2 className="text-3xl font-bold mb-2" style={{ color: currentTheme.palette.primary }}>
+                  {settings.productSections.onSale.title}
+                </h2>
+                <p style={{ color: currentTheme.palette.textSecondary }}>{settings.productSections.onSale.subtitle}</p>
+                <div className="w-24 h-1 mx-auto mt-4 rounded" style={{ backgroundColor: currentTheme.palette.accent }}></div>
+              </div>
+              <div className={`grid ${getLayoutClass()} gap-6`}>
+                {onSaleProducts.map((product) => (
+                  <ProductCard key={product.id} product={product} />
+                ))}
+              </div>
+              
+              {/* View More Button */}
+              <div className="text-center mt-8">
+                <button 
+                  onClick={() => window.open('/products?filter=onsale', '_blank')}
+                  className="inline-flex items-center gap-2 px-8 py-3 rounded-full font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg"
+                  style={{
+                    backgroundColor: `${currentTheme.palette.accent}10`,
+                    color: currentTheme.palette.accent,
+                    border: `2px solid ${currentTheme.palette.accent}20`
+                  }}
+                >
+                  <span>عرض جميع العروض والتخفيضات</span>
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  </svg>
+                </button>
+              </div>
+            </>
+          ) : (
+            <div className="text-center py-12 bg-white rounded-lg border border-gray-200">
+              <div className="mb-4 text-gray-400">
+                <svg className="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                </svg>
+              </div>
+              <h3 className="text-lg font-semibold text-gray-600 mb-2">لا توجد عروض وتخفيضات</h3>
+              <p className="text-gray-500">قم بإضافة منتجات وتفعيل العروض عليها</p>
+            </div>
+          )}
         </div>
       )}
     </div>

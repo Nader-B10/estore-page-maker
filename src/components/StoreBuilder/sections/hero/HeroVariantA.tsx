@@ -98,10 +98,6 @@ export default function HeroVariantA({ settings }: HeroVariantAProps) {
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center animate-fade-in-up animation-delay-600">
             <a
               href={heroSection.ctaLink}
-              onClick={(e) => {
-                e.preventDefault();
-                window.open('/products', '_blank');
-              }}
               className="group relative inline-flex items-center gap-3 text-white font-bold py-4 px-8 rounded-2xl transition-all duration-300 transform hover:scale-105 hover:shadow-2xl cursor-pointer"
               style={{
                 background: `linear-gradient(135deg, ${settings.primaryColor}, ${settings.secondaryColor})`,
@@ -132,34 +128,10 @@ export default function HeroVariantA({ settings }: HeroVariantAProps) {
           </div>
 
           {/* Stats */}
-          <div className="flex flex-wrap justify-center gap-8 mt-16 animate-fade-in-up animation-delay-800">
-            <div className="text-center">
-              <div 
-                className="text-3xl font-black mb-1"
-                style={{ color: settings.primaryColor }}
-              >
-                1000+
-              </div>
-              <div style={{ color: settings.textSecondary }}>عميل سعيد</div>
-            </div>
-            <div className="text-center">
-              <div 
-                className="text-3xl font-black mb-1"
-                style={{ color: settings.primaryColor }}
-              >
-                5⭐
-              </div>
-              <div style={{ color: settings.textSecondary }}>تقييم ممتاز</div>
-            </div>
-            <div className="text-center">
-              <div 
-                className="text-3xl font-black mb-1"
-                style={{ color: settings.primaryColor }}
-              >
-                24/7
-              </div>
-              <div style={{ color: settings.textSecondary }}>دعم فني</div>
-            </div>
+          <div className="text-center mt-16 animate-fade-in-up animation-delay-800">
+            <p className="text-lg" style={{ color: settings.textSecondary }}>
+              ابدأ رحلة التسوق معنا واكتشف عالماً من المنتجات المميزة
+            </p>
           </div>
         </div>
       </div>
