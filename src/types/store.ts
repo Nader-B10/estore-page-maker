@@ -3,23 +3,28 @@ export interface Product {
   name: string;
   description: string;
   price: number;
-  originalPrice?: number; // السعر الأصلي قبل الخصم
+  originalPrice?: number;
   image: string;
   category: string;
-  isFeatured: boolean; // منتج مميز
-  isBestSeller: boolean; // الأعلى مبيعاً
-  isOnSale: boolean; // عليه عرض/تخفيض
-  discountPercentage?: number; // نسبة الخصم
-  tags: string[]; // علامات إضافية
+  isFeatured: boolean;
+  isBestSeller: boolean;
+  isOnSale: boolean;
+  discountPercentage?: number;
+  tags: string[];
 }
 
-export interface HeroSection {
-  enabled: boolean;
+export interface HeroSectionData {
   title: string;
   subtitle: string;
   backgroundImage: string;
   ctaText: string;
   ctaLink: string;
+}
+
+export interface ProductSectionData {
+  title: string;
+  subtitle: string;
+  limit: number;
 }
 
 export interface WhyChooseUsItem {
@@ -29,8 +34,7 @@ export interface WhyChooseUsItem {
   description: string;
 }
 
-export interface WhyChooseUsSection {
-  enabled: boolean;
+export interface WhyChooseUsSectionData {
   title: string;
   subtitle: string;
   items: WhyChooseUsItem[];
@@ -42,35 +46,20 @@ export interface FAQItem {
   answer: string;
 }
 
-export interface FAQSection {
-  enabled: boolean;
+export interface FAQSectionData {
   title: string;
   subtitle: string;
   items: FAQItem[];
 }
 
-export interface ProductSection {
-  featured: {
-    enabled: boolean;
-    title: string;
-    subtitle: string;
-    limit: number;
-  };
-  bestSellers: {
-    enabled: boolean;
-    title: string;
-    subtitle: string;
-    limit: number;
-  };
-  onSale: {
-    enabled: boolean;
-    title: string;
-    subtitle: string;
-    limit: number;
-  };
+export interface SectionConfig<T> {
+  template: string;
+  enabled: boolean;
+  data: T;
 }
 
 export interface StoreSettings {
+  theme: string;
   storeName: string;
   description: string;
   logo: string;
@@ -87,10 +76,15 @@ export interface StoreSettings {
     phone: string;
     address: string;
   };
-  heroSection: HeroSection;
-  productSections: ProductSection;
-  whyChooseUs: WhyChooseUsSection;
-  faq: FAQSection;
+  sections: {
+    hero: SectionConfig<HeroSectionData>;
+    featuredProducts: SectionConfig<ProductSectionData>;
+    bestSellers: SectionConfig<ProductSectionData>;
+    onSale: SectionConfig<ProductSectionData>;
+    allProducts: SectionConfig<Omit<ProductSectionData, 'limit'>>;
+    whyChooseUs: SectionConfig<WhyChooseUsSectionData>;
+    faq: SectionConfig<FAQSectionData>;
+  };
 }
 
 export interface StoreData {
