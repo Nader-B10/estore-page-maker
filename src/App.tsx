@@ -1,219 +1,151 @@
 import React, { useState } from 'react';
-import { Settings, Package, Eye, Download, Loader } from 'lucide-react';
-import { StoreData, StoreSettings, Product } from './types/store';
-import SettingsPanel from './components/StoreBuilder/SettingsPanel';
-import ProductManager from './components/StoreBuilder/ProductManager';
-import StorePreview from './components/StoreBuilder/StorePreview';
+import { Loader } from 'lucide-react';
+import { useStoreData } from './hooks/useStoreData';
+import { useErrorHandler } from './hooks/useErrorHandler';
 import { exportStore } from './utils/fileExporter';
-
-const defaultSettings: StoreSettings = {
-  storeName: 'متجري الإلكتروني',
-  description: 'أفضل المنتجات بأسعار منافسة',
-  logo: '',
-  primaryColor: '#3b82f6',
-  secondaryColor: '#1e40af',
-  accentColor: '#f59e0b',
-  fontFamily: 'Cairo',
-  layout: 'grid',
-  headerStyle: 'modern',
-  footerText: '',
-  contactInfo: {
-    email: '',
-    phone: '',
-    address: ''
-  }
-};
+import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary';
+import AppHeader from './components/App/AppHeader';
+import AppSidebar from './components/App/AppSidebar';
+import AppMain from './components/App/AppMain';
+import DocumentationViewer from './components/Documentation/DocumentationViewer';
+import SaveIndicator from './components/App/SaveIndicator';
 
 function App() {
   const [activeTab, setActiveTab] = useState('settings');
   const [isExporting, setIsExporting] = useState(false);
-  const [storeData, setStoreData] = useState<StoreData>({
-    settings: defaultSettings,
-    products: []
-  });
+  const [isDocumentationOpen, setIsDocumentationOpen] = useState(false);
+  const [lastSaved, setLastSaved] = useState<Date | undefined>();
+  const [isSaving, setIsSaving] = useState(false);
+  const { handleError, withErrorHandling } = useErrorHandler();
+  
+  const {
+    storeData,
+    handleUpdateSettings,
+    handleAddProduct,
+    handleEditProduct,
+    handleDeleteProduct,
+    handleAddPage,
+    handleEditPage,
+    handleDeletePage,
+    resetStoreData,
+    exportStoreData,
+    importStoreData,
+    saveNow
+  } = useStoreData();
 
-  const handleUpdateSettings = (newSettings: StoreSettings) => {
-    setStoreData(prev => ({
-      ...prev,
-      settings: newSettings
-    }));
-  };
-
-  const handleAddProduct = (product: Product) => {
-    setStoreData(prev => ({
-      ...prev,
-      products: [...prev.products, product]
-    }));
-  };
-
-  const handleEditProduct = (id: string, updatedProduct: Product) => {
-    setStoreData(prev => ({
-      ...prev,
-      products: prev.products.map(p => p.id === id ? updatedProduct : p)
-    }));
-  };
-
-  const handleDeleteProduct = (id: string) => {
-    setStoreData(prev => ({
-      ...prev,
-      products: prev.products.filter(p => p.id !== id)
-    }));
-  };
-
-  const handleExport = async () => {
+  const handleExport = withErrorHandling(async () => {
     setIsExporting(true);
     try {
-      const success = await exportStore(storeData);
-      if (success) {
-        alert('تم تصدير المتجر بنجاح!');
-      } else {
-        alert('حدث خطأ أثناء تصدير المتجر');
-      }
+      await exportStore(storeData);
+      alert('تم تصدير المتجر بنجاح!');
     } catch (error) {
-      console.error('Export error:', error);
       alert('حدث خطأ أثناء تصدير المتجر');
+      throw error;
     } finally {
       setIsExporting(false);
     }
-  };
+  }, 'handleExport');
 
-  const tabs = [
-    { id: 'settings', label: 'الإعدادات', icon: Settings },
-    { id: 'products', label: 'المنتجات', icon: Package },
-    { id: 'preview', label: 'معاينة', icon: Eye }
-  ];
+  const handleSaveNow = withErrorHandling(async () => {
+    setIsSaving(true);
+    try {
+      await saveNow();
+      setLastSaved(new Date());
+    } finally {
+      setIsSaving(false);
+    }
+  }, 'handleSaveNow');
+
+  const handleImportData = withErrorHandling(async (file: File) => {
+    try {
+      await importStoreData(file);
+      setLastSaved(new Date());
+      alert('تم استيراد البيانات بنجاح!');
+    } catch (error) {
+      alert('فشل في استيراد البيانات. تأكد من صحة الملف.');
+      throw error;
+    }
+  }, 'handleImportData');
+
+  const handleReset = withErrorHandling(() => {
+    resetStoreData();
+    setLastSaved(new Date());
+  }, 'handleReset');
+
+  // Listen for switch to products tab
+  React.useEffect(() => {
+    const handleSwitchToProducts = () => {
+      setActiveTab('products');
+    };
+
+    window.addEventListener('switchToProducts', handleSwitchToProducts);
+    return () => window.removeEventListener('switchToProducts', handleSwitchToProducts);
+  }, []);
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
-      {/* Header */}
-      <header className="bg-white shadow-sm border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
-                <Package className="w-6 h-6 text-white" />
-              </div>
-              <div>
-                <h1 className="text-xl font-bold text-gray-900">أداة بناء المتاجر</h1>
-                <p className="text-sm text-gray-600">اصنع متجرك الإلكتروني في دقائق</p>
-              </div>
+    <ErrorBoundary>
+      <div className="min-h-screen bg-gray-50 flex flex-col">
+        <AppHeader 
+          onExport={handleExport}
+          isExporting={isExporting}
+          onOpenDocumentation={() => setIsDocumentationOpen(true)}
+          onSaveNow={handleSaveNow}
+          onExportData={exportStoreData}
+          onImportData={handleImportData}
+          onReset={handleReset}
+        />
+
+        {/* Save Indicator */}
+        <div className="bg-white border-b border-gray-200 px-4 py-2">
+          <div className="max-w-7xl mx-auto flex justify-between items-center">
+            <SaveIndicator 
+              lastSaved={lastSaved}
+              isSaving={isSaving}
+              hasUnsavedChanges={false}
+            />
+            <div className="text-xs text-gray-500">
+              💾 الحفظ التلقائي مفعل - تتم المزامنة كل ثانية
             </div>
-            
-            <button
-              onClick={handleExport}
-              disabled={isExporting}
-              className="bg-gradient-to-r from-green-600 to-green-700 text-white px-6 py-3 rounded-lg flex items-center gap-2 hover:from-green-700 hover:to-green-800 transition-all duration-200 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {isExporting ? (
-                <>
-                  <Loader className="w-5 h-5 animate-spin" />
-                  جاري التحضير...
-                </>
-              ) : (
-                <>
-                  <Download className="w-5 h-5" />
-                  تحميل المتجر
-                </>
-              )}
-            </button>
           </div>
         </div>
-      </header>
 
-      <div className="flex-1 flex">
-        {/* Sidebar */}
-        <aside className="w-80 bg-white shadow-lg border-r border-gray-200 flex flex-col">
-          {/* Tab Navigation */}
-          <div className="p-6 border-b border-gray-200">
-            <div className="flex flex-col gap-2">
-              {tabs.map(tab => {
-                const Icon = tab.icon;
-                return (
-                  <button
-                    key={tab.id}
-                    onClick={() => setActiveTab(tab.id)}
-                    className={`flex items-center gap-3 px-4 py-3 rounded-lg text-right transition-all duration-200 ${
-                      activeTab === tab.id
-                        ? 'bg-blue-50 text-blue-700 border-2 border-blue-200 shadow-sm'
-                        : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900 border-2 border-transparent'
-                    }`}
-                  >
-                    <Icon size={20} />
-                    <span className="font-medium">{tab.label}</span>
-                  </button>
-                );
-              })}
+        <div className="flex-1 flex">
+          <AppSidebar
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
+            storeData={storeData}
+            onUpdateSettings={handleUpdateSettings}
+            onAddProduct={handleAddProduct}
+            onEditProduct={handleEditProduct}
+            onDeleteProduct={handleDeleteProduct}
+            onAddPage={handleAddPage}
+            onEditPage={handleEditPage}
+            onDeletePage={handleDeletePage}
+          />
+
+          <AppMain storeData={storeData} />
+        </div>
+
+        {/* Export Status */}
+        {isExporting && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white rounded-lg p-8 max-w-md w-full mx-4 text-center">
+              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Loader className="w-8 h-8 text-blue-600 animate-spin" />
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">جاري تحضير المتجر...</h3>
+              <p className="text-gray-600">يتم الآن تجهيز وضغط ملفات متجرك</p>
             </div>
           </div>
+        )}
 
-          {/* Tab Content */}
-          <div className="flex-1 overflow-auto p-6">
-            {activeTab === 'settings' && (
-              <SettingsPanel
-                settings={storeData.settings}
-                onUpdateSettings={handleUpdateSettings}
-              />
-            )}
-            
-            {activeTab === 'products' && (
-              <ProductManager
-                products={storeData.products}
-                onAddProduct={handleAddProduct}
-                onEditProduct={handleEditProduct}
-                onDeleteProduct={handleDeleteProduct}
-              />
-            )}
-          </div>
-        </aside>
-
-        {/* Main Content */}
-        <main className="flex-1 bg-gray-100">
-          {activeTab === 'preview' ? (
-            <div className="h-full">
-              <div className="bg-white border-b border-gray-200 px-6 py-4">
-                <div className="flex items-center justify-between">
-                  <h2 className="text-lg font-semibold text-gray-900">معاينة المتجر</h2>
-                  <div className="flex items-center gap-2 text-sm text-gray-600">
-                    <Eye size={16} />
-                    معاينة مباشرة
-                  </div>
-                </div>
-              </div>
-              <StorePreview storeData={storeData} />
-            </div>
-          ) : (
-            <div className="h-full flex items-center justify-center">
-              <div className="text-center">
-                <div className="w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Eye size={48} className="text-blue-600" />
-                </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">معاينة المتجر</h3>
-                <p className="text-gray-600 mb-4">انقر على تبويب "معاينة" لرؤية متجرك</p>
-                <button
-                  onClick={() => setActiveTab('preview')}
-                  className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors"
-                >
-                  عرض المعاينة
-                </button>
-              </div>
-            </div>
-          )}
-        </main>
+        {/* Documentation Viewer */}
+        <DocumentationViewer 
+          isOpen={isDocumentationOpen} 
+          onClose={() => setIsDocumentationOpen(false)} 
+        />
       </div>
-
-      {/* Export Status */}
-      {isExporting && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-8 max-w-md w-full mx-4 text-center">
-            <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Loader className="w-8 h-8 text-blue-600 animate-spin" />
-            </div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">جاري تحضير المتجر...</h3>
-            <p className="text-gray-600">يتم الآن تجهيز وضغط ملفات متجرك</p>
-          </div>
-        </div>
-      )}
-    </div>
+    </ErrorBoundary>
   );
 }
 
