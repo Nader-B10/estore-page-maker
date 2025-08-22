@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Plus, Edit, Trash2, Upload, X, Eye, EyeOff, Palette } from 'lucide-react';
 import { StoreSettings, WhyChooseUsItem, FAQItem } from '../../types/store';
-import { getAvailableHeaders, getAvailableFooters, getAvailableHeros, getAvailableAbouts, getAvailableFeatures, getAvailableFAQs } from '../../utils/componentRegistry';
+import { getAvailableHeros, getAvailableAbouts, getAvailableFeatures, getAvailableFAQs } from '../../utils/componentRegistry';
 
 interface SectionsManagerProps {
   settings: StoreSettings;
@@ -14,8 +14,6 @@ export default function SectionsManager({ settings, onUpdateSettings }: Sections
   const [editingFAQItem, setEditingFAQItem] = useState<FAQItem | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const availableHeaders = getAvailableHeaders();
-  const availableFooters = getAvailableFooters();
   const availableHeros = getAvailableHeros();
   const availableAbouts = getAvailableAbouts();
   const availableFeatures = getAvailableFeatures();
@@ -159,6 +157,53 @@ export default function SectionsManager({ settings, onUpdateSettings }: Sections
       {/* Hero Section */}
       {activeSection === 'hero' && (
         <div className="bg-white rounded-lg p-6 shadow-sm">
+          {/* Template Selection */}
+          <div className="mb-8">
+            <h4 className="text-lg font-semibold mb-4 flex items-center gap-2">
+              <Palette className="w-5 h-5 text-purple-600" />
+              اختيار قالب الهيرو
+            </h4>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+              {availableHeros.map((template) => (
+                <div
+                  key={template.id}
+                  onClick={() => handleChange('heroTemplate', template.id)}
+                  className={`relative p-4 rounded-lg border-2 cursor-pointer transition-all duration-200 hover:shadow-lg ${
+                    settings.heroTemplate === template.id
+                      ? 'border-purple-500 bg-purple-50 shadow-lg'
+                      : 'border-gray-200 hover:border-purple-300'
+                  }`}
+                >
+                  {settings.heroTemplate === template.id && (
+                    <div className="absolute top-2 right-2 w-6 h-6 bg-purple-500 rounded-full flex items-center justify-center">
+                      <span className="text-white text-xs">✓</span>
+                    </div>
+                  )}
+                  
+                  <div className="mb-3">
+                    <div 
+                      className="w-full h-20 rounded-md mb-2"
+                      style={{ 
+                        background: `linear-gradient(135deg, ${settings.primaryColor}40, ${settings.secondaryColor}40)` 
+                      }}
+                    ></div>
+                  </div>
+                  
+                  <h5 className="font-semibold text-gray-800 mb-2">{template.name}</h5>
+                  <p className="text-sm text-gray-600 mb-3">{template.description}</p>
+                  
+                  <div className="flex flex-wrap gap-1">
+                    {template.features.slice(0, 2).map((feature, index) => (
+                      <span key={index} className="px-2 py-1 bg-purple-100 text-purple-700 text-xs rounded-full">
+                        {feature}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-lg font-semibold">قسم البطل (Hero Section)</h3>
             <button
@@ -253,7 +298,56 @@ export default function SectionsManager({ settings, onUpdateSettings }: Sections
 
       {/* About Section */}
       {activeSection === 'about' && (
-        <AboutSectionManager settings={settings} onUpdateSettings={onUpdateSettings} />
+        <div className="space-y-6">
+          {/* Template Selection */}
+          <div className="bg-white rounded-lg p-6 shadow-sm">
+            <h4 className="text-lg font-semibold mb-4 flex items-center gap-2">
+              <Palette className="w-5 h-5 text-orange-600" />
+              اختيار قالب من نحن
+            </h4>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+              {availableAbouts.map((template) => (
+                <div
+                  key={template.id}
+                  onClick={() => handleChange('aboutTemplate', template.id)}
+                  className={`relative p-4 rounded-lg border-2 cursor-pointer transition-all duration-200 hover:shadow-lg ${
+                    settings.aboutTemplate === template.id
+                      ? 'border-orange-500 bg-orange-50 shadow-lg'
+                      : 'border-gray-200 hover:border-orange-300'
+                  }`}
+                >
+                  {settings.aboutTemplate === template.id && (
+                    <div className="absolute top-2 right-2 w-6 h-6 bg-orange-500 rounded-full flex items-center justify-center">
+                      <span className="text-white text-xs">✓</span>
+                    </div>
+                  )}
+                  
+                  <div className="mb-3">
+                    <div 
+                      className="w-full h-16 rounded-md mb-2"
+                      style={{ 
+                        background: `linear-gradient(135deg, ${settings.primaryColor}30, ${settings.accentColor}30)` 
+                      }}
+                    ></div>
+                  </div>
+                  
+                  <h5 className="font-semibold text-gray-800 mb-2">{template.name}</h5>
+                  <p className="text-sm text-gray-600 mb-3">{template.description}</p>
+                  
+                  <div className="flex flex-wrap gap-1">
+                    {template.features.slice(0, 3).map((feature, index) => (
+                      <span key={index} className="px-2 py-1 bg-orange-100 text-orange-700 text-xs rounded-full">
+                        {feature}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+          
+          <AboutSectionManager settings={settings} onUpdateSettings={onUpdateSettings} />
+        </div>
       )}
 
       {/* Product Sections */}
@@ -413,7 +507,54 @@ export default function SectionsManager({ settings, onUpdateSettings }: Sections
 
       {/* Why Choose Us Section */}
       {activeSection === 'why-choose-us' && (
-        <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
+        <div className="space-y-6">
+          {/* Template Selection */}
+          <div className="bg-white rounded-lg p-6 shadow-sm">
+            <h4 className="text-lg font-semibold mb-4 flex items-center gap-2">
+              <Palette className="w-5 h-5 text-red-600" />
+              اختيار قالب الميزات
+            </h4>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+              {availableFeatures.map((template) => (
+                <div
+                  key={template.id}
+                  onClick={() => handleChange('featuresTemplate', template.id)}
+                  className={`relative p-4 rounded-lg border-2 cursor-pointer transition-all duration-200 hover:shadow-lg ${
+                    settings.featuresTemplate === template.id
+                      ? 'border-red-500 bg-red-50 shadow-lg'
+                      : 'border-gray-200 hover:border-red-300'
+                  }`}
+                >
+                  {settings.featuresTemplate === template.id && (
+                    <div className="absolute top-2 right-2 w-6 h-6 bg-red-500 rounded-full flex items-center justify-center">
+                      <span className="text-white text-xs">✓</span>
+                    </div>
+                  )}
+                  
+                  <div className="mb-3">
+                    <div className="flex gap-2 mb-2">
+                      <div className="w-8 h-8 rounded-full" style={{ backgroundColor: `${settings.primaryColor}40` }}></div>
+                      <div className="w-8 h-8 rounded-full" style={{ backgroundColor: `${settings.accentColor}40` }}></div>
+                      <div className="w-8 h-8 rounded-full" style={{ backgroundColor: `${settings.secondaryColor}40` }}></div>
+                    </div>
+                  </div>
+                  
+                  <h5 className="font-semibold text-gray-800 mb-2">{template.name}</h5>
+                  <p className="text-sm text-gray-600 mb-3">{template.description}</p>
+                  
+                  <div className="flex flex-wrap gap-1">
+                    {template.features.slice(0, 3).map((feature, index) => (
+                      <span key={index} className="px-2 py-1 bg-red-100 text-red-700 text-xs rounded-full">
+                        {feature}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-lg font-semibold">لماذا تختارنا</h3>
             <div className="flex items-center gap-3">
