@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Plus, Edit, Trash2, X, Link, ExternalLink } from 'lucide-react';
-import { StoreSettings, LinkItem, CustomPage } from '../../../types/store';
+import { StoreSettings, LinkItem, CustomPage } from '../../../types';
 
 interface LinksManagerProps {
   settings: StoreSettings;
@@ -75,62 +75,109 @@ export default function LinksManager({ settings, onUpdateSettings, customPages =
     onUpdateSettings({ ...settings, [linksKey]: updatedLinks });
   };
 
-  const LinkSection = ({ title, links, type }: { title: string; links: LinkItem[]; type: 'header' | 'footer' }) => (
-    <div className="bg-white rounded-lg p-6 shadow-sm">
-      <h3 className="text-lg font-semibold mb-4">{title}</h3>
-      
-      <div className="space-y-3 mb-4">
-        {links.map((link) => (
-          <div key={link.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-            <div className="flex items-center gap-3">
-              <div className="flex items-center gap-2">
-                <Link size={16} className="text-gray-500" />
-                <span className={`font-medium ${!link.isVisible ? 'text-gray-400' : ''}`}>
-                  {link.text}
-                </span>
-                {link.type === 'external' && <ExternalLink size={12} className="text-gray-400" />}
-              </div>
-              <span className="text-xs text-gray-500">({link.url})</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <button
-                onClick={() => handleToggleLinkVisibility(link.id, type)}
-                className={`p-1 rounded ${link.isVisible ? 'text-green-600' : 'text-gray-400'}`}
-                title={link.isVisible ? 'إخفاء' : 'إظهار'}
-              >
-                {link.isVisible ? '👁️' : '🙈'}
-              </button>
-              <button
-                onClick={() => handleEditLink(link, type)}
-                className="text-blue-600 hover:bg-blue-50 p-1 rounded"
-              >
-                <Edit size={14} />
-              </button>
-              <button
-                onClick={() => handleDeleteLink(link.id, type)}
-                className="text-red-600 hover:bg-red-50 p-1 rounded"
-              >
-                <Trash2 size={14} />
-              </button>
-            </div>
-          </div>
-        ))}
-      </div>
-      
-      <button
-        onClick={() => handleAddLink(type)}
-        className="w-full bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center justify-center gap-2 hover:bg-blue-700 transition-colors"
-      >
-        <Plus size={16} />
-        إضافة رابط {type === 'header' ? 'للهيدر' : 'للفوتر'}
-      </button>
-    </div>
-  );
-
   return (
     <div className="space-y-6">
-      <LinkSection title="روابط الهيدر" links={settings.headerLinks} type="header" />
-      <LinkSection title="روابط الفوتر" links={settings.footerLinks} type="footer" />
+      {/* Header Links */}
+      <div className="bg-white rounded-lg p-6 shadow-sm">
+        <h3 className="text-lg font-semibold mb-4">روابط الهيدر</h3>
+        
+        <div className="space-y-3 mb-4">
+          {settings.headerLinks.map((link) => (
+            <div key={link.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+              <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2">
+                  <Link size={16} className="text-gray-500" />
+                  <span className={`font-medium ${!link.isVisible ? 'text-gray-400' : ''}`}>
+                    {link.text}
+                  </span>
+                  {link.type === 'external' && <ExternalLink size={12} className="text-gray-400" />}
+                </div>
+                <span className="text-xs text-gray-500">({link.url})</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => handleToggleLinkVisibility(link.id, 'header')}
+                  className={`p-1 rounded ${link.isVisible ? 'text-green-600' : 'text-gray-400'}`}
+                  title={link.isVisible ? 'إخفاء' : 'إظهار'}
+                >
+                  {link.isVisible ? '👁️' : '🙈'}
+                </button>
+                <button
+                  onClick={() => handleEditLink(link, 'header')}
+                  className="text-blue-600 hover:bg-blue-50 p-1 rounded"
+                >
+                  <Edit size={14} />
+                </button>
+                <button
+                  onClick={() => handleDeleteLink(link.id, 'header')}
+                  className="text-red-600 hover:bg-red-50 p-1 rounded"
+                >
+                  <Trash2 size={14} />
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+        
+        <button
+          onClick={() => handleAddLink('header')}
+          className="w-full bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center justify-center gap-2 hover:bg-blue-700 transition-colors"
+        >
+          <Plus size={16} />
+          إضافة رابط للهيدر
+        </button>
+      </div>
+
+      {/* Footer Links */}
+      <div className="bg-white rounded-lg p-6 shadow-sm">
+        <h3 className="text-lg font-semibold mb-4">روابط الفوتر</h3>
+        
+        <div className="space-y-3 mb-4">
+          {settings.footerLinks.map((link) => (
+            <div key={link.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+              <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2">
+                  <Link size={16} className="text-gray-500" />
+                  <span className={`font-medium ${!link.isVisible ? 'text-gray-400' : ''}`}>
+                    {link.text}
+                  </span>
+                  {link.type === 'external' && <ExternalLink size={12} className="text-gray-400" />}
+                </div>
+                <span className="text-xs text-gray-500">({link.url})</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => handleToggleLinkVisibility(link.id, 'footer')}
+                  className={`p-1 rounded ${link.isVisible ? 'text-green-600' : 'text-gray-400'}`}
+                  title={link.isVisible ? 'إخفاء' : 'إظهار'}
+                >
+                  {link.isVisible ? '👁️' : '🙈'}
+                </button>
+                <button
+                  onClick={() => handleEditLink(link, 'footer')}
+                  className="text-blue-600 hover:bg-blue-50 p-1 rounded"
+                >
+                  <Edit size={14} />
+                </button>
+                <button
+                  onClick={() => handleDeleteLink(link.id, 'footer')}
+                  className="text-red-600 hover:bg-red-50 p-1 rounded"
+                >
+                  <Trash2 size={14} />
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+        
+        <button
+          onClick={() => handleAddLink('footer')}
+          className="w-full bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center justify-center gap-2 hover:bg-blue-700 transition-colors"
+        >
+          <Plus size={16} />
+          إضافة رابط للفوتر
+        </button>
+      </div>
 
       {/* Link Modal */}
       {isLinkModalOpen && (

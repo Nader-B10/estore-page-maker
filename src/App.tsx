@@ -8,11 +8,14 @@ import AppHeader from './components/App/AppHeader';
 import AppSidebar from './components/App/AppSidebar';
 import AppMain from './components/App/AppMain';
 import DocumentationViewer from './components/Documentation/DocumentationViewer';
+import SaveIndicator from './components/App/SaveIndicator';
 
 function App() {
   const [activeTab, setActiveTab] = useState('settings');
   const [isExporting, setIsExporting] = useState(false);
   const [isDocumentationOpen, setIsDocumentationOpen] = useState(false);
+  const [lastSaved, setLastSaved] = useState<Date | undefined>();
+  const [isSaving, setIsSaving] = useState(false);
   const { handleError, withErrorHandling } = useErrorHandler();
   
   const {
@@ -23,7 +26,11 @@ function App() {
     handleDeleteProduct,
     handleAddPage,
     handleEditPage,
-    handleDeletePage
+    handleDeletePage,
+    resetStoreData,
+    exportStoreData,
+    importStoreData,
+    saveNow
   } = useStoreData();
 
   const handleExport = withErrorHandling(async () => {
@@ -38,6 +45,32 @@ function App() {
       setIsExporting(false);
     }
   }, 'handleExport');
+
+  const handleSaveNow = withErrorHandling(async () => {
+    setIsSaving(true);
+    try {
+      await saveNow();
+      setLastSaved(new Date());
+    } finally {
+      setIsSaving(false);
+    }
+  }, 'handleSaveNow');
+
+  const handleImportData = withErrorHandling(async (file: File) => {
+    try {
+      await importStoreData(file);
+      setLastSaved(new Date());
+      alert('تم استيراد البيانات بنجاح!');
+    } catch (error) {
+      alert('فشل في استيراد البيانات. تأكد من صحة الملف.');
+      throw error;
+    }
+  }, 'handleImportData');
+
+  const handleReset = withErrorHandling(() => {
+    resetStoreData();
+    setLastSaved(new Date());
+  }, 'handleReset');
 
   // Listen for switch to products tab
   React.useEffect(() => {
@@ -56,7 +89,25 @@ function App() {
           onExport={handleExport}
           isExporting={isExporting}
           onOpenDocumentation={() => setIsDocumentationOpen(true)}
+          onSaveNow={handleSaveNow}
+          onExportData={exportStoreData}
+          onImportData={handleImportData}
+          onReset={handleReset}
         />
+
+        {/* Save Indicator */}
+        <div className="bg-white border-b border-gray-200 px-4 py-2">
+          <div className="max-w-7xl mx-auto flex justify-between items-center">
+            <SaveIndicator 
+              lastSaved={lastSaved}
+              isSaving={isSaving}
+              hasUnsavedChanges={false}
+            />
+            <div className="text-xs text-gray-500">
+              💾 الحفظ التلقائي مفعل - تتم المزامنة كل ثانية
+            </div>
+          </div>
+        </div>
 
         <div className="flex-1 flex">
           <AppSidebar

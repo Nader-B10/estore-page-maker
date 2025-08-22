@@ -2,11 +2,13 @@ import { useState } from 'react';
 import { StoreData, StoreSettings, Product, CustomPage } from '../types/store';
 import { defaultSettings } from '../utils/defaultSettings';
 import { useErrorHandler } from './useErrorHandler';
+import { useLocalStorage } from './useLocalStorage';
+import { useAutoSave } from './useAutoSave';
 
 export function useStoreData() {
   const { handleError, withErrorHandling } = useErrorHandler();
   
-  const [storeData, setStoreData] = useState<StoreData>({
+  const initialStoreData: StoreData = {
     settings: defaultSettings,
     products: [],
     customPages: [
@@ -33,7 +35,23 @@ export function useStoreData() {
         updatedAt: new Date().toISOString()
       }
     ]
-  });
+  };
+
+  const [storeData, setStoreData, clearStoreData] = useLocalStorage<StoreData>('estore-builder-data', initialStoreData);
+  
+  // Auto-save functionality
+  const { saveNow } = useAutoSave(
+    storeData,
+    (data) => {
+      // Data is automatically saved to localStorage by useLocalStorage
+      console.log('Store data auto-saved');
+    },
+    {
+      delay: 1000, // Save after 1 second of inactivity
+      onSave: () => console.log('✅ تم حفظ البيانات تلقائياً'),
+      onError: (error) => console.error('❌ خطأ في الحفظ التلقائي:', error)
+    }
+  );
 
   const handleUpdateSettings = withErrorHandling((newSettings: StoreSettings) => {
     setStoreData(prev => ({
@@ -84,6 +102,33 @@ export function useStoreData() {
     }));
   }, 'handleDeletePage');
 
+  const resetStoreData = withErrorHandling(() => {
+    setStoreData(initialStoreData);
+  }, 'resetStoreData');
+
+  const exportStoreData = withErrorHandling(() => {
+    const dataStr = JSON.stringify(storeData, null, 2);
+    const dataBlob = new Blob([dataStr], { type: 'application/json' });
+    const url = URL.createObjectURL(dataBlob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `${storeData.settings.storeName}_backup.json`;
+    link.click();
+    URL.revokeObjectURL(url);
+  }, 'exportStoreData');
+
+  const importStoreData = withErrorHandling((file: File) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const importedData = JSON.parse(e.target?.result as string);
+        setStoreData(importedData);
+      } catch (error) {
+        throw new Error('ملف غير صالح');
+      }
+    };
+    reader.readAsText(file);
+  }, 'importStoreData');
   return {
     storeData,
     handleUpdateSettings,
@@ -92,6 +137,10 @@ export function useStoreData() {
     handleDeleteProduct,
     handleAddPage,
     handleEditPage,
-    handleDeletePage
+    handleDeletePage,
+    resetStoreData,
+    exportStoreData,
+    importStoreData,
+    saveNow
   };
 }
