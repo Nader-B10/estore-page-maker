@@ -27,6 +27,7 @@ const defaultSettings: StoreSettings = {
   featuresTemplate: 'grid-features',
   faqTemplate: 'accordion-faq',
   footerText: '',
+  sectionsOrder: ['hero', 'featured', 'bestSellers', 'onSale', 'about', 'whyChooseUs', 'faq'],
   headerLinks: [
     { id: '1', text: 'الرئيسية', url: '#home', type: 'internal', isVisible: true, order: 1 },
     { id: '2', text: 'المنتجات', url: '#products', type: 'internal', isVisible: true, order: 2 },

@@ -90,6 +90,7 @@ export interface StoreSettings {
   footerText: string;
   headerLinks: LinkItem[];
   footerLinks: LinkItem[];
+  sectionsOrder: string[];
   contactInfo: {
     email: string;
     phone: string;

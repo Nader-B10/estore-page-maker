@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { GripVertical, ArrowUp, ArrowDown } from 'lucide-react';
 import { StoreSettings } from '../../types/store';
 import HeroSectionManager from './sections-manager/HeroSectionManager';
 import ProductSectionsManager from './sections-manager/ProductSectionsManager';
@@ -14,18 +15,79 @@ interface SectionsManagerProps {
 export default function SectionsManager({ settings, onUpdateSettings }: SectionsManagerProps) {
   const [activeSection, setActiveSection] = useState('hero');
 
-  const sections = [
-    { id: 'hero', label: 'قسم البطل (Hero)' },
-    { id: 'products', label: 'أقسام المنتجات' },
-    { id: 'about', label: 'قسم من نحن' },
-    { id: 'why-choose-us', label: 'لماذا تختارنا' },
-    { id: 'faq', label: 'الأسئلة الشائعة' },
+  const allSections = [
+    { id: 'hero', label: 'قسم البطل (Hero)', icon: '🦸' },
+    { id: 'featured', label: 'المنتجات المميزة', icon: '⭐' },
+    { id: 'bestSellers', label: 'الأعلى مبيعاً', icon: '🏆' },
+    { id: 'onSale', label: 'العروض والتخفيضات', icon: '🔥' },
+    { id: 'about', label: 'قسم من نحن', icon: '👥' },
+    { id: 'whyChooseUs', label: 'لماذا تختارنا', icon: '✨' },
+    { id: 'faq', label: 'الأسئلة الشائعة', icon: '❓' },
   ];
+
+  const sections = settings.sectionsOrder.map(sectionId => 
+    allSections.find(section => section.id === sectionId)
+  ).filter(Boolean);
+
+  const moveSectionUp = (index: number) => {
+    if (index > 0) {
+      const newOrder = [...settings.sectionsOrder];
+      [newOrder[index], newOrder[index - 1]] = [newOrder[index - 1], newOrder[index]];
+      onUpdateSettings({
+        ...settings,
+        sectionsOrder: newOrder
+      });
+    }
+  };
+
+  const moveSectionDown = (index: number) => {
+    if (index < settings.sectionsOrder.length - 1) {
+      const newOrder = [...settings.sectionsOrder];
+      [newOrder[index], newOrder[index + 1]] = [newOrder[index + 1], newOrder[index]];
+      onUpdateSettings({
+        ...settings,
+        sectionsOrder: newOrder
+      });
+    }
+  };
 
   return (
     <div className="space-y-6">
+      {/* Sections Reordering */}
+      <div className="bg-white rounded-lg p-4 shadow-sm">
+        <h3 className="text-lg font-semibold mb-4">ترتيب الأقسام</h3>
+        <div className="space-y-2">
+          {sections.map((section, index) => (
+            <div key={section.id} className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+              <GripVertical className="text-gray-400 cursor-move" size={16} />
+              <span className="text-lg">{section.icon}</span>
+              <span className="flex-1 font-medium">{section.label}</span>
+              <div className="flex gap-1">
+                <button
+                  onClick={() => moveSectionUp(index)}
+                  disabled={index === 0}
+                  className="p-1 text-gray-500 hover:text-blue-600 disabled:opacity-30 disabled:cursor-not-allowed"
+                  title="تحريك لأعلى"
+                >
+                  <ArrowUp size={16} />
+                </button>
+                <button
+                  onClick={() => moveSectionDown(index)}
+                  disabled={index === sections.length - 1}
+                  className="p-1 text-gray-500 hover:text-blue-600 disabled:opacity-30 disabled:cursor-not-allowed"
+                  title="تحريك لأسفل"
+                >
+                  <ArrowDown size={16} />
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
       {/* Section Navigation */}
       <div className="bg-white rounded-lg p-4 shadow-sm">
+        <h3 className="text-lg font-semibold mb-4">إعدادات الأقسام</h3>
         <div className="flex flex-wrap gap-2">
           {sections.map(section => (
             <button
@@ -37,6 +99,7 @@ export default function SectionsManager({ settings, onUpdateSettings }: Sections
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >
+              <span className="mr-2">{section.icon}</span>
               {section.label}
             </button>
           ))}
@@ -48,7 +111,7 @@ export default function SectionsManager({ settings, onUpdateSettings }: Sections
         <HeroSectionManager settings={settings} onUpdateSettings={onUpdateSettings} />
       )}
 
-      {activeSection === 'products' && (
+      {(activeSection === 'featured' || activeSection === 'bestSellers' || activeSection === 'onSale') && (
         <ProductSectionsManager settings={settings} onUpdateSettings={onUpdateSettings} />
       )}
 
@@ -56,7 +119,7 @@ export default function SectionsManager({ settings, onUpdateSettings }: Sections
         <AboutSectionManager settings={settings} onUpdateSettings={onUpdateSettings} />
       )}
 
-      {activeSection === 'why-choose-us' && (
+      {activeSection === 'whyChooseUs' && (
         <WhyChooseUsSectionManager settings={settings} onUpdateSettings={onUpdateSettings} />
       )}
 
