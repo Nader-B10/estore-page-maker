@@ -1,5 +1,5 @@
 import React from 'react';
-import { StoreSettings, PREDEFINED_THEMES } from '../../../types/store';
+import { StoreSettings, PREDEFINED_THEMES } from '../../../types';
 
 interface ThemeSettingsProps {
   settings: StoreSettings;
