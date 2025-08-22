@@ -164,16 +164,17 @@ export default function StorePreview({ storeData }: StorePreviewProps) {
       {/* Hero Section */}
       <HeroComponent settings={settings} />
 
-      {/* Main Content */}
       {/* Dynamic Sections Based on Order */}
-      {settings.sectionsOrder.map((sectionId) => {
+      {settings.sectionsOrder.map((sectionId, index) => {
         switch (sectionId) {
           case 'hero':
             return null; // Already rendered above
           
           case 'featured':
-            return settings.productSections.featured.enabled ? (
-              <main key={sectionId} className="max-w-7xl mx-auto py-8 px-6" style={{ backgroundColor: currentTheme.palette.background }}>
+            if (!settings.productSections.featured.enabled) return null;
+            return (
+              <section key={`${sectionId}-${index}`} className="py-8 px-6" style={{ backgroundColor: currentTheme.palette.background }}>
+                <div className="max-w-7xl mx-auto">
                 <section className="mb-16">
                   <div className="text-center mb-8">
                     <h2 className="text-3xl font-bold mb-2" style={{ color: currentTheme.palette.primary }}>
@@ -214,12 +215,15 @@ export default function StorePreview({ storeData }: StorePreviewProps) {
                     </div>
                   )}
                 </section>
-              </main>
-            ) : null;
+                </div>
+              </section>
+            );
           
           case 'bestSellers':
-            return settings.productSections.bestSellers.enabled ? (
-              <main key={sectionId} className="max-w-7xl mx-auto py-8 px-6" style={{ backgroundColor: currentTheme.palette.background }}>
+            if (!settings.productSections.bestSellers.enabled) return null;
+            return (
+              <section key={`${sectionId}-${index}`} className="py-8 px-6" style={{ backgroundColor: currentTheme.palette.background }}>
+                <div className="max-w-7xl mx-auto">
                 <section className="mb-16">
                   <div className="text-center mb-8">
                     <h2 className="text-3xl font-bold mb-2" style={{ color: currentTheme.palette.primary }}>
@@ -260,12 +264,15 @@ export default function StorePreview({ storeData }: StorePreviewProps) {
                     </div>
                   )}
                 </section>
-              </main>
-            ) : null;
+                </div>
+              </section>
+            );
           
           case 'onSale':
-            return settings.productSections.onSale.enabled ? (
-              <main key={sectionId} className="max-w-7xl mx-auto py-8 px-6" style={{ backgroundColor: currentTheme.palette.background }}>
+            if (!settings.productSections.onSale.enabled) return null;
+            return (
+              <section key={`${sectionId}-${index}`} className="py-8 px-6" style={{ backgroundColor: currentTheme.palette.background }}>
+                <div className="max-w-7xl mx-auto">
                 <section className="mb-16">
                   <div className="text-center mb-8">
                     <h2 className="text-3xl font-bold mb-2" style={{ color: currentTheme.palette.primary }}>
@@ -306,17 +313,18 @@ export default function StorePreview({ storeData }: StorePreviewProps) {
                     </div>
                   )}
                 </section>
-              </main>
-            ) : null;
+                </div>
+              </section>
+            );
           
           case 'about':
-            return <AboutComponent key={sectionId} settings={settings} />;
+            return <AboutComponent key={`${sectionId}-${index}`} settings={settings} />;
           
           case 'whyChooseUs':
-            return <FeaturesComponent key={sectionId} settings={settings} />;
+            return <FeaturesComponent key={`${sectionId}-${index}`} settings={settings} />;
           
           case 'faq':
-            return <FAQComponent key={sectionId} settings={settings} />;
+            return <FAQComponent key={`${sectionId}-${index}`} settings={settings} />;
           
           default:
             return null;
