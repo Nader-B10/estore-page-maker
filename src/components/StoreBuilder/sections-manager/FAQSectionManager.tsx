@@ -24,8 +24,8 @@ export default function FAQSectionManager({ settings, onUpdateSettings }: FAQSec
   const handleSectionChange = (field: string, value: any) => {
     onUpdateSettings({
       ...settings,
-      faqSection: {
-        ...settings.faqSection,
+      faq: {
+        ...settings.faq,
         [field]: value,
       },
     });
@@ -67,7 +67,7 @@ export default function FAQSectionManager({ settings, onUpdateSettings }: FAQSec
   const handleSave = () => {
     if (!itemFormData.question.trim() || !itemFormData.answer.trim()) return;
 
-    const currentFAQs = settings.faq.items || [];
+    const currentFAQs = settings.faq?.items || [];
     let updatedFAQs;
 
     if (editingFAQ) {
@@ -90,7 +90,7 @@ export default function FAQSectionManager({ settings, onUpdateSettings }: FAQSec
   };
 
   const handleDelete = (faqId: string) => {
-    const currentFAQs = settings.faq.items || [];
+    const currentFAQs = settings.faq?.items || [];
     const updatedFAQs = currentFAQs.filter(faq => faq.id !== faqId);
     handleSectionChange('items', updatedFAQs);
   };
@@ -119,7 +119,7 @@ export default function FAQSectionManager({ settings, onUpdateSettings }: FAQSec
             <label className="flex items-center gap-2 mb-4">
               <input
                 type="checkbox"
-                checked={settings.faqSection?.enabled || false}
+                checked={settings.faq?.enabled || false}
                 onChange={(e) => handleSectionChange('enabled', e.target.checked)}
                 className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
               />
@@ -127,13 +127,13 @@ export default function FAQSectionManager({ settings, onUpdateSettings }: FAQSec
             </label>
           </div>
 
-          {settings.faqSection?.enabled && (
+          {settings.faq?.enabled && (
             <>
               <div>
                 <label className="block text-sm font-medium mb-2">عنوان القسم</label>
                 <input
                   type="text"
-                  value={settings.faqSection.title || ''}
+                  value={settings.faq.title || ''}
                   onChange={(e) => handleSectionChange('title', e.target.value)}
                   className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="الأسئلة الشائعة"
@@ -143,7 +143,7 @@ export default function FAQSectionManager({ settings, onUpdateSettings }: FAQSec
               <div>
                 <label className="block text-sm font-medium mb-2">وصف القسم</label>
                 <textarea
-                  value={settings.faqSection.subtitle || ''}
+                  value={settings.faq.subtitle || ''}
                   onChange={(e) => handleSectionChange('subtitle', e.target.value)}
                   className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   rows={2}
@@ -156,7 +156,7 @@ export default function FAQSectionManager({ settings, onUpdateSettings }: FAQSec
       </div>
 
       {/* FAQ Items Management */}
-      {settings.faqSection?.enabled && (
+      {settings.faq?.enabled && (
         <div className="bg-white rounded-lg p-6 shadow-sm">
           <div className="flex justify-between items-center mb-4">
             <h3 className="text-lg font-semibold">إدارة الأسئلة والأجوبة</h3>
@@ -170,7 +170,7 @@ export default function FAQSectionManager({ settings, onUpdateSettings }: FAQSec
           </div>
 
           <div className="space-y-3">
-            {(settings.faqSection.faqs || []).map((faq: FAQItem) => (
+            {(settings.faq.items || []).map((faq: FAQItem) => (
               <div key={faq.id} className="border border-gray-200 rounded-lg p-4">
                 <div className="flex justify-between items-start gap-4">
                   <div className="flex-1">
@@ -195,7 +195,7 @@ export default function FAQSectionManager({ settings, onUpdateSettings }: FAQSec
               </div>
             ))}
 
-            {(!settings.faqSection.faqs || settings.faqSection.faqs.length === 0) && (
+            {(!settings.faq.items || settings.faq.items.length === 0) && (
               <div className="text-center py-8 text-gray-500">
                 لا توجد أسئلة شائعة. اضغط على "إضافة سؤال جديد" لبدء الإضافة.
               </div>
@@ -205,7 +205,7 @@ export default function FAQSectionManager({ settings, onUpdateSettings }: FAQSec
       )}
 
       {/* FAQ Templates */}
-      {settings.faqSection?.enabled && (
+      {settings.faq?.enabled && (
         <div className="bg-white rounded-lg p-6 shadow-sm">
           <h3 className="text-lg font-semibold mb-4">قوالب الأسئلة الشائعة</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -248,8 +248,8 @@ export default function FAQSectionManager({ settings, onUpdateSettings }: FAQSec
                 <label className="block text-sm font-medium mb-2">السؤال</label>
                 <input
                   type="text"
-                  value={formData.question}
-                  onChange={(e) => setFormData({ ...formData, question: e.target.value })}
+                  value={itemFormData.question}
+                  onChange={(e) => setItemFormData({ ...itemFormData, question: e.target.value })}
                   className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="اكتب السؤال هنا..."
                 />
@@ -258,8 +258,8 @@ export default function FAQSectionManager({ settings, onUpdateSettings }: FAQSec
               <div>
                 <label className="block text-sm font-medium mb-2">الإجابة</label>
                 <textarea
-                  value={formData.answer}
-                  onChange={(e) => setFormData({ ...formData, answer: e.target.value })}
+                  value={itemFormData.answer}
+                  onChange={(e) => setItemFormData({ ...itemFormData, answer: e.target.value })}
                   className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   rows={4}
                   placeholder="اكتب الإجابة هنا..."
@@ -270,10 +270,10 @@ export default function FAQSectionManager({ settings, onUpdateSettings }: FAQSec
             <div className="flex gap-3 mt-6">
               <button
                 onClick={handleSave}
-                disabled={!formData.question.trim() || !formData.answer.trim()}
+                disabled={!itemFormData.question.trim() || !itemFormData.answer.trim()}
                 className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed"
               >
-                {editingFAQ ? 'حفظ التعديلات' : 'إضافة السؤال'}
+                {editingFAQ ? 'حفظ التغييرات' : 'إضافة السؤال'}
               </button>
               <button
                 onClick={closeModal}
