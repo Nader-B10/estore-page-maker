@@ -751,6 +751,7 @@ export default function SectionsManager({ settings, onUpdateSettings }: Sections
     </div>
   );
 }
+}
 
 // About Section Manager Component
 function AboutSectionManager({ 
