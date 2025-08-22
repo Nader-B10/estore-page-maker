@@ -10,12 +10,9 @@ export default function AboutSectionManager({ settings, onUpdateSettings }: Abou
   const updateAboutSection = (updates: any) => {
     onUpdateSettings({
       ...settings,
-      sections: {
-        ...settings.sections,
-        about: {
-          ...settings.sections.about,
-          ...updates
-        }
+      aboutSection: {
+        ...settings.aboutSection,
+        ...updates
       }
     });
   };
@@ -29,7 +26,7 @@ export default function AboutSectionManager({ settings, onUpdateSettings }: Abou
         <label className="flex items-center">
           <input
             type="checkbox"
-            checked={settings.sections.about?.enabled || false}
+            checked={settings.aboutSection?.enabled || false}
             onChange={(e) => updateAboutSection({ enabled: e.target.checked })}
             className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
           />
@@ -37,7 +34,7 @@ export default function AboutSectionManager({ settings, onUpdateSettings }: Abou
         </label>
       </div>
 
-      {settings.sections.about?.enabled && (
+      {settings.aboutSection?.enabled && (
         <div className="space-y-6">
           {/* Section Title */}
           <div>
@@ -46,7 +43,7 @@ export default function AboutSectionManager({ settings, onUpdateSettings }: Abou
             </label>
             <input
               type="text"
-              value={settings.sections.about?.title || 'من نحن'}
+              value={settings.aboutSection?.title || 'من نحن'}
               onChange={(e) => updateAboutSection({ title: e.target.value })}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="من نحن"
@@ -60,7 +57,7 @@ export default function AboutSectionManager({ settings, onUpdateSettings }: Abou
             </label>
             <input
               type="text"
-              value={settings.sections.about?.subtitle || ''}
+              value={settings.aboutSection?.subtitle || ''}
               onChange={(e) => updateAboutSection({ subtitle: e.target.value })}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="نبذة مختصرة عن الشركة"
@@ -73,7 +70,7 @@ export default function AboutSectionManager({ settings, onUpdateSettings }: Abou
               محتوى القسم
             </label>
             <textarea
-              value={settings.sections.about?.content || ''}
+              value={settings.aboutSection?.content || ''}
               onChange={(e) => updateAboutSection({ content: e.target.value })}
               rows={6}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -88,15 +85,15 @@ export default function AboutSectionManager({ settings, onUpdateSettings }: Abou
             </label>
             <input
               type="url"
-              value={settings.sections.about?.image || ''}
+              value={settings.aboutSection?.image || ''}
               onChange={(e) => updateAboutSection({ image: e.target.value })}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="https://example.com/about-image.jpg"
             />
-            {settings.sections.about?.image && (
+            {settings.aboutSection?.image && (
               <div className="mt-2">
                 <img
-                  src={settings.sections.about.image}
+                  src={settings.aboutSection.image}
                   alt="About preview"
                   className="w-32 h-32 object-cover rounded-lg border"
                 />
@@ -118,7 +115,7 @@ export default function AboutSectionManager({ settings, onUpdateSettings }: Abou
                   key={template.id}
                   onClick={() => updateAboutSection({ template: template.id })}
                   className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
-                    settings.sections.about?.template === template.id
+                    settings.aboutSection?.template === template.id
                       ? 'border-orange-500 bg-orange-50'
                       : template.color
                   }`}
