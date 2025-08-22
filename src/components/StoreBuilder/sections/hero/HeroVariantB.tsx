@@ -53,6 +53,8 @@ export default function HeroVariantB({ settings }: HeroVariantBProps) {
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+          {/* Content Column */}
+          <div>
               className="inline-flex items-center gap-3 backdrop-blur-sm border rounded-full px-6 py-3 shadow-lg"
               style={{
                 backgroundColor: `${settings.primaryColor}10`,
@@ -134,6 +136,8 @@ export default function HeroVariantB({ settings }: HeroVariantBProps) {
                 <span>شاهد الفيديو</span>
               </button>
             </div>
+
+          </div>
 
           </div>
 
