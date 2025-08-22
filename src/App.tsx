@@ -276,7 +276,6 @@ function App() {
     { id: 'sections', label: 'الأقسام', icon: Package },
     { id: 'products', label: 'المنتجات', icon: Package },
     { id: 'pages', label: 'الصفحات', icon: Package },
-    { id: 'preview', label: 'معاينة', icon: Eye }
   ];
 
   return (
@@ -389,37 +388,17 @@ function App() {
         </aside>
 
         {/* Main Content */}
-        <main className="flex-1 bg-gray-100">
-          {activeTab === 'preview' ? (
-            <div className="h-full">
-              <div className="bg-white border-b border-gray-200 px-6 py-4">
-                <div className="flex items-center justify-between">
-                  <h2 className="text-lg font-semibold text-gray-900">معاينة المتجر</h2>
-                  <div className="flex items-center gap-2 text-sm text-gray-600">
-                    <Eye size={16} />
-                    معاينة مباشرة
-                  </div>
-                </div>
-              </div>
-              <StorePreview storeData={storeData} />
-            </div>
-          ) : (
-            <div className="h-full flex items-center justify-center">
-              <div className="text-center">
-                <div className="w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Eye size={48} className="text-blue-600" />
-                </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">معاينة المتجر</h3>
-                <p className="text-gray-600 mb-4">انقر على تبويب "معاينة" لرؤية متجرك</p>
-                <button
-                  onClick={() => setActiveTab('preview')}
-                  className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors"
-                >
-                  عرض المعاينة
-                </button>
+        <main className="flex-1 bg-gray-100 h-full">
+          <div className="bg-white border-b border-gray-200 px-6 py-4">
+            <div className="flex items-center justify-between">
+              <h2 className="text-lg font-semibold text-gray-900">معاينة المتجر</h2>
+              <div className="flex items-center gap-2 text-sm text-gray-600">
+                <Eye size={16} />
+                معاينة مباشرة
               </div>
             </div>
-          )}
+          </div>
+          <StorePreview storeData={storeData} />
         </main>
       </div>
 
