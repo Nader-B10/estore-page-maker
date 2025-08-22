@@ -28,30 +28,70 @@ export default function IconFeatures({ settings }: IconFeaturesProps) {
   };
 
   return (
-    <section className="relative py-20 bg-white overflow-hidden">
+    <section 
+      className="relative py-20 overflow-hidden"
+      style={{ backgroundColor: settings.surface }}
+    >
       {/* Subtle Background Pattern */}
       <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,rgba(59,130,246,0.15)_1px,transparent_0)] bg-[length:40px_40px]"></div>
+        <div 
+          className="absolute inset-0 opacity-5"
+          style={{
+            backgroundImage: `radial-gradient(circle at 1px 1px, ${settings.primaryColor} 1px, transparent 0)`,
+            backgroundSize: '40px 40px'
+          }}
+        ></div>
       </div>
 
       {/* Floating Geometric Shapes */}
-      <div className="absolute top-10 left-10 w-20 h-20 border-2 border-blue-200 rounded-full animate-spin-slow"></div>
-      <div className="absolute bottom-10 right-10 w-16 h-16 border-2 border-purple-200 rounded-lg animate-pulse"></div>
-      <div className="absolute top-1/2 left-1/4 w-12 h-12 bg-gradient-to-r from-blue-100 to-purple-100 rounded-full animate-bounce-slow"></div>
+      <div 
+        className="absolute top-10 left-10 w-20 h-20 border-2 rounded-full animate-spin-slow"
+        style={{ borderColor: `${settings.primaryColor}20` }}
+      ></div>
+      <div 
+        className="absolute bottom-10 right-10 w-16 h-16 border-2 rounded-lg animate-pulse"
+        style={{ borderColor: `${settings.accentColor}20` }}
+      ></div>
+      <div 
+        className="absolute top-1/2 left-1/4 w-12 h-12 rounded-full animate-bounce-slow"
+        style={{
+          background: `linear-gradient(135deg, ${settings.primaryColor}10, ${settings.accentColor}10)`
+        }}
+      ></div>
 
       <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-16">
-          <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200 rounded-full px-6 py-3 mb-6">
-            <div className="w-2 h-2 bg-blue-500 rounded-full animate-ping"></div>
-            <span className="text-blue-600 font-semibold text-sm">لماذا نحن مختلفون</span>
+          <div 
+            className="inline-flex items-center gap-2 border rounded-full px-6 py-3 mb-6"
+            style={{
+              background: `linear-gradient(135deg, ${settings.primaryColor}05, ${settings.accentColor}05)`,
+              borderColor: `${settings.primaryColor}20`
+            }}
+          >
+            <div 
+              className="w-2 h-2 rounded-full animate-ping"
+              style={{ backgroundColor: settings.primaryColor }}
+            ></div>
+            <span 
+              className="font-semibold text-sm"
+              style={{ color: settings.primaryColor }}
+            >
+              لماذا نحن مختلفون
+            </span>
           </div>
           
-          <h2 className="text-4xl md:text-5xl font-black text-gray-900 mb-4">
+          <h2 
+            className="text-4xl md:text-5xl font-black mb-4"
+            style={{ color: settings.text }}
+          >
             {whyChooseUs.title}
           </h2>
           
-          <p className="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto">
+          <p 
+            className="text-lg md:text-xl max-w-2xl mx-auto"
+            style={{ color: settings.textSecondary }}
+          >
             {whyChooseUs.subtitle}
           </p>
         </div>
@@ -60,15 +100,6 @@ export default function IconFeatures({ settings }: IconFeaturesProps) {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {whyChooseUs.items.map((item, index) => {
             const Icon = getIcon(item.icon);
-            const colors = [
-              { bg: 'bg-blue-50', icon: 'text-blue-600', border: 'border-blue-200' },
-              { bg: 'bg-purple-50', icon: 'text-purple-600', border: 'border-purple-200' },
-              { bg: 'bg-green-50', icon: 'text-green-600', border: 'border-green-200' },
-              { bg: 'bg-orange-50', icon: 'text-orange-600', border: 'border-orange-200' },
-              { bg: 'bg-pink-50', icon: 'text-pink-600', border: 'border-pink-200' },
-              { bg: 'bg-indigo-50', icon: 'text-indigo-600', border: 'border-indigo-200' }
-            ];
-            const color = colors[index % colors.length];
             
             return (
               <div 
@@ -78,27 +109,50 @@ export default function IconFeatures({ settings }: IconFeaturesProps) {
               >
                 {/* Icon Container */}
                 <div className="relative mb-6">
-                  <div className={`w-20 h-20 ${color.bg} ${color.border} border-2 rounded-2xl flex items-center justify-center mx-auto group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 shadow-lg group-hover:shadow-xl`}>
-                    <Icon className={`w-10 h-10 ${color.icon}`} />
+                  <div 
+                    className="w-20 h-20 border-2 rounded-2xl flex items-center justify-center mx-auto group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 shadow-lg group-hover:shadow-xl"
+                    style={{
+                      backgroundColor: `${settings.primaryColor}05`,
+                      borderColor: `${settings.primaryColor}20`
+                    }}
+                  >
+                    <Icon 
+                      className="w-10 h-10"
+                      style={{ color: settings.primaryColor }}
+                    />
                   </div>
                   
                   {/* Pulse Effect */}
-                  <div className={`absolute inset-0 w-20 h-20 ${color.bg} rounded-2xl mx-auto animate-ping opacity-20 group-hover:opacity-40`}></div>
+                  <div 
+                    className="absolute inset-0 w-20 h-20 rounded-2xl mx-auto animate-ping opacity-20 group-hover:opacity-40"
+                    style={{ backgroundColor: `${settings.primaryColor}20` }}
+                  ></div>
                 </div>
                 
                 {/* Content */}
                 <div className="space-y-3">
-                  <h3 className="text-xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors duration-300">
+                  <h3 
+                    className="text-xl font-bold group-hover:opacity-80 transition-colors duration-300"
+                    style={{ color: settings.text }}
+                  >
                     {item.title}
                   </h3>
                   
-                  <p className="text-gray-600 text-sm leading-relaxed">
+                  <p 
+                    className="text-sm leading-relaxed"
+                    style={{ color: settings.textSecondary }}
+                  >
                     {item.description}
                   </p>
                 </div>
 
                 {/* Decorative Line */}
-                <div className="w-12 h-0.5 bg-gradient-to-r from-transparent via-gray-300 to-transparent mx-auto mt-6 group-hover:via-blue-500 transition-colors duration-300"></div>
+                <div 
+                  className="w-12 h-0.5 mx-auto mt-6 group-hover:w-16 transition-all duration-300"
+                  style={{
+                    background: `linear-gradient(90deg, transparent, ${settings.primaryColor}50, transparent)`
+                  }}
+                ></div>
               </div>
             );
           })}
@@ -107,9 +161,22 @@ export default function IconFeatures({ settings }: IconFeaturesProps) {
         {/* Bottom Decoration */}
         <div className="text-center mt-16">
           <div className="inline-flex items-center gap-4">
-            <div className="w-12 h-0.5 bg-gradient-to-r from-transparent to-blue-500"></div>
-            <div className="w-3 h-3 bg-blue-500 rounded-full animate-pulse"></div>
-            <div className="w-12 h-0.5 bg-gradient-to-l from-transparent to-blue-500"></div>
+            <div 
+              className="w-12 h-0.5"
+              style={{
+                background: `linear-gradient(90deg, transparent, ${settings.primaryColor})`
+              }}
+            ></div>
+            <div 
+              className="w-3 h-3 rounded-full animate-pulse"
+              style={{ backgroundColor: settings.primaryColor }}
+            ></div>
+            <div 
+              className="w-12 h-0.5"
+              style={{
+                background: `linear-gradient(90deg, ${settings.primaryColor}, transparent)`
+              }}
+            ></div>
           </div>
         </div>
       </div>
