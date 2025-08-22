@@ -1,5 +1,5 @@
 import { ComponentType } from 'react';
-import { StoreSettings, CustomPage } from '../types/store';
+import { StoreSettings, CustomPage } from '../types';
 
 // Header Components
 import ModernHeader1, { ModernHeader1Config } from '../components/StoreBuilder/sections/headers/ModernHeader1';

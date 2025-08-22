@@ -1,5 +1,5 @@
 import { ComponentType } from 'react';
-import { StoreSettings, CustomPage } from '../types/store';
+import { StoreSettings, CustomPage } from '../types';
 
 // Footer Components
 import DefaultFooter, { DefaultFooterConfig } from '../components/StoreBuilder/sections/footers/DefaultFooter';

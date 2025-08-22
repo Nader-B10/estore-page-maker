@@ -1,5 +1,5 @@
 import { ComponentType } from 'react';
-import { StoreSettings } from '../types/store';
+import { StoreSettings } from '../types';
 
 // FAQ Components
 import AccordionFAQ, { AccordionFAQConfig } from '../components/StoreBuilder/sections/faq/AccordionFAQ';

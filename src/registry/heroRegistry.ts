@@ -1,5 +1,5 @@
 import { ComponentType } from 'react';
-import { StoreSettings } from '../types/store';
+import { StoreSettings } from '../types';
 
 // Hero Components
 import HeroVariantA, { HeroVariantAConfig } from '../components/StoreBuilder/sections/hero/HeroVariantA';

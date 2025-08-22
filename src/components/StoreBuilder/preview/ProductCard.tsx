@@ -1,6 +1,6 @@
 import React from 'react';
 import { MessageCircle } from 'lucide-react';
-import { Product, StoreSettings, PredefinedTheme } from '../../../types/store';
+import { Product, StoreSettings, PredefinedTheme } from '../../../types';
 
 interface ProductCardProps {
   product: Product;

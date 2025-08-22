@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Plus, Edit, Trash2, X } from 'lucide-react';
-import { StoreSettings } from '../../../types/store';
-import { getAvailableFeatures } from '../../../registry/componentRegistry';
+import { StoreSettings } from '../../../types';
+import { getAvailableFeatures } from '../../../registry';
 
 interface WhyChooseUsSectionManagerProps {
   settings: StoreSettings;

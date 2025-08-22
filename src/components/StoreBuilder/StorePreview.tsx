@@ -1,6 +1,6 @@
 import React from 'react';
-import { StoreData, getThemeById } from '../../types/store';
-import { getHeaderComponent, getFooterComponent, getHeroComponent, getAboutComponent, getFeaturesComponent, getFAQComponent } from '../../registry/componentRegistry';
+import { StoreData, getThemeById } from '../../types';
+import { getHeaderComponent, getFooterComponent, getHeroComponent, getAboutComponent, getFeaturesComponent, getFAQComponent } from '../../registry';
 import ProductSection from './preview/ProductSection';
 
 interface StorePreviewProps {

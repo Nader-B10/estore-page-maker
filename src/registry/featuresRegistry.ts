@@ -1,5 +1,5 @@
 import { ComponentType } from 'react';
-import { StoreSettings } from '../types/store';
+import { StoreSettings } from '../types';
 
 // Features Components
 import GridFeatures, { GridFeaturesConfig } from '../components/StoreBuilder/sections/features/GridFeatures';

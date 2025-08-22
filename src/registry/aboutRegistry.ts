@@ -1,5 +1,5 @@
 import { ComponentType } from 'react';
-import { StoreSettings } from '../types/store';
+import { StoreSettings } from '../types';
 
 // About Components
 import ModernAbout, { ModernAboutConfig } from '../components/StoreBuilder/sections/about/ModernAbout';
