@@ -34,6 +34,7 @@ export interface StoreSettings {
     includeProductDescription: boolean;
     includeProductPrice: boolean;
     includeStoreInfo: boolean;
+    includeProductLink: boolean;
   };
   heroSection: HeroSection;
   productSections: ProductSection;

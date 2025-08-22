@@ -103,7 +103,17 @@ export default function WhatsAppSettings({ settings, onUpdateSettings }: WhatsAp
                     onChange={(e) => handleChange('includeStoreInfo', e.target.checked)}
                     className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                   />
-                  <span className="text-sm">معلومات المتجر</span>
+                  يمكنك استخدام: {'{productName}'}, {'{productPrice}'}, {'{productDescription}'}, {'{productLink}'}, {'{storeName}'}
+                </label>
+
+                <label className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    checked={settings.whatsappSettings.includeProductLink}
+                    onChange={(e) => handleChange('includeProductLink', e.target.checked)}
+                    className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  />
+                  <span className="text-sm">رابط المنتج</span>
                 </label>
               </div>
             </div>

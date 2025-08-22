@@ -31,6 +31,10 @@ export default function ProductDetailPage({ product, storeData, relatedProducts 
     if (settings.whatsappSettings.includeStoreInfo) {
       message = message.replace('{storeName}', settings.storeName);
     }
+    if (settings.whatsappSettings.includeProductLink) {
+      const productLink = `${window.location.origin}/product-${product.id}.html`;
+      message = message.replace('{productLink}', productLink);
+    }
 
     const encodedMessage = encodeURIComponent(message);
     return `https://wa.me/${settings.whatsappSettings.phoneNumber}?text=${encodedMessage}`;

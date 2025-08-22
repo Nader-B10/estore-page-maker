@@ -38,11 +38,12 @@ export const defaultSettings: StoreSettings = {
   whatsappSettings: {
     enabled: true,
     phoneNumber: '',
-    messageTemplate: 'مرحباً، أريد شراء هذا المنتج:\n\n📦 *{productName}*\n💰 السعر: {productPrice}\n\n{productDescription}\n\nشكراً لكم',
+    messageTemplate: 'مرحباً، أريد شراء هذا المنتج:\n\n📦 *{productName}*\n💰 السعر: {productPrice}\n\n{productDescription}\n\n🔗 رابط المنتج: {productLink}\n\nشكراً لكم',
     includeProductName: true,
     includeProductDescription: true,
     includeProductPrice: true,
     includeStoreInfo: true,
+    includeProductLink: true,
   },
   heroSection: {
     enabled: true,
