@@ -346,6 +346,8 @@ const generatePageHTML = (page: CustomPage, settings: StoreSettings): string => 
 };
 
 const generateProductDetailHTML = (product: any, settings: StoreSettings, relatedProducts: any[] = []): string => {
+  const { productDetailSettings } = settings;
+  
   return `<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -380,10 +382,12 @@ const generateProductDetailHTML = (product: any, settings: StoreSettings, relate
                         العودة
                     </button>
                     
-                    <button onclick="shareProduct()" class="flex items-center gap-2 text-gray-600 hover:text-gray-800 px-4 py-2 border border-gray-300 rounded-lg transition-colors">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z"></path></svg>
-                        مشاركة
-                    </button>
+                    ${productDetailSettings.showShareButton ? `
+                        <button onclick="shareProduct()" class="flex items-center gap-2 text-gray-600 hover:text-gray-800 px-4 py-2 border border-gray-300 rounded-lg transition-colors">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z"></path></svg>
+                            مشاركة
+                        </button>
+                    ` : ''}
                 </div>
             </div>
         </div>
@@ -398,16 +402,20 @@ const generateProductDetailHTML = (product: any, settings: StoreSettings, relate
                     <img src="images/${product.id}.jpg" alt="${product.name}" class="w-full h-96 lg:h-[500px] object-cover" />
                     
                     <!-- Badges -->
-                    <div class="absolute top-4 right-4 flex flex-col gap-2">
-                        ${product.category ? `<span class="px-3 py-1 text-sm font-medium text-white rounded-full bg-blue-500 shadow-lg">${product.category}</span>` : ''}
-                        ${product.isOnSale && product.discountPercentage ? `<span class="px-3 py-1 text-sm font-bold text-white rounded-full bg-red-500 shadow-lg animate-pulse">خصم ${product.discountPercentage}%</span>` : ''}
-                    </div>
+                    ${productDetailSettings.showProductBadges ? `
+                        <div class="absolute top-4 right-4 flex flex-col gap-2">
+                            ${productDetailSettings.showProductCategory && product.category ? `<span class="px-3 py-1 text-sm font-medium text-white rounded-full bg-blue-500 shadow-lg">${product.category}</span>` : ''}
+                            ${productDetailSettings.showDiscountBadge && product.isOnSale && product.discountPercentage ? `<span class="px-3 py-1 text-sm font-bold text-white rounded-full bg-red-500 shadow-lg animate-pulse">خصم ${product.discountPercentage}%</span>` : ''}
+                        </div>
+                    ` : ''}
 
                     <!-- Product Labels -->
-                    <div class="absolute bottom-4 left-4 flex flex-wrap gap-2">
-                        ${product.isFeatured ? '<span class="px-3 py-1 text-sm font-bold text-white rounded-full bg-yellow-500 shadow-lg">⭐ مميز</span>' : ''}
-                        ${product.isBestSeller ? '<span class="px-3 py-1 text-sm font-bold text-white rounded-full bg-green-500 shadow-lg">🏆 الأعلى مبيعاً</span>' : ''}
-                    </div>
+                    ${productDetailSettings.showProductBadges ? `
+                        <div class="absolute bottom-4 left-4 flex flex-wrap gap-2">
+                            ${product.isFeatured ? '<span class="px-3 py-1 text-sm font-bold text-white rounded-full bg-yellow-500 shadow-lg">⭐ مميز</span>' : ''}
+                            ${product.isBestSeller ? '<span class="px-3 py-1 text-sm font-bold text-white rounded-full bg-green-500 shadow-lg">🏆 الأعلى مبيعاً</span>' : ''}
+                        </div>
+                    ` : ''}
                 </div>
             </div>
 
@@ -417,38 +425,41 @@ const generateProductDetailHTML = (product: any, settings: StoreSettings, relate
                 <div>
                     <h1 class="text-4xl font-bold text-gray-900 mb-4">${product.name}</h1>
                     
-                    <!-- Rating Stars -->
-                    <div class="flex items-center gap-2 mb-4">
-                        <div class="flex items-center">
-                            <svg class="w-5 h-5 text-yellow-400 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
-                            <svg class="w-5 h-5 text-yellow-400 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
-                            <svg class="w-5 h-5 text-yellow-400 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
-                            <svg class="w-5 h-5 text-yellow-400 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
-                            <svg class="w-5 h-5 text-yellow-400 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                    ${productDetailSettings.showRating ? `
+                        <div class="flex items-center gap-2 mb-4">
+                            <div class="flex items-center">
+                                <svg class="w-5 h-5 text-yellow-400 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                                <svg class="w-5 h-5 text-yellow-400 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                                <svg class="w-5 h-5 text-yellow-400 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                                <svg class="w-5 h-5 text-yellow-400 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                                <svg class="w-5 h-5 text-yellow-400 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                            </div>
+                            ${productDetailSettings.showReviewsCount ? '<span class="text-gray-600 text-sm">(4.8) • 127 تقييم</span>' : ''}
                         </div>
-                        <span class="text-gray-600 text-sm">(4.8) • 127 تقييم</span>
-                    </div>
+                    ` : ''}
                 </div>
 
                 <!-- Price -->
                 <div class="flex items-center gap-4">
                     <span class="text-4xl font-black" style="color: ${settings.primaryColor}">$${product.price}</span>
-                    ${product.originalPrice && product.originalPrice > product.price ? `
+                    ${productDetailSettings.showOriginalPrice && product.originalPrice && product.originalPrice > product.price ? `
                         <div class="flex flex-col">
                             <span class="text-xl text-gray-500 line-through">$${product.originalPrice}</span>
-                            <span class="text-sm text-green-600 font-medium">وفر $${(product.originalPrice - product.price).toFixed(2)}</span>
+                            ${productDetailSettings.showSavingsAmount ? `<span class="text-sm text-green-600 font-medium">وفر $${(product.originalPrice - product.price).toFixed(2)}</span>` : ''}
                         </div>
                     ` : ''}
                 </div>
 
                 <!-- Description -->
-                <div>
-                    <h3 class="text-xl font-semibold text-gray-900 mb-3">وصف المنتج</h3>
-                    <p class="text-gray-700 leading-relaxed text-lg">${product.description}</p>
-                </div>
+                ${productDetailSettings.showProductDescription ? `
+                    <div>
+                        <h3 class="text-xl font-semibold text-gray-900 mb-3">وصف المنتج</h3>
+                        <p class="text-gray-700 leading-relaxed text-lg">${product.description}</p>
+                    </div>
+                ` : ''}
 
                 <!-- Tags -->
-                ${product.tags && product.tags.length > 0 ? `
+                ${productDetailSettings.showProductTags && product.tags && product.tags.length > 0 ? `
                     <div>
                         <h3 class="text-lg font-semibold text-gray-900 mb-3">العلامات</h3>
                         <div class="flex flex-wrap gap-2">
@@ -458,37 +469,39 @@ const generateProductDetailHTML = (product: any, settings: StoreSettings, relate
                 ` : ''}
 
                 <!-- Features -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 py-6 border-t border-b border-gray-200">
-                    <div class="flex items-center gap-3 text-center">
-                        <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                            <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
+                ${productDetailSettings.showProductFeatures ? `
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 py-6 border-t border-b border-gray-200">
+                        <div class="flex items-center gap-3 text-center">
+                            <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                                <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
+                            </div>
+                            <div>
+                                <p class="font-semibold text-gray-900">شحن مجاني</p>
+                                <p class="text-sm text-gray-600">للطلبات فوق $50</p>
+                            </div>
                         </div>
-                        <div>
-                            <p class="font-semibold text-gray-900">شحن مجاني</p>
-                            <p class="text-sm text-gray-600">للطلبات فوق $50</p>
+                        
+                        <div class="flex items-center gap-3 text-center">
+                            <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                                <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                            </div>
+                            <div>
+                                <p class="font-semibold text-gray-900">ضمان الجودة</p>
+                                <p class="text-sm text-gray-600">ضمان لمدة سنة</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center gap-3 text-center">
+                            <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
+                                <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                            </div>
+                            <div>
+                                <p class="font-semibold text-gray-900">إرجاع مجاني</p>
+                                <p class="text-sm text-gray-600">خلال 30 يوم</p>
+                            </div>
                         </div>
                     </div>
-                    
-                    <div class="flex items-center gap-3 text-center">
-                        <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
-                            <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
-                        </div>
-                        <div>
-                            <p class="font-semibold text-gray-900">ضمان الجودة</p>
-                            <p class="text-sm text-gray-600">ضمان لمدة سنة</p>
-                        </div>
-                    </div>
-                    
-                    <div class="flex items-center gap-3 text-center">
-                        <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
-                            <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
-                        </div>
-                        <div>
-                            <p class="font-semibold text-gray-900">إرجاع مجاني</p>
-                            <p class="text-sm text-gray-600">خلال 30 يوم</p>
-                        </div>
-                    </div>
-                </div>
+                ` : ''}
 
                 <!-- Action Buttons -->
                 <div class="space-y-4">
@@ -504,20 +517,22 @@ const generateProductDetailHTML = (product: any, settings: StoreSettings, relate
                         </button>
                     `}
 
-                    <button class="w-full flex items-center justify-center gap-3 border-2 border-gray-300 text-gray-700 hover:bg-gray-50 px-8 py-4 rounded-xl transition-colors text-lg font-semibold">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
-                        إضافة للمفضلة
-                    </button>
+                    ${productDetailSettings.showFavoriteButton ? `
+                        <button class="w-full flex items-center justify-center gap-3 border-2 border-gray-300 text-gray-700 hover:bg-gray-50 px-8 py-4 rounded-xl transition-colors text-lg font-semibold">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                            إضافة للمفضلة
+                        </button>
+                    ` : ''}
                 </div>
             </div>
         </div>
 
         <!-- Related Products -->
-        ${relatedProducts.length > 0 ? `
+        ${productDetailSettings.showRelatedProducts && relatedProducts.length > 0 ? `
             <div class="mt-16">
                 <h2 class="text-3xl font-bold text-gray-900 mb-8 text-center">منتجات ذات صلة</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    ${relatedProducts.slice(0, 4).map(relatedProduct => `
+                    ${relatedProducts.slice(0, productDetailSettings.relatedProductsLimit).map(relatedProduct => `
                         <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow cursor-pointer" onclick="window.open('product-${relatedProduct.id}.html', '_blank')">
                             <img src="images/${relatedProduct.id}.jpg" alt="${relatedProduct.name}" class="w-full h-48 object-cover hover:scale-105 transition-transform duration-300" />
                             <div class="p-4">
@@ -550,18 +565,20 @@ const generateProductDetailHTML = (product: any, settings: StoreSettings, relate
     </footer>
 
     <script>
-        function shareProduct() {
-            if (navigator.share) {
-                navigator.share({
-                    title: '${product.name}',
-                    text: '${product.description}',
-                    url: window.location.href,
-                }).catch(console.error);
-            } else {
-                navigator.clipboard.writeText(window.location.href);
-                alert('تم نسخ رابط المنتج!');
+        ${productDetailSettings.showShareButton ? `
+            function shareProduct() {
+                if (navigator.share) {
+                    navigator.share({
+                        title: '${product.name}',
+                        text: '${product.description}',
+                        url: window.location.href,
+                    }).catch(console.error);
+                } else {
+                    navigator.clipboard.writeText(window.location.href);
+                    alert('تم نسخ رابط المنتج!');
+                }
             }
-        }
+        ` : ''}
     </script>
 </body>
 </html>`;

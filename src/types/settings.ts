@@ -37,9 +37,28 @@ export interface StoreSettings {
   };
   heroSection: HeroSection;
   productSections: ProductSection;
+  productDetailSettings: ProductDetailSettings;
   aboutSection: AboutSection;
   whyChooseUs: WhyChooseUsSection;
   faq: FAQSection;
+}
+
+export interface ProductDetailSettings {
+  showRating: boolean;
+  showReviewsCount: boolean;
+  showOriginalPrice: boolean;
+  showSavingsAmount: boolean;
+  showProductTags: boolean;
+  showProductFeatures: boolean;
+  showRelatedProducts: boolean;
+  showShareButton: boolean;
+  showFavoriteButton: boolean;
+  showProductBadges: boolean;
+  showProductCategory: boolean;
+  showDiscountBadge: boolean;
+  relatedProductsLimit: number;
+  enableImageZoom: boolean;
+  showProductDescription: boolean;
 }
 
 export interface HeroSection {

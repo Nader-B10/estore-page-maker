@@ -87,6 +87,7 @@ export default function AppSidebar({
             onAddProduct={onAddProduct}
             onEditProduct={onEditProduct}
             onDeleteProduct={onDeleteProduct}
+            onUpdateSettings={onUpdateSettings}
           />
         )}
         

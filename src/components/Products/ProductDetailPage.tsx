@@ -10,6 +10,7 @@ interface ProductDetailPageProps {
 
 export default function ProductDetailPage({ product, storeData, relatedProducts = [] }: ProductDetailPageProps) {
   const { settings } = storeData;
+  const { productDetailSettings } = settings;
 
   const generateWhatsAppMessage = (product: Product) => {
     if (!settings.whatsappSettings.enabled || !settings.whatsappSettings.phoneNumber) {
@@ -36,6 +37,8 @@ export default function ProductDetailPage({ product, storeData, relatedProducts 
   };
 
   const handleShare = async () => {
+    if (!productDetailSettings.showShareButton) return;
+    
     if (navigator.share) {
       try {
         await navigator.share({
@@ -80,13 +83,15 @@ export default function ProductDetailPage({ product, storeData, relatedProducts 
                 العودة
               </button>
               
-              <button
-                onClick={handleShare}
-                className="flex items-center gap-2 text-gray-600 hover:text-gray-800 px-4 py-2 border border-gray-300 rounded-lg transition-colors"
-              >
-                <Share2 size={18} />
-                مشاركة
-              </button>
+              {productDetailSettings.showShareButton && (
+                <button
+                  onClick={handleShare}
+                  className="flex items-center gap-2 text-gray-600 hover:text-gray-800 px-4 py-2 border border-gray-300 rounded-lg transition-colors"
+                >
+                  <Share2 size={18} />
+                  مشاركة
+                </button>
+              )}
             </div>
           </div>
         </div>
@@ -105,32 +110,36 @@ export default function ProductDetailPage({ product, storeData, relatedProducts 
               />
               
               {/* Badges */}
-              <div className="absolute top-4 right-4 flex flex-col gap-2">
-                {product.category && (
-                  <span className="px-3 py-1 text-sm font-medium text-white rounded-full bg-blue-500 shadow-lg">
-                    {product.category}
-                  </span>
-                )}
-                {product.isOnSale && product.discountPercentage && (
-                  <span className="px-3 py-1 text-sm font-bold text-white rounded-full bg-red-500 shadow-lg animate-pulse">
-                    خصم {product.discountPercentage}%
-                  </span>
-                )}
-              </div>
+              {productDetailSettings.showProductBadges && (
+                <div className="absolute top-4 right-4 flex flex-col gap-2">
+                  {productDetailSettings.showProductCategory && product.category && (
+                    <span className="px-3 py-1 text-sm font-medium text-white rounded-full bg-blue-500 shadow-lg">
+                      {product.category}
+                    </span>
+                  )}
+                  {productDetailSettings.showDiscountBadge && product.isOnSale && product.discountPercentage && (
+                    <span className="px-3 py-1 text-sm font-bold text-white rounded-full bg-red-500 shadow-lg animate-pulse">
+                      خصم {product.discountPercentage}%
+                    </span>
+                  )}
+                </div>
+              )}
 
               {/* Product Labels */}
-              <div className="absolute bottom-4 left-4 flex flex-wrap gap-2">
-                {product.isFeatured && (
-                  <span className="px-3 py-1 text-sm font-bold text-white rounded-full bg-yellow-500 shadow-lg">
-                    ⭐ مميز
-                  </span>
-                )}
-                {product.isBestSeller && (
-                  <span className="px-3 py-1 text-sm font-bold text-white rounded-full bg-green-500 shadow-lg">
-                    🏆 الأعلى مبيعاً
-                  </span>
-                )}
-              </div>
+              {productDetailSettings.showProductBadges && (
+                <div className="absolute bottom-4 left-4 flex flex-wrap gap-2">
+                  {product.isFeatured && (
+                    <span className="px-3 py-1 text-sm font-bold text-white rounded-full bg-yellow-500 shadow-lg">
+                      ⭐ مميز
+                    </span>
+                  )}
+                  {product.isBestSeller && (
+                    <span className="px-3 py-1 text-sm font-bold text-white rounded-full bg-green-500 shadow-lg">
+                      🏆 الأعلى مبيعاً
+                    </span>
+                  )}
+                </div>
+              )}
             </div>
           </div>
 
@@ -141,14 +150,18 @@ export default function ProductDetailPage({ product, storeData, relatedProducts 
               <h1 className="text-4xl font-bold text-gray-900 mb-4">{product.name}</h1>
               
               {/* Rating Stars */}
-              <div className="flex items-center gap-2 mb-4">
-                <div className="flex items-center">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-5 h-5 text-yellow-400 fill-current" />
-                  ))}
+              {productDetailSettings.showRating && (
+                <div className="flex items-center gap-2 mb-4">
+                  <div className="flex items-center">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="w-5 h-5 text-yellow-400 fill-current" />
+                    ))}
+                  </div>
+                  {productDetailSettings.showReviewsCount && (
+                    <span className="text-gray-600 text-sm">(4.8) • 127 تقييم</span>
+                  )}
                 </div>
-                <span className="text-gray-600 text-sm">(4.8) • 127 تقييم</span>
-              </div>
+              )}
             </div>
 
             {/* Price */}
@@ -156,26 +169,30 @@ export default function ProductDetailPage({ product, storeData, relatedProducts 
               <span className="text-4xl font-black" style={{ color: settings.primaryColor }}>
                 ${product.price}
               </span>
-              {product.originalPrice && product.originalPrice > product.price && (
+              {productDetailSettings.showOriginalPrice && product.originalPrice && product.originalPrice > product.price && (
                 <div className="flex flex-col">
                   <span className="text-xl text-gray-500 line-through">
                     ${product.originalPrice}
                   </span>
-                  <span className="text-sm text-green-600 font-medium">
-                    وفر ${(product.originalPrice - product.price).toFixed(2)}
-                  </span>
+                  {productDetailSettings.showSavingsAmount && (
+                    <span className="text-sm text-green-600 font-medium">
+                      وفر ${(product.originalPrice - product.price).toFixed(2)}
+                    </span>
+                  )}
                 </div>
               )}
             </div>
 
             {/* Description */}
-            <div className="prose prose-lg max-w-none">
-              <h3 className="text-xl font-semibold text-gray-900 mb-3">وصف المنتج</h3>
-              <p className="text-gray-700 leading-relaxed text-lg">{product.description}</p>
-            </div>
+            {productDetailSettings.showProductDescription && (
+              <div className="prose prose-lg max-w-none">
+                <h3 className="text-xl font-semibold text-gray-900 mb-3">وصف المنتج</h3>
+                <p className="text-gray-700 leading-relaxed text-lg">{product.description}</p>
+              </div>
+            )}
 
             {/* Tags */}
-            {product.tags && product.tags.length > 0 && (
+            {productDetailSettings.showProductTags && product.tags && product.tags.length > 0 && (
               <div>
                 <h3 className="text-lg font-semibold text-gray-900 mb-3">العلامات</h3>
                 <div className="flex flex-wrap gap-2">
@@ -192,37 +209,39 @@ export default function ProductDetailPage({ product, storeData, relatedProducts 
             )}
 
             {/* Features */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 py-6 border-t border-b border-gray-200">
-              <div className="flex items-center gap-3 text-center">
-                <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                  <Truck className="w-6 h-6 text-blue-600" />
+            {productDetailSettings.showProductFeatures && (
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 py-6 border-t border-b border-gray-200">
+                <div className="flex items-center gap-3 text-center">
+                  <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                    <Truck className="w-6 h-6 text-blue-600" />
+                  </div>
+                  <div>
+                    <p className="font-semibold text-gray-900">شحن مجاني</p>
+                    <p className="text-sm text-gray-600">للطلبات فوق $50</p>
+                  </div>
                 </div>
-                <div>
-                  <p className="font-semibold text-gray-900">شحن مجاني</p>
-                  <p className="text-sm text-gray-600">للطلبات فوق $50</p>
+                
+                <div className="flex items-center gap-3 text-center">
+                  <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                    <Shield className="w-6 h-6 text-green-600" />
+                  </div>
+                  <div>
+                    <p className="font-semibold text-gray-900">ضمان الجودة</p>
+                    <p className="text-sm text-gray-600">ضمان لمدة سنة</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-center gap-3 text-center">
+                  <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
+                    <RotateCcw className="w-6 h-6 text-purple-600" />
+                  </div>
+                  <div>
+                    <p className="font-semibold text-gray-900">إرجاع مجاني</p>
+                    <p className="text-sm text-gray-600">خلال 30 يوم</p>
+                  </div>
                 </div>
               </div>
-              
-              <div className="flex items-center gap-3 text-center">
-                <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
-                  <Shield className="w-6 h-6 text-green-600" />
-                </div>
-                <div>
-                  <p className="font-semibold text-gray-900">ضمان الجودة</p>
-                  <p className="text-sm text-gray-600">ضمان لمدة سنة</p>
-                </div>
-              </div>
-              
-              <div className="flex items-center gap-3 text-center">
-                <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
-                  <RotateCcw className="w-6 h-6 text-purple-600" />
-                </div>
-                <div>
-                  <p className="font-semibold text-gray-900">إرجاع مجاني</p>
-                  <p className="text-sm text-gray-600">خلال 30 يوم</p>
-                </div>
-              </div>
-            </div>
+            )}
 
             {/* Action Buttons */}
             <div className="space-y-4">
@@ -246,20 +265,22 @@ export default function ProductDetailPage({ product, storeData, relatedProducts 
                 </button>
               )}
 
-              <button className="w-full flex items-center justify-center gap-3 border-2 border-gray-300 text-gray-700 hover:bg-gray-50 px-8 py-4 rounded-xl transition-colors text-lg font-semibold">
-                <Heart size={24} />
-                إضافة للمفضلة
-              </button>
+              {productDetailSettings.showFavoriteButton && (
+                <button className="w-full flex items-center justify-center gap-3 border-2 border-gray-300 text-gray-700 hover:bg-gray-50 px-8 py-4 rounded-xl transition-colors text-lg font-semibold">
+                  <Heart size={24} />
+                  إضافة للمفضلة
+                </button>
+              )}
             </div>
           </div>
         </div>
 
         {/* Related Products */}
-        {relatedProducts.length > 0 && (
+        {productDetailSettings.showRelatedProducts && relatedProducts.length > 0 && (
           <div className="mt-16">
             <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">منتجات ذات صلة</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {relatedProducts.slice(0, 4).map((relatedProduct) => (
+              {relatedProducts.slice(0, productDetailSettings.relatedProductsLimit).map((relatedProduct) => (
                 <div
                   key={relatedProduct.id}
                   className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"

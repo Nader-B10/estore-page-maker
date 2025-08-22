@@ -72,6 +72,23 @@ export const defaultSettings: StoreSettings = {
       limit: 4
     }
   },
+  productDetailSettings: {
+    showRating: true,
+    showReviewsCount: true,
+    showOriginalPrice: true,
+    showSavingsAmount: true,
+    showProductTags: true,
+    showProductFeatures: true,
+    showRelatedProducts: true,
+    showShareButton: true,
+    showFavoriteButton: true,
+    showProductBadges: true,
+    showProductCategory: true,
+    showDiscountBadge: true,
+    relatedProductsLimit: 4,
+    enableImageZoom: false,
+    showProductDescription: true,
+  },
   aboutSection: {
     enabled: true,
     title: 'من نحن',
