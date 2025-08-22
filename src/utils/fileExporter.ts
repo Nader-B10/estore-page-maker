@@ -1,7 +1,7 @@
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
 import { StoreData, CustomPage, StoreSettings } from '../types/store';
-import { generateStoreHTML, generateStoreCSS, generateStoreJS } from './storeGenerator';
+import { generateStoreHTML, generateStoreCSS, generateStoreJS } from '../generators';
 
 const generateProductsPageHTML = (storeData: StoreData): string => {
   const { settings, products } = storeData;
@@ -346,66 +346,75 @@ const generatePageHTML = (page: CustomPage, settings: StoreSettings): string => 
 };
 
 export const exportStore = async (storeData: StoreData) => {
-  const zip = new JSZip();
-  
-  // Create main HTML file
-  const htmlContent = generateStoreHTML(storeData);
-  zip.file('index.html', htmlContent);
-  
-  // Create CSS folder and file
-  const cssFolder = zip.folder('css');
-  const cssContent = generateStoreCSS(storeData);
-  cssFolder?.file('style.css', cssContent);
-  
-  // Create JS folder and file
-  const jsFolder = zip.folder('js');
-  const jsContent = generateStoreJS();
-  jsFolder?.file('main.js', jsContent);
-  
-  // Create products page
-  const productsHTML = generateProductsPageHTML(storeData);
-  zip.file('products.html', productsHTML);
-  
-  // Create images folder and add product images
-  const imagesFolder = zip.folder('images');
-  
-  // Add product images
-  for (const product of storeData.products) {
-    if (product.image && product.image.startsWith('data:')) {
-      // Convert base64 to blob and add to zip
-      const base64Data = product.image.split(',')[1];
-      const mimeType = product.image.split(':')[1].split(';')[0];
-      const extension = mimeType.split('/')[1];
-      
-      const byteCharacters = atob(base64Data);
-      const byteNumbers = new Array(byteCharacters.length);
-      for (let i = 0; i < byteCharacters.length; i++) {
-        byteNumbers[i] = byteCharacters.charCodeAt(i);
+  try {
+    const zip = new JSZip();
+    
+    // Create main HTML file
+    const htmlContent = generateStoreHTML(storeData);
+    zip.file('index.html', htmlContent);
+    
+    // Create CSS folder and file
+    const cssFolder = zip.folder('css');
+    const cssContent = generateStoreCSS(storeData);
+    cssFolder?.file('style.css', cssContent);
+    
+    // Create JS folder and file
+    const jsFolder = zip.folder('js');
+    const jsContent = generateStoreJS();
+    jsFolder?.file('main.js', jsContent);
+    
+    // Create products page
+    const productsHTML = generateProductsPageHTML(storeData);
+    zip.file('products.html', productsHTML);
+    
+    // Create images folder and add product images
+    const imagesFolder = zip.folder('images');
+    
+    // Add product images
+    for (const product of storeData.products) {
+      if (product.image && product.image.startsWith('data:')) {
+        try {
+          // Convert base64 to blob and add to zip
+          const base64Data = product.image.split(',')[1];
+          const mimeType = product.image.split(':')[1].split(';')[0];
+          const extension = mimeType.split('/')[1];
+          
+          const byteCharacters = atob(base64Data);
+          const byteNumbers = new Array(byteCharacters.length);
+          for (let i = 0; i < byteCharacters.length; i++) {
+            byteNumbers[i] = byteCharacters.charCodeAt(i);
+          }
+          const byteArray = new Uint8Array(byteNumbers);
+          
+          imagesFolder?.file(`${product.id}.${extension}`, byteArray);
+        } catch (error) {
+          console.warn(`Failed to process image for product ${product.id}:`, error);
+        }
       }
-      const byteArray = new Uint8Array(byteNumbers);
-      
-      imagesFolder?.file(`${product.id}.${extension}`, byteArray);
     }
-  }
-  
-  // Add logo if exists
-  if (storeData.settings.logo && storeData.settings.logo.startsWith('data:')) {
-    const base64Data = storeData.settings.logo.split(',')[1];
-    const mimeType = storeData.settings.logo.split(':')[1].split(';')[0];
-    const extension = mimeType.split('/')[1];
     
-    const byteCharacters = atob(base64Data);
-    const byteNumbers = new Array(byteCharacters.length);
-    for (let i = 0; i < byteCharacters.length; i++) {
-      byteNumbers[i] = byteCharacters.charCodeAt(i);
+    // Add logo if exists
+    if (storeData.settings.logo && storeData.settings.logo.startsWith('data:')) {
+      try {
+        const base64Data = storeData.settings.logo.split(',')[1];
+        const mimeType = storeData.settings.logo.split(':')[1].split(';')[0];
+        const extension = mimeType.split('/')[1];
+        
+        const byteCharacters = atob(base64Data);
+        const byteNumbers = new Array(byteCharacters.length);
+        for (let i = 0; i < byteCharacters.length; i++) {
+          byteNumbers[i] = byteCharacters.charCodeAt(i);
+        }
+        const byteArray = new Uint8Array(byteNumbers);
+        
+        zip.file(`logo.${extension}`, byteArray);
+      } catch (error) {
+        console.warn('Failed to process logo:', error);
+      }
     }
-    const byteArray = new Uint8Array(byteNumbers);
     
-    zip.file(`logo.${extension}`, byteArray);
-  }
-  
-  // Create README file
-  const readmeContent = `# ${storeData.settings.storeName}
+    // Create README file
+    const readmeContent = `# ${storeData.settings.storeName}
 
 ## وصف المتجر
 ${storeData.settings.description}
@@ -433,25 +442,28 @@ ${storeData.customPages.length > 0 ? `\n## الصفحات المخصصة\n${stor
 
 تم إنشاء هذا المتجر باستخدام أداة بناء المتاجر الإلكترونية.
 `;
-  
-  zip.file('README.md', readmeContent);
-  
-  // Create custom pages
-  for (const page of storeData.customPages) {
-    if (page.isPublished) {
-      const pageHTML = generatePageHTML(page, storeData.settings);
-      zip.file(`${page.slug}.html`, pageHTML);
+    
+    zip.file('README.md', readmeContent);
+    
+    // Create custom pages
+    for (const page of storeData.customPages) {
+      if (page.isPublished) {
+        try {
+          const pageHTML = generatePageHTML(page, storeData.settings);
+          zip.file(`${page.slug}.html`, pageHTML);
+        } catch (error) {
+          console.warn(`Failed to generate page ${page.slug}:`, error);
+        }
+      }
     }
-  }
-  
-  // Generate and download the zip file
-  try {
+    
+    // Generate and download the zip file
     const blob = await zip.generateAsync({ type: 'blob' });
     const fileName = `${storeData.settings.storeName.replace(/[^a-zA-Z0-9\u0600-\u06FF]/g, '_')}_store.zip`;
     saveAs(blob, fileName);
     return true;
   } catch (error) {
     console.error('Error creating zip file:', error);
-    return false;
+    throw error;
   }
 };

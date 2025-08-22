@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd';
-import { GripVertical } from 'lucide-react';
+import { GripVertical, ArrowUp, ArrowDown } from 'lucide-react';
 import { StoreSettings } from '../../types/store';
+import { useErrorHandler } from '../../hooks/useErrorHandler';
 import HeroSectionManager from './sections-manager/HeroSectionManager';
 import ProductSectionsManager from './sections-manager/ProductSectionsManager';
 import AboutSectionManager from './sections-manager/AboutSectionManager';
@@ -15,6 +15,7 @@ interface SectionsManagerProps {
 
 export default function SectionsManager({ settings, onUpdateSettings }: SectionsManagerProps) {
   const [activeSection, setActiveSection] = useState('hero');
+  const { handleError, withErrorHandling } = useErrorHandler();
 
   const allSections = [
     { id: 'hero', label: 'قسم البطل (Hero)', icon: '🦸', color: 'bg-purple-100 text-purple-700' },
@@ -30,85 +31,83 @@ export default function SectionsManager({ settings, onUpdateSettings }: Sections
     allSections.find(section => section.id === sectionId)
   ).filter(Boolean);
 
-  const handleDragEnd = (result: DropResult) => {
-    if (!result.destination) return;
+  const moveSection = withErrorHandling((index: number, direction: 'up' | 'down') => {
+    const newOrder = [...settings.sectionsOrder];
+    const targetIndex = direction === 'up' ? index - 1 : index + 1;
+    
+    if (targetIndex < 0 || targetIndex >= newOrder.length) {
+      return;
+    }
 
-    const newOrder = Array.from(settings.sectionsOrder);
-    const [reorderedItem] = newOrder.splice(result.source.index, 1);
-    newOrder.splice(result.destination.index, 0, reorderedItem);
+    // تبديل العناصر
+    [newOrder[index], newOrder[targetIndex]] = [newOrder[targetIndex], newOrder[index]];
 
     onUpdateSettings({
       ...settings,
       sectionsOrder: newOrder
     });
-  };
+  }, 'moveSection');
+
+  const handleSectionClick = withErrorHandling((sectionId: string) => {
+    setActiveSection(sectionId);
+  }, 'handleSectionClick');
 
   return (
     <div className="space-y-6">
-      {/* Drag & Drop Sections Reordering */}
+      {/* Sections Reordering with Arrows */}
       <div className="bg-white rounded-lg p-6 shadow-sm">
         <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
           <GripVertical className="text-gray-400" size={20} />
-          ترتيب الأقسام (اسحب وأفلت)
+          ترتيب الأقسام
         </h3>
         
-        <DragDropContext onDragEnd={handleDragEnd}>
-          <Droppable droppableId="sections">
-            {(provided, snapshot) => (
-              <div
-                {...provided.droppableProps}
-                ref={provided.innerRef}
-                className={`space-y-3 p-4 rounded-lg transition-colors ${
-                  snapshot.isDraggingOver ? 'bg-blue-50 border-2 border-blue-200' : 'bg-gray-50'
-                }`}
-              >
-                {sections.map((section, index) => (
-                  <Draggable key={section.id} draggableId={section.id} index={index}>
-                    {(provided, snapshot) => (
-                      <div
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        className={`flex items-center gap-4 p-4 bg-white rounded-lg border-2 transition-all duration-200 ${
-                          snapshot.isDragging 
-                            ? 'shadow-xl border-blue-300 rotate-2 scale-105' 
-                            : 'shadow-sm border-gray-200 hover:border-gray-300'
-                        }`}
-                      >
-                        <div
-                          {...provided.dragHandleProps}
-                          className="cursor-grab active:cursor-grabbing text-gray-400 hover:text-gray-600 transition-colors"
-                        >
-                          <GripVertical size={20} />
-                        </div>
-                        
-                        <div className={`w-10 h-10 rounded-full flex items-center justify-center ${section.color}`}>
-                          <span className="text-lg">{section.icon}</span>
-                        </div>
-                        
-                        <div className="flex-1">
-                          <span className="font-semibold text-gray-800">{section.label}</span>
-                          <div className="text-xs text-gray-500 mt-1">
-                            الترتيب: {index + 1}
-                          </div>
-                        </div>
-                        
-                        <div className="text-sm text-gray-400">
-                          #{index + 1}
-                        </div>
-                      </div>
-                    )}
-                  </Draggable>
-                ))}
-                {provided.placeholder}
+        <div className="space-y-3">
+          {sections.map((section, index) => (
+            <div
+              key={`${section.id}-${index}`}
+              className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200"
+            >
+              <div className="flex flex-col gap-1">
+                <button
+                  onClick={() => moveSection(index, 'up')}
+                  disabled={index === 0}
+                  className="p-1 text-gray-400 hover:text-gray-600 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                  title="تحريك لأعلى"
+                >
+                  <ArrowUp size={16} />
+                </button>
+                <button
+                  onClick={() => moveSection(index, 'down')}
+                  disabled={index === sections.length - 1}
+                  className="p-1 text-gray-400 hover:text-gray-600 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                  title="تحريك لأسفل"
+                >
+                  <ArrowDown size={16} />
+                </button>
               </div>
-            )}
-          </Droppable>
-        </DragDropContext>
+              
+              <div className={`w-10 h-10 rounded-full flex items-center justify-center ${section.color}`}>
+                <span className="text-lg">{section.icon}</span>
+              </div>
+              
+              <div className="flex-1">
+                <span className="font-semibold text-gray-800">{section.label}</span>
+                <div className="text-xs text-gray-500 mt-1">
+                  الترتيب: {index + 1}
+                </div>
+              </div>
+              
+              <div className="text-sm text-gray-400">
+                #{index + 1}
+              </div>
+            </div>
+          ))}
+        </div>
         
         <div className="mt-4 p-3 bg-blue-50 rounded-lg border border-blue-200">
           <p className="text-sm text-blue-700 flex items-center gap-2">
             <span>💡</span>
-            <span>اسحب الأقسام لإعادة ترتيبها. التغييرات ستظهر في المعاينة فوراً!</span>
+            <span>استخدم الأسهم لإعادة ترتيب الأقسام. التغييرات ستظهر في المعاينة فوراً!</span>
           </p>
         </div>
       </div>
@@ -120,7 +119,7 @@ export default function SectionsManager({ settings, onUpdateSettings }: Sections
           {sections.map(section => (
             <button
               key={section.id}
-              onClick={() => setActiveSection(section.id)}
+              onClick={() => handleSectionClick(section.id)}
               className={`p-4 rounded-lg text-sm font-medium transition-all duration-200 border-2 ${
                 activeSection === section.id
                   ? 'bg-blue-600 text-white border-blue-600 shadow-lg scale-105'

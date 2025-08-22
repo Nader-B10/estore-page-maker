@@ -1,8 +1,11 @@
 import { useState } from 'react';
 import { StoreData, StoreSettings, Product, CustomPage } from '../types/store';
 import { defaultSettings } from '../utils/defaultSettings';
+import { useErrorHandler } from './useErrorHandler';
 
 export function useStoreData() {
+  const { handleError, withErrorHandling } = useErrorHandler();
+  
   const [storeData, setStoreData] = useState<StoreData>({
     settings: defaultSettings,
     products: [],
@@ -32,54 +35,54 @@ export function useStoreData() {
     ]
   });
 
-  const handleUpdateSettings = (newSettings: StoreSettings) => {
+  const handleUpdateSettings = withErrorHandling((newSettings: StoreSettings) => {
     setStoreData(prev => ({
       ...prev,
       settings: newSettings
     }));
-  };
+  }, 'handleUpdateSettings');
 
-  const handleAddProduct = (product: Product) => {
+  const handleAddProduct = withErrorHandling((product: Product) => {
     setStoreData(prev => ({
       ...prev,
       products: [...prev.products, product]
     }));
-  };
+  }, 'handleAddProduct');
 
-  const handleEditProduct = (id: string, updatedProduct: Product) => {
+  const handleEditProduct = withErrorHandling((id: string, updatedProduct: Product) => {
     setStoreData(prev => ({
       ...prev,
       products: prev.products.map(p => p.id === id ? updatedProduct : p)
     }));
-  };
+  }, 'handleEditProduct');
 
-  const handleDeleteProduct = (id: string) => {
+  const handleDeleteProduct = withErrorHandling((id: string) => {
     setStoreData(prev => ({
       ...prev,
       products: prev.products.filter(p => p.id !== id)
     }));
-  };
+  }, 'handleDeleteProduct');
 
-  const handleAddPage = (page: CustomPage) => {
+  const handleAddPage = withErrorHandling((page: CustomPage) => {
     setStoreData(prev => ({
       ...prev,
       customPages: [...prev.customPages, page]
     }));
-  };
+  }, 'handleAddPage');
 
-  const handleEditPage = (id: string, updatedPage: CustomPage) => {
+  const handleEditPage = withErrorHandling((id: string, updatedPage: CustomPage) => {
     setStoreData(prev => ({
       ...prev,
       customPages: prev.customPages.map(p => p.id === id ? updatedPage : p)
     }));
-  };
+  }, 'handleEditPage');
 
-  const handleDeletePage = (id: string) => {
+  const handleDeletePage = withErrorHandling((id: string) => {
     setStoreData(prev => ({
       ...prev,
       customPages: prev.customPages.filter(p => p.id !== id)
     }));
-  };
+  }, 'handleDeletePage');
 
   return {
     storeData,
