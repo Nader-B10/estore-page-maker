@@ -7,6 +7,7 @@ import HeaderLinkModal from './HeaderLinkModal';
 export default function HeaderEditor() {
   const { storeData, updateSection } = useStore();
   const { header } = storeData.settings.sections;
+  const defaultProductsPage = storeData.pages.find(p => p.isDefault && p.showAllProducts);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<HeaderLink | null>(null);
 
@@ -43,7 +44,11 @@ export default function HeaderEditor() {
 
       <div className="mb-4 p-4 bg-blue-50 border-l-4 border-blue-500 text-blue-800 rounded-r-lg">
         <p className="font-medium">ملاحظة:</p>
-        <p className="text-sm">يتم التحكم في "اسم المتجر" و "الشعار" من <b className="font-semibold">الإعدادات العامة</b>.</p>
+        <p className="text-sm">يتم التحكم في "اسم المتجر" و "الشعار" من <b className="font-semibold">الإعدادات العامة</b>. 
+        {defaultProductsPage && (
+          <span> يمكنك ربط رابط "المنتجات" بصفحة <b>/{defaultProductsPage.slug}</b></span>
+        )}
+        </p>
       </div>
 
       <div className="flex items-center justify-between mb-4">

@@ -100,6 +100,7 @@ export interface StoreSettings {
   layout: 'grid' | 'list' | 'masonry';
   headerStyle: 'classic' | 'modern' | 'minimal';
   contactInfo: ContactInfo;
+  sectionOrder: string[];
   sections: {
     header: SectionConfig<{ links: HeaderLink[] }>;
     footer: SectionConfig<FooterData>;
@@ -113,7 +114,18 @@ export interface StoreSettings {
   };
 }
 
+export interface CustomPage {
+  id: string;
+  title: string;
+  slug: string;
+  content: string;
+  isDefault: boolean;
+  showAllProducts: boolean;
+  metaDescription?: string;
+}
+
 export interface StoreData {
   settings: StoreSettings;
   products: Product[];
+  pages: CustomPage[];
 }

@@ -1,5 +1,5 @@
 import React, { createContext, useContext, ReactNode, useCallback } from 'react';
-import { StoreData, StoreSettings, Product } from '../types/store';
+import { StoreData, StoreSettings, Product, CustomPage } from '../types/store';
 import useLocalStorage from '../hooks/useLocalStorage';
 
 const defaultSettings: StoreSettings = {
@@ -14,6 +14,7 @@ const defaultSettings: StoreSettings = {
   fontFamily: 'Cairo',
   layout: 'grid',
   headerStyle: 'classic',
+  sectionOrder: ['hero', 'featuredProducts', 'bestSellers', 'onSale', 'whyChooseUs', 'faq', 'allProducts'],
   contactInfo: {
     email: 'contact@example.com',
     phone: '+966 12 345 6789',
@@ -111,13 +112,29 @@ const defaultSettings: StoreSettings = {
   }
 };
 
+const defaultPages: CustomPage[] = [
+  {
+    id: 'all-products',
+    title: 'جميع المنتجات',
+    slug: 'products',
+    content: 'تصفح مجموعتنا الكاملة من المنتجات المتميزة',
+    isDefault: true,
+    showAllProducts: true,
+    metaDescription: 'تصفح جميع منتجاتنا المتاحة بأفضل الأسعار'
+  }
+];
+
 interface StoreContextType {
   storeData: StoreData;
   updateSettings: (newSettings: Partial<Omit<StoreSettings, 'sections'>>) => void;
   updateSection: (sectionKey: keyof StoreSettings['sections'], newConfig: any) => void;
+  updateSectionOrder: (newOrder: string[]) => void;
   addProduct: (product: Product) => void;
   editProduct: (id: string, updatedProduct: Product) => void;
   deleteProduct: (id: string) => void;
+  addPage: (page: CustomPage) => void;
+  editPage: (id: string, updatedPage: CustomPage) => void;
+  deletePage: (id: string) => void;
 }
 
 const StoreContext = createContext<StoreContextType | undefined>(undefined);
@@ -127,7 +144,8 @@ const STORE_DATA_KEY = 'store-builder-data-v1';
 export const StoreProvider = ({ children }: { children: ReactNode }) => {
   const [storeData, setStoreData] = useLocalStorage<StoreData>(STORE_DATA_KEY, {
     settings: defaultSettings,
-    products: []
+    products: [],
+    pages: defaultPages
   });
 
   const updateSettings = useCallback((newSettings: Partial<Omit<StoreSettings, 'sections'>>) => {
@@ -157,6 +175,13 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
     }));
   }, [setStoreData]);
 
+  const updateSectionOrder = useCallback((newOrder: string[]) => {
+    setStoreData(prev => ({
+      ...prev,
+      settings: { ...prev.settings, sectionOrder: newOrder }
+    }));
+  }, [setStoreData]);
+
   const addProduct = useCallback((product: Product) => {
     setStoreData(prev => ({
       ...prev,
@@ -178,13 +203,38 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
     }));
   }, [setStoreData]);
 
+  const addPage = useCallback((page: CustomPage) => {
+    setStoreData(prev => ({
+      ...prev,
+      pages: [...prev.pages, page]
+    }));
+  }, [setStoreData]);
+
+  const editPage = useCallback((id: string, updatedPage: CustomPage) => {
+    setStoreData(prev => ({
+      ...prev,
+      pages: prev.pages.map(p => p.id === id ? updatedPage : p)
+    }));
+  }, [setStoreData]);
+
+  const deletePage = useCallback((id: string) => {
+    setStoreData(prev => ({
+      ...prev,
+      pages: prev.pages.filter(p => p.id !== id)
+    }));
+  }, [setStoreData]);
+
   const value = {
     storeData,
     updateSettings,
     updateSection,
+    updateSectionOrder,
     addProduct,
     editProduct,
     deleteProduct,
+    addPage,
+    editPage,
+    deletePage,
   };
 
   return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>;

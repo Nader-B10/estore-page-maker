@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
 import { HeaderLink } from '../../types/store';
+import { useStore } from '../../contexts/StoreContext';
 
 interface HeaderLinkModalProps {
   item: HeaderLink | null;
@@ -9,6 +10,8 @@ interface HeaderLinkModalProps {
 }
 
 export default function HeaderLinkModal({ item, onSave, onClose }: HeaderLinkModalProps) {
+  const { storeData } = useStore();
+  const defaultProductsPage = storeData.pages.find(p => p.isDefault && p.showAllProducts);
   const [formData, setFormData] = useState({ text: '', link: '' });
 
   useEffect(() => {
@@ -42,7 +45,30 @@ export default function HeaderLinkModal({ item, onSave, onClose }: HeaderLinkMod
           </div>
           <div>
             <label className="block text-sm font-medium mb-2">الرابط (مثال: #products)</label>
-            <input type="text" value={formData.link} onChange={(e) => setFormData(prev => ({ ...prev, link: e.target.value }))} className="w-full p-3 border border-gray-300 rounded-lg" required />
+            <select 
+              value={formData.link} 
+              onChange={(e) => setFormData(prev => ({ ...prev, link: e.target.value }))} 
+              className="w-full p-3 border border-gray-300 rounded-lg mb-2"
+            >
+              <option value="">اختر رابط...</option>
+              <option value="#all-products">قسم جميع المنتجات</option>
+              {defaultProductsPage && (
+                <option value={`/${defaultProductsPage.slug}`}>صفحة {defaultProductsPage.title}</option>
+              )}
+              <option value="#featured-products">المنتجات المميزة</option>
+              <option value="#best-sellers">الأعلى مبيعاً</option>
+              <option value="#on-sale">العروض والتخفيضات</option>
+              <option value="#why-us">لماذا تختارنا</option>
+              <option value="#faq">الأسئلة الشائعة</option>
+            </select>
+            <input 
+              type="text" 
+              value={formData.link} 
+              onChange={(e) => setFormData(prev => ({ ...prev, link: e.target.value }))} 
+              className="w-full p-3 border border-gray-300 rounded-lg" 
+              placeholder="أو أدخل رابط مخصص"
+              required 
+            />
           </div>
           <div className="flex gap-3 pt-4">
             <button type="submit" className="flex-1 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700">{item ? 'حفظ التغييرات' : 'إضافة الرابط'}</button>

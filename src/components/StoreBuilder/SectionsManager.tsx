@@ -5,8 +5,10 @@ import HeroSectionEditor from '../SectionsManager/HeroSectionEditor';
 import ProductSectionsEditor from '../SectionsManager/ProductSectionsEditor';
 import WhyChooseUsEditor from '../SectionsManager/WhyChooseUsEditor';
 import FAQEditor from '../SectionsManager/FAQEditor';
+import GeneralSectionSettings from '../SectionsManager/GeneralSectionSettings';
 
 const sections = [
+  { id: 'general', label: 'الإعدادات العامة' },
   { id: 'header', label: 'الهيدر' },
   { id: 'hero', label: 'قسم البطل (Hero)' },
   { id: 'products', label: 'أقسام المنتجات' },
@@ -16,10 +18,12 @@ const sections = [
 ];
 
 export default function SectionsManager() {
-  const [activeSection, setActiveSection] = useState('header');
+  const [activeSection, setActiveSection] = useState('general');
 
   const renderActiveEditor = () => {
     switch (activeSection) {
+      case 'general':
+        return <GeneralSectionSettings />;
       case 'header':
         return <HeaderEditor />;
       case 'footer':

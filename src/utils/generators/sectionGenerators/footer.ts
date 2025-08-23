@@ -32,7 +32,7 @@ export const generateFooterHTML = (storeData: StoreData): string => {
         <div>
           <h4 class="text-lg font-semibold mb-4">${linksTitle}</h4>
           <ul class="space-y-2">
-            ${header.data.links.map(link => `<li><a href="${link.link}" class="opacity-80 hover:opacity-100">${link.text}</a></li>`).join('')}
+            ${header.data.links.map(link => `<li><a href="${link.link}" class="opacity-80 hover:opacity-100 hover:underline">${link.text}</a></li>`).join('')}
           </ul>
         </div>
         <div>

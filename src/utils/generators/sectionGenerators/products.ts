@@ -73,8 +73,13 @@ export const generateProductSectionHTML = (storeData: StoreData, sectionKey: 'fe
         </p>
       </div>`;
 
+  // Generate section ID based on section key
+  const sectionId = sectionKey === 'allProducts' ? 'all-products' : 
+                   sectionKey === 'featuredProducts' ? 'featured-products' :
+                   sectionKey === 'bestSellers' ? 'best-sellers' :
+                   sectionKey === 'onSale' ? 'on-sale' : sectionKey;
   return `
-    <section class="container mx-auto px-6 py-16" id="${title.toLowerCase().replace(/[^a-z0-9\u0600-\u06FF-]/g, '').replace(/\s+/g, '-')}">
+    <section class="container mx-auto px-6 py-16" id="${sectionId}">
       <div class="text-center mb-12">
         <h2 class="text-3xl lg:text-4xl font-bold mb-2" style="color: ${settings.primaryColor};">${title}</h2>
         <p class="text-subtle-text max-w-2xl mx-auto">${subtitle}</p>

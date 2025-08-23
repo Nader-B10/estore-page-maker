@@ -132,6 +132,7 @@ img, svg, video, canvas, audio, iframe, embed, object { display: block; vertical
 .hover\\:underline:hover { text-decoration-line: underline; }
 
 /* --- COLORS --- */
+.bg-white { background-color: #ffffff; }
 .bg-surface { background-color: var(--surface-color); }
 .bg-footer-background { background-color: var(--footer-background-color); }
 .text-text { color: var(--text-color); }
@@ -139,7 +140,28 @@ img, svg, video, canvas, audio, iframe, embed, object { display: block; vertical
 .text-footer-text { color: var(--footer-text-color); }
 .text-white { color: #ffffff; }
 .text-black { color: #000000; }
+.text-gray-50 { color: #f9fafb; }
+.text-gray-100 { color: #f3f4f6; }
+.text-gray-200 { color: #e5e7eb; }
+.text-gray-300 { color: #d1d5db; }
+.text-gray-400 { color: #9ca3af; }
+.text-gray-500 { color: #6b7280; }
+.text-gray-600 { color: #4b5563; }
+.text-gray-700 { color: #374151; }
+.text-gray-800 { color: #1f2937; }
+.text-gray-900 { color: #111827; }
+.bg-gray-50 { background-color: #f9fafb; }
+.bg-gray-100 { background-color: #f3f4f6; }
+.bg-gray-200 { background-color: #e5e7eb; }
+.bg-blue-50 { background-color: #eff6ff; }
+.bg-blue-100 { background-color: #dbeafe; }
+.bg-blue-600 { background-color: #2563eb; }
+.bg-green-100 { background-color: #dcfce7; }
+.bg-green-800 { background-color: #166534; }
 .bg-red-500 { background-color: #ef4444; }
+.border-gray-200 { border-color: #e5e7eb; }
+.border-gray-300 { border-color: #d1d5db; }
+.border-gray-400 { border-color: #9ca3af; }
 .hover\\:bg-gray-500\\/10:hover { background-color: rgba(107, 114, 128, 0.1); }
 .hover\\:text-text:hover { color: var(--text-color); }
 
@@ -152,6 +174,7 @@ img, svg, video, canvas, audio, iframe, embed, object { display: block; vertical
 .border-t { border-top-width: 1px; }
 .border-gray-200\\/10 { border-color: rgba(229, 231, 235, 0.1); }
 .border-white\\/10 { border-color: rgba(255, 255, 255, 0.1); }
+.border-dashed { border-style: dashed; }
 
 /* --- EFFECTS --- */
 .shadow-sm { box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); }

@@ -9,15 +9,22 @@ import { generateFaqHTML } from './sectionGenerators/faq';
 export const generateStoreHTML = (storeData: StoreData): string => {
   const { settings } = storeData;
 
-  const sectionsHTML = [
-    generateHeroHTML(storeData),
-    generateProductSectionHTML(storeData, 'featuredProducts'),
-    generateProductSectionHTML(storeData, 'bestSellers'),
-    generateProductSectionHTML(storeData, 'onSale'),
-    generateWhyChooseUsHTML(storeData),
-    generateFaqHTML(storeData),
-    generateProductSectionHTML(storeData, 'allProducts'),
-  ].filter(Boolean).join('\n');
+  // Create section generators map
+  const sectionGenerators: { [key: string]: () => string } = {
+    hero: () => generateHeroHTML(storeData),
+    featuredProducts: () => generateProductSectionHTML(storeData, 'featuredProducts'),
+    bestSellers: () => generateProductSectionHTML(storeData, 'bestSellers'),
+    onSale: () => generateProductSectionHTML(storeData, 'onSale'),
+    whyChooseUs: () => generateWhyChooseUsHTML(storeData),
+    faq: () => generateFaqHTML(storeData),
+    allProducts: () => generateProductSectionHTML(storeData, 'allProducts'),
+  };
+
+  // Generate sections in the specified order
+  const sectionsHTML = settings.sectionOrder
+    .map(sectionKey => sectionGenerators[sectionKey]?.())
+    .filter(Boolean)
+    .join('\n');
 
   return `<!DOCTYPE html>
 <html lang="ar" dir="rtl">

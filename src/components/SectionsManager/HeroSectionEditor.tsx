@@ -5,6 +5,7 @@ import { useStore } from '../../contexts/StoreContext';
 export default function HeroSectionEditor() {
   const { storeData, updateSection } = useStore();
   const { hero } = storeData.settings.sections;
+  const defaultProductsPage = storeData.pages.find(p => p.isDefault && p.showAllProducts);
 
   const handleChange = (field: string, value: any) => {
     updateSection('hero', { data: { [field]: value } });
@@ -59,7 +60,19 @@ export default function HeroSectionEditor() {
           </div>
           <div>
             <label className="block text-sm font-medium mb-2">رابط الزر</label>
-            <input type="text" value={hero.data.ctaLink} onChange={(e) => handleChange('ctaLink', e.target.value)} className="w-full p-3 border border-gray-300 rounded-lg" />
+            <select 
+              value={hero.data.ctaLink} 
+              onChange={(e) => handleChange('ctaLink', e.target.value)} 
+              className="w-full p-3 border border-gray-300 rounded-lg"
+            >
+              <option value="#all-products">قسم جميع المنتجات</option>
+              {defaultProductsPage && (
+                <option value={`/${defaultProductsPage.slug}`}>صفحة {defaultProductsPage.title}</option>
+              )}
+              <option value="#featured-products">المنتجات المميزة</option>
+              <option value="#best-sellers">الأعلى مبيعاً</option>
+              <option value="#on-sale">العروض والتخفيضات</option>
+            </select>
           </div>
         </div>
       </div>

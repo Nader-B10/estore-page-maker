@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
-import { Settings, Package, Layers, Eye } from 'lucide-react';
+import { Settings, Package, Layers, Eye, FileText } from 'lucide-react';
 import SettingsPanel from '../StoreBuilder/SettingsPanel';
 import ProductManager from '../StoreBuilder/ProductManager';
 import StorePreview from '../StoreBuilder/StorePreview';
 import SectionsManager from '../StoreBuilder/SectionsManager';
+import PagesManager from '../StoreBuilder/PagesManager';
 
 const tabs = [
   { id: 'settings', label: 'الإعدادات', icon: Settings },
   { id: 'sections', label: 'الأقسام', icon: Layers },
   { id: 'products', label: 'المنتجات', icon: Package },
+  { id: 'pages', label: 'الصفحات', icon: FileText },
 ];
 
 export default function MainLayout() {
@@ -22,6 +24,8 @@ export default function MainLayout() {
         return <SectionsManager />;
       case 'products':
         return <ProductManager />;
+      case 'pages':
+        return <PagesManager />;
       default:
         return null;
     }
