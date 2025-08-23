@@ -47,7 +47,7 @@ export interface HeroSectionData {
 
 export interface ProductSectionData {
   title: string;
-  subtitle:string;
+  subtitle: string;
   limit: number;
 }
 
@@ -81,6 +81,12 @@ export interface SectionConfig<T> {
   data: T;
 }
 
+export interface ContactInfo {
+  email: string;
+  phone: string;
+  address: string;
+}
+
 export interface StoreSettings {
   theme: string;
   storeName: string;
@@ -93,6 +99,7 @@ export interface StoreSettings {
   fontFamily: string;
   layout: 'grid' | 'list' | 'masonry';
   headerStyle: 'classic' | 'modern' | 'minimal';
+  contactInfo: ContactInfo;
   sections: {
     header: SectionConfig<{ links: HeaderLink[] }>;
     footer: SectionConfig<FooterData>;

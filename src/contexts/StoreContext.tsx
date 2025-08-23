@@ -14,6 +14,11 @@ const defaultSettings: StoreSettings = {
   fontFamily: 'Cairo',
   layout: 'grid',
   headerStyle: 'classic',
+  contactInfo: {
+    email: 'contact@example.com',
+    phone: '+966 12 345 6789',
+    address: 'الرياض، المملكة العربية السعودية'
+  },
   sections: {
     header: {
       enabled: true,
