@@ -53,6 +53,7 @@ export default function ProductSectionsEditor() {
       <SectionEditor sectionKey="featuredProducts" title="المنتجات المميزة" />
       <SectionEditor sectionKey="bestSellers" title="الأعلى مبيعاً" />
       <SectionEditor sectionKey="onSale" title="عروض وتخفيضات" />
+      <SectionEditor sectionKey="allProducts" title="جميع المنتجات" />
     </div>
   );
 }

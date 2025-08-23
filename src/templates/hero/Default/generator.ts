@@ -18,8 +18,8 @@ export const generator = (storeData: StoreData): string => {
       style="${backgroundStyle}"
     >
       <div class="max-w-3xl">
-        <h2 class="text-4xl md:text-6xl font-extrabold leading-tight mb-4" style="color: ${hero.data.titleColor || 'white'}">${title}</h2>
-        <p class="text-lg md:text-xl opacity-90 mb-8" style="color: ${hero.data.subtitleColor || 'white'}">${subtitle}</p>
+        <h2 class="text-4xl md:text-6xl font-extrabold leading-tight mb-4">${title}</h2>
+        <p class="text-lg md:text-xl opacity-90 mb-8">${subtitle}</p>
         <a
           href="${ctaLink}"
           class="inline-block text-black font-bold py-3 px-8 rounded-full text-lg transition-transform hover:scale-105"

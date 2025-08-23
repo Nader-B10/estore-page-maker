@@ -1,7 +1,7 @@
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
 import { StoreData } from '../types/store';
-import { generateStoreHTML, generateStoreJS, generateReadme } from './storeGenerator';
+import { generateStoreHTML, generateStoreJS, generateReadme, generateStaticCss } from './storeGenerator';
 
 // Helper to convert base64 to Blob
 const base64ToBlob = (base64: string, mimeType: string): Blob => {
@@ -70,6 +70,10 @@ export const exportStore = async (storeData: StoreData) => {
     imagesFolder?.file(fileName, blob);
     heroSection.data.backgroundImage = `images/${fileName}`;
   }
+
+  // Create CSS file
+  const cssContent = generateStaticCss(exportData);
+  zip.file('styles.css', cssContent);
 
   // Create main HTML file
   const htmlContent = generateStoreHTML(exportData);
