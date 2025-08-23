@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Package, Download, Loader } from 'lucide-react';
+import { Package, Download, Loader, RefreshCw } from 'lucide-react';
 import { useStore } from '../../contexts/StoreContext';
 import { exportStore } from '../../utils/fileExporter';
 
@@ -20,6 +20,13 @@ export default function AppHeader() {
     }
   };
 
+  const handleReset = () => {
+    if (window.confirm('هل أنت متأكد من أنك تريد إعادة تعيين المتجر؟ سيتم حذف جميع التغييرات المحفوظة.')) {
+      window.localStorage.removeItem('store-builder-data-v1');
+      window.location.reload();
+    }
+  };
+
   return (
     <>
       <header className="bg-white shadow-sm border-b border-gray-200">
@@ -35,23 +42,33 @@ export default function AppHeader() {
               </div>
             </div>
             
-            <button
-              onClick={handleExport}
-              disabled={isExporting}
-              className="bg-gradient-to-r from-green-600 to-green-700 text-white px-6 py-3 rounded-lg flex items-center gap-2 hover:from-green-700 hover:to-green-800 transition-all duration-200 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {isExporting ? (
-                <>
-                  <Loader className="w-5 h-5 animate-spin" />
-                  جاري التحضير...
-                </>
-              ) : (
-                <>
-                  <Download className="w-5 h-5" />
-                  تحميل المتجر
-                </>
-              )}
-            </button>
+            <div className="flex items-center gap-3">
+              <button
+                onClick={handleReset}
+                className="bg-red-100 text-red-700 px-4 py-3 rounded-lg flex items-center gap-2 hover:bg-red-200 transition-colors"
+                title="إعادة تعيين المتجر إلى الحالة الافتراضية"
+              >
+                <RefreshCw className="w-5 h-5" />
+                إعادة تعيين
+              </button>
+              <button
+                onClick={handleExport}
+                disabled={isExporting}
+                className="bg-gradient-to-r from-green-600 to-green-700 text-white px-6 py-3 rounded-lg flex items-center gap-2 hover:from-green-700 hover:to-green-800 transition-all duration-200 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {isExporting ? (
+                  <>
+                    <Loader className="w-5 h-5 animate-spin" />
+                    جاري التحضير...
+                  </>
+                ) : (
+                  <>
+                    <Download className="w-5 h-5" />
+                    تحميل المتجر
+                  </>
+                )}
+              </button>
+            </div>
           </div>
         </div>
       </header>

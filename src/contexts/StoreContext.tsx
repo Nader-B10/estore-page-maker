@@ -1,5 +1,6 @@
-import React, { createContext, useState, useContext, ReactNode, useCallback } from 'react';
+import React, { createContext, useContext, ReactNode, useCallback } from 'react';
 import { StoreData, StoreSettings, Product } from '../types/store';
+import useLocalStorage from '../hooks/useLocalStorage';
 
 const defaultSettings: StoreSettings = {
   theme: 'oceanic-blue',
@@ -116,8 +117,10 @@ interface StoreContextType {
 
 const StoreContext = createContext<StoreContextType | undefined>(undefined);
 
+const STORE_DATA_KEY = 'store-builder-data-v1';
+
 export const StoreProvider = ({ children }: { children: ReactNode }) => {
-  const [storeData, setStoreData] = useState<StoreData>({
+  const [storeData, setStoreData] = useLocalStorage<StoreData>(STORE_DATA_KEY, {
     settings: defaultSettings,
     products: []
   });
@@ -127,7 +130,7 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
       ...prev,
       settings: { ...prev.settings, ...newSettings }
     }));
-  }, []);
+  }, [setStoreData]);
 
   const updateSection = useCallback((sectionKey: keyof StoreSettings['sections'], newConfig: any) => {
     setStoreData(prev => ({
@@ -147,28 +150,28 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
         }
       }
     }));
-  }, []);
+  }, [setStoreData]);
 
   const addProduct = useCallback((product: Product) => {
     setStoreData(prev => ({
       ...prev,
       products: [...prev.products, product]
     }));
-  }, []);
+  }, [setStoreData]);
 
   const editProduct = useCallback((id: string, updatedProduct: Product) => {
     setStoreData(prev => ({
       ...prev,
       products: prev.products.map(p => p.id === id ? updatedProduct : p)
     }));
-  }, []);
+  }, [setStoreData]);
 
   const deleteProduct = useCallback((id: string) => {
     setStoreData(prev => ({
       ...prev,
       products: prev.products.filter(p => p.id !== id)
     }));
-  }, []);
+  }, [setStoreData]);
 
   const value = {
     storeData,
