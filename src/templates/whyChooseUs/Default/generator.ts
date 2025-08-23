@@ -1,5 +1,5 @@
 import { StoreData } from '../../../types/store';
-import { icons } from '../../../utils/generators/iconSvgs';
+import { generateIconHTML } from '../../../utils/generators/iconGenerator';
 
 export const generator = (storeData: StoreData): string => {
   const { whyChooseUs } = storeData.settings.sections;
@@ -17,7 +17,7 @@ export const generator = (storeData: StoreData): string => {
           ${whyChooseUs.data.items.map(item => `
             <div class="text-center">
               <div class="w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center text-white" style="background-color: ${storeData.settings.primaryColor};">
-                ${icons[item.icon] || ''}
+                ${generateIconHTML(item.icon)}
               </div>
               <h3 class="text-xl font-semibold mb-2 text-text">${item.title}</h3>
               <p class="text-subtle-text">${item.description}</p>
