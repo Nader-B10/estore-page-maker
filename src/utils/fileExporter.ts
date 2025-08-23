@@ -19,17 +19,21 @@ export const exportStore = async (storeData: StoreData) => {
   const exportData = JSON.parse(JSON.stringify(storeData)); // Deep copy to avoid mutating state
 
   const imagesFolder = zip.folder('images');
+  if (!imagesFolder) {
+    console.error("Could not create images folder in zip");
+    return false;
+  }
 
   // Process and add product images
   for (const product of exportData.products) {
     if (product.image && product.image.startsWith('data:')) {
       const parts = product.image.split(',');
       const meta = parts[0].split(':')[1].split(';')[0];
-      const extension = meta.split('/')[1];
-      const fileName = `${product.id}.${extension}`;
+      const extension = meta.split('/')[1] || 'png';
+      const fileName = `product-${product.id}.${extension}`;
       
       const blob = base64ToBlob(parts[1], meta);
-      imagesFolder?.file(fileName, blob);
+      imagesFolder.file(fileName, blob);
       product.image = `images/${fileName}`; // Update path for HTML generator
     }
   }
@@ -38,24 +42,24 @@ export const exportStore = async (storeData: StoreData) => {
   if (exportData.settings.logo && exportData.settings.logo.startsWith('data:')) {
     const parts = exportData.settings.logo.split(',');
     const meta = parts[0].split(':')[1].split(';')[0];
-    const extension = meta.split('/')[1];
+    const extension = meta.split('/')[1] || 'png';
     const fileName = `logo.${extension}`;
     
     const blob = base64ToBlob(parts[1], meta);
-    zip.file(fileName, blob);
-    exportData.settings.logo = fileName; // Update path
+    imagesFolder.file(fileName, blob);
+    exportData.settings.logo = `images/${fileName}`; // Update path
   }
 
   // Process and add favicon
   if (exportData.settings.favicon && exportData.settings.favicon.startsWith('data:')) {
     const parts = exportData.settings.favicon.split(',');
     const meta = parts[0].split(':')[1].split(';')[0];
-    const extension = meta.split('/')[1];
+    const extension = meta.split('/')[1] || 'ico';
     const fileName = `favicon.${extension}`;
     
     const blob = base64ToBlob(parts[1], meta);
-    zip.file(fileName, blob);
-    exportData.settings.favicon = fileName; // Update path
+    imagesFolder.file(fileName, blob);
+    exportData.settings.favicon = `images/${fileName}`; // Update path
   }
   
   // Process hero background image
@@ -63,11 +67,11 @@ export const exportStore = async (storeData: StoreData) => {
   if (heroSection && heroSection.data.backgroundImage && heroSection.data.backgroundImage.startsWith('data:')) {
     const parts = heroSection.data.backgroundImage.split(',');
     const meta = parts[0].split(':')[1].split(';')[0];
-    const extension = meta.split('/')[1];
+    const extension = meta.split('/')[1] || 'jpg';
     const fileName = `hero-bg.${extension}`;
     
     const blob = base64ToBlob(parts[1], meta);
-    imagesFolder?.file(fileName, blob);
+    imagesFolder.file(fileName, blob);
     heroSection.data.backgroundImage = `images/${fileName}`;
   }
 
