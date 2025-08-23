@@ -1,6 +1,8 @@
 import React from 'react';
+import { Card, Form, Button, Row, Col, Image } from 'react-bootstrap';
 import { Upload, Eye, EyeOff } from 'lucide-react';
 import { useStore } from '../../contexts/StoreContext';
+import SectionTemplateSelector from './SectionTemplateSelector';
 
 export default function HeroSectionEditor() {
   const { storeData, updateSection } = useStore();
@@ -24,45 +26,58 @@ export default function HeroSectionEditor() {
   };
 
   return (
-    <div className="bg-white rounded-lg p-6 shadow-sm">
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="text-lg font-semibold">قسم البطل (Hero)</h3>
-        <button onClick={handleToggleEnabled} className={`flex items-center gap-2 px-3 py-1 rounded-lg text-sm ${hero.enabled ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'}`}>
+    <Card>
+      <Card.Header className="d-flex justify-content-between align-items-center">
+        <Card.Title as="h3" className="mb-0 h6">قسم البطل (Hero)</Card.Title>
+        <Button size="sm" variant={hero.enabled ? 'success' : 'secondary'} onClick={handleToggleEnabled} className="d-flex align-items-center gap-1">
           {hero.enabled ? <Eye size={16} /> : <EyeOff size={16} />}
-          {hero.enabled ? 'مفعل' : 'غير مفعل'}
-        </button>
-      </div>
-      <div className="space-y-4">
-        <div>
-          <label className="block text-sm font-medium mb-2">العنوان الرئيسي</label>
-          <input type="text" value={hero.data.title} onChange={(e) => handleChange('title', e.target.value)} className="w-full p-3 border border-gray-300 rounded-lg" />
-        </div>
-        <div>
-          <label className="block text-sm font-medium mb-2">العنوان الفرعي</label>
-          <textarea value={hero.data.subtitle} onChange={(e) => handleChange('subtitle', e.target.value)} className="w-full p-3 border border-gray-300 rounded-lg" rows={2} />
-        </div>
-        <div>
-          <label className="block text-sm font-medium mb-2">صورة الخلفية</label>
-          <div className="flex items-center gap-3">
-            <input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" id="hero-image-upload" />
-            <label htmlFor="hero-image-upload" className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 cursor-pointer hover:bg-blue-700">
-              <Upload size={20} />
-              رفع صورة
-            </label>
-            {hero.data.backgroundImage && <img src={hero.data.backgroundImage} alt="Hero Background" className="w-16 h-16 object-cover rounded" />}
-          </div>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm font-medium mb-2">نص الزر</label>
-            <input type="text" value={hero.data.ctaText} onChange={(e) => handleChange('ctaText', e.target.value)} className="w-full p-3 border border-gray-300 rounded-lg" />
-          </div>
-          <div>
-            <label className="block text-sm font-medium mb-2">رابط الزر</label>
-            <input type="text" value={hero.data.ctaLink} onChange={(e) => handleChange('ctaLink', e.target.value)} className="w-full p-3 border border-gray-300 rounded-lg" />
-          </div>
-        </div>
-      </div>
-    </div>
+          {hero.enabled ? 'مفعل' : 'معطل'}
+        </Button>
+      </Card.Header>
+      <Card.Body>
+        <Form className="d-flex flex-column gap-3">
+          <SectionTemplateSelector
+            sectionKey="hero"
+            currentTemplate={hero.template}
+            onSelect={(template) => updateSection('hero', { template })}
+          />
+          <Form.Group>
+            <Form.Label>العنوان الرئيسي</Form.Label>
+            <Form.Control type="text" value={hero.data.title} onChange={(e) => handleChange('title', e.target.value)} />
+          </Form.Group>
+          <Form.Group>
+            <Form.Label>العنوان الفرعي</Form.Label>
+            <Form.Control as="textarea" rows={2} value={hero.data.subtitle} onChange={(e) => handleChange('subtitle', e.target.value)} />
+          </Form.Group>
+          {hero.template === 'default' && (
+            <Form.Group>
+              <Form.Label>صورة الخلفية</Form.Label>
+              <div className="d-flex align-items-center gap-3">
+                <Form.Control type="file" accept="image/*" onChange={handleImageUpload} className="d-none" id="hero-image-upload" />
+                <Button as="label" htmlFor="hero-image-upload" className="d-flex align-items-center gap-2">
+                  <Upload size={20} />
+                  رفع صورة
+                </Button>
+                {hero.data.backgroundImage && <Image src={hero.data.backgroundImage} alt="Hero Background" rounded style={{ width: '64px', height: '64px', objectFit: 'cover' }} />}
+              </div>
+            </Form.Group>
+          )}
+          <Row>
+            <Col md={6}>
+              <Form.Group>
+                <Form.Label>نص الزر</Form.Label>
+                <Form.Control type="text" value={hero.data.ctaText} onChange={(e) => handleChange('ctaText', e.target.value)} />
+              </Form.Group>
+            </Col>
+            <Col md={6}>
+              <Form.Group>
+                <Form.Label>رابط الزر</Form.Label>
+                <Form.Control type="text" value={hero.data.ctaLink} onChange={(e) => handleChange('ctaLink', e.target.value)} />
+              </Form.Group>
+            </Col>
+          </Row>
+        </Form>
+      </Card.Body>
+    </Card>
   );
 }

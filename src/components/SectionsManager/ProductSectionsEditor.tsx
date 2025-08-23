@@ -1,9 +1,10 @@
 import React from 'react';
+import { Card, Form, Button } from 'react-bootstrap';
 import { Eye, EyeOff } from 'lucide-react';
 import { useStore } from '../../contexts/StoreContext';
-import { StoreSettings } from '../../types/store';
+import SectionTemplateSelector from './SectionTemplateSelector';
 
-type SectionKey = 'featuredProducts' | 'bestSellers' | 'onSale' | 'allProducts';
+type SectionKey = 'featuredProducts' | 'bestSellers' | 'onSale' | 'homeAllProducts';
 
 export default function ProductSectionsEditor() {
   const { storeData, updateSection } = useStore();
@@ -16,43 +17,64 @@ export default function ProductSectionsEditor() {
   const handleToggleEnabled = (section: SectionKey) => {
     updateSection(section, { enabled: !sections[section].enabled });
   };
+  
+  const handleTemplateChange = (section: SectionKey, template: string) => {
+    updateSection(section, { template });
+  };
 
   const SectionEditor = ({ sectionKey, title }: { sectionKey: SectionKey, title: string }) => {
     const sectionData = sections[sectionKey];
     return (
-      <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-semibold">{title}</h3>
-          <button onClick={() => handleToggleEnabled(sectionKey)} className={`flex items-center gap-2 px-3 py-1 rounded-lg text-sm ${sectionData.enabled ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'}`}>
+      <Card>
+        <Card.Header className="d-flex justify-content-between align-items-center">
+          <Card.Title as="h3" className="mb-0 h6">{title}</Card.Title>
+          <Button size="sm" variant={sectionData.enabled ? 'success' : 'secondary'} onClick={() => handleToggleEnabled(sectionKey)} className="d-flex align-items-center gap-1">
             {sectionData.enabled ? <Eye size={16} /> : <EyeOff size={16} />}
-            {sectionData.enabled ? 'مفعل' : 'غير مفعل'}
-          </button>
-        </div>
-        <div className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium mb-2">العنوان</label>
-            <input type="text" value={sectionData.data.title} onChange={(e) => handleSectionChange(sectionKey, 'title', e.target.value)} className="w-full p-3 border border-gray-300 rounded-lg" />
-          </div>
-          <div>
-            <label className="block text-sm font-medium mb-2">العنوان الفرعي</label>
-            <input type="text" value={sectionData.data.subtitle} onChange={(e) => handleSectionChange(sectionKey, 'subtitle', e.target.value)} className="w-full p-3 border border-gray-300 rounded-lg" />
-          </div>
-          {'limit' in sectionData.data && (
-            <div>
-              <label className="block text-sm font-medium mb-2">عدد المنتجات</label>
-              <input type="number" min="1" max="12" value={(sectionData.data as any).limit} onChange={(e) => handleSectionChange(sectionKey, 'limit', parseInt(e.target.value))} className="w-full p-3 border border-gray-300 rounded-lg" />
-            </div>
-          )}
-        </div>
-      </div>
+            {sectionData.enabled ? 'مفعل' : 'معطل'}
+          </Button>
+        </Card.Header>
+        <Card.Body>
+          <Form className="d-flex flex-column gap-3">
+            <SectionTemplateSelector
+              sectionKey={sectionKey}
+              currentTemplate={sectionData.template}
+              onSelect={(template) => handleTemplateChange(sectionKey, template)}
+            />
+            <Form.Group>
+              <Form.Label>العنوان</Form.Label>
+              <Form.Control type="text" value={sectionData.data.title} onChange={(e) => handleSectionChange(sectionKey, 'title', e.target.value)} />
+            </Form.Group>
+            <Form.Group>
+              <Form.Label>العنوان الفرعي</Form.Label>
+              <Form.Control type="text" value={sectionData.data.subtitle} onChange={(e) => handleSectionChange(sectionKey, 'subtitle', e.target.value)} />
+            </Form.Group>
+            {'limit' in sectionData.data && (
+              <Form.Group>
+                <Form.Label>عدد المنتجات</Form.Label>
+                <Form.Control type="number" min="1" max="12" value={(sectionData.data as any).limit} onChange={(e) => handleSectionChange(sectionKey, 'limit', parseInt(e.target.value))} />
+              </Form.Group>
+            )}
+            {sectionData.template === 'carousel' && (
+              <Form.Check 
+                type="switch"
+                id={`autoplay-switch-${sectionKey}`}
+                label="تشغيل تلقائي للـ Carousel"
+                checked={!!sectionData.data.autoplay}
+                onChange={(e) => handleSectionChange(sectionKey, 'autoplay', e.target.checked)}
+              />
+            )}
+          </Form>
+        </Card.Body>
+      </Card>
     );
   };
 
   return (
-    <div className="space-y-6">
+    <div className="d-flex flex-column gap-4">
       <SectionEditor sectionKey="featuredProducts" title="المنتجات المميزة" />
       <SectionEditor sectionKey="bestSellers" title="الأعلى مبيعاً" />
       <SectionEditor sectionKey="onSale" title="عروض وتخفيضات" />
+      <SectionEditor sectionKey="homeAllProducts" title="قسم جميع المنتجات (بالصفحة الرئيسية)" />
     </div>
   );
 }

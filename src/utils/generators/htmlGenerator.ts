@@ -1,14 +1,11 @@
 import { StoreData } from '../../types/store';
 import { templateRegistry } from '../../templates/registry';
-import { themes } from '../../themes/palettes';
 
 export const generateStoreHTML = (storeData: StoreData): string => {
   const { settings } = storeData;
-  const theme = themes.find(t => t.name === settings.theme) || themes[0];
 
   const headerHTML = templateRegistry.header.default.generator(storeData);
-  const footerHTML = templateRegistry.footer.default.generator(storeData);
-
+  
   const orderedSections: (keyof typeof settings.sections)[] = [
     'hero', 'featuredProducts', 'bestSellers', 'onSale', 'allProducts', 'whyChooseUs', 'faq'
   ];
@@ -22,27 +19,11 @@ export const generateStoreHTML = (storeData: StoreData): string => {
       return template.generator(storeData, sectionKey);
     })
     .join('\n');
-  
-  const tailwindConfig = {
-    theme: {
-      extend: {
-        colors: {
-          primary: settings.primaryColor,
-          secondary: settings.secondaryColor,
-          accent: settings.accentColor,
-          background: theme.colors.background,
-          surface: theme.colors.surface,
-          text: theme.colors.text,
-          'subtle-text': theme.colors.subtleText,
-          'footer-background': theme.colors.footerBackground,
-          'footer-text': theme.colors.footerText,
-        },
-        fontFamily: {
-          sans: [`'${settings.fontFamily}'`, 'sans-serif'],
-        },
-      }
-    }
-  };
+
+  const footerConfig = settings.sections.footer;
+  const footerTemplate = (templateRegistry.footer as any)[footerConfig.template];
+  const footerHTML = footerTemplate ? footerTemplate.generator(storeData, 'footer') : '';
+
 
   return `<!DOCTYPE html>
 <html lang="ar" dir="rtl">
@@ -52,28 +33,30 @@ export const generateStoreHTML = (storeData: StoreData): string => {
     <title>${settings.storeName}</title>
     <meta name="description" content="${settings.description}">
     ${settings.favicon ? `<link rel="icon" type="image/x-icon" href="${settings.favicon}">` : ''}
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-      tailwind.config = ${JSON.stringify(tailwindConfig, null, 2)}
-    </script>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.rtl.min.css" rel="stylesheet" integrity="sha384-dpuaG1suU0eT09tx5plTaGMLBsfA80DDsmIVtd/QFOQwFdpvoDhWRSHdkKtspZER" crossorigin="anonymous">
+    
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=${settings.fontFamily.replace(' ', '+')}:wght@300;400;500;700&display=swap" rel="stylesheet">
-    <style>
-      body { 
-        font-family: ${JSON.stringify(tailwindConfig.theme.extend.fontFamily.sans)};
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-      }
-    </style>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="assets/style.css">
 </head>
-<body class="font-sans bg-background text-text">
+<body>
     ${headerHTML}
     <main>
         ${sectionsHTML}
     </main>
     ${footerHTML}
-    <script src="main.js"></script>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    
+    <!-- Custom JS -->
+    <script src="assets/main.js"></script>
 </body>
 </html>`;
 };

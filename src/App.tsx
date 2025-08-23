@@ -6,7 +6,7 @@ import MainLayout from './components/layout/MainLayout';
 function App() {
   return (
     <StoreProvider>
-      <div className="min-h-screen bg-gray-50 flex flex-col" dir="rtl">
+      <div className="min-vh-100 d-flex flex-column">
         <AppHeader />
         <MainLayout />
       </div>

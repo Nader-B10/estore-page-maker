@@ -2,36 +2,41 @@ import { StoreData } from '../../../types/store';
 
 export const generator = (storeData: StoreData): string => {
   const { settings } = storeData;
-  const { storeName, description, contactInfo, footerText } = settings;
+  const { storeName, description, contactInfo } = settings;
+  const { footer } = settings.sections;
+
+  if (!footer.enabled) return '';
 
   return `
-  <footer class="bg-footer-background text-footer-text mt-16">
-    <div class="container mx-auto px-6 py-12">
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div class="md:col-span-1">
-          <h3 class="text-2xl font-bold mb-2">${storeName}</h3>
-          <p class="opacity-80">${description}</p>
+    <!-- Footer -->
+    <footer class="footer-custom bg-dark text-white mt-5">
+      <div class="container py-5">
+        <div class="row gy-4">
+          <div class="col-lg-4 col-md-12">
+            <h3 class="h4 fw-bold mb-2">${storeName}</h3>
+            <p class="text-white-50">${description}</p>
+          </div>
+          <div class="col-lg-4 col-md-6">
+            <h4 class="h5 mb-3 footer-heading">روابط سريعة</h4>
+            <ul class="list-unstyled footer-links">
+              <li class="mb-2"><a href="products.html">المنتجات</a></li>
+              <li class="mb-2"><a href="index.html#why-us">لماذا نحن</a></li>
+              <li><a href="index.html#faq">الأسئلة الشائعة</a></li>
+            </ul>
+          </div>
+          <div class="col-lg-4 col-md-6">
+            <h4 class="h5 mb-3 footer-heading">تواصل معنا</h4>
+            <ul class="list-unstyled text-white-50">
+              ${contactInfo.email ? `<li class="mb-2">البريد: <a href="mailto:${contactInfo.email}" class="text-reset text-decoration-none hover-underline">${contactInfo.email}</a></li>` : ''}
+              ${contactInfo.phone ? `<li class="mb-2">الهاتف: ${contactInfo.phone}</li>` : ''}
+              ${contactInfo.address ? `<li>العنوان: ${contactInfo.address}</li>` : ''}
+            </ul>
+          </div>
         </div>
-        <div>
-          <h4 class="text-lg font-semibold mb-4">روابط سريعة</h4>
-          <ul class="space-y-2">
-            <li><a href="#products" class="opacity-80 hover:opacity-100">المنتجات</a></li>
-            <li><a href="#why-us" class="opacity-80 hover:opacity-100">لماذا نحن</a></li>
-            <li><a href="#faq" class="opacity-80 hover:opacity-100">الأسئلة الشائعة</a></li>
-          </ul>
-        </div>
-        <div>
-          <h4 class="text-lg font-semibold mb-4">تواصل معنا</h4>
-          <ul class="space-y-2 opacity-80">
-            ${contactInfo.email ? `<li>البريد: <a href="mailto:${contactInfo.email}" class="hover:opacity-100 hover:underline">${contactInfo.email}</a></li>` : ''}
-            ${contactInfo.phone ? `<li>الهاتف: ${contactInfo.phone}</li>` : ''}
-            ${contactInfo.address ? `<li>العنوان: ${contactInfo.address}</li>` : ''}
-          </ul>
+        <div class="mt-5 pt-4 border-top border-secondary text-center text-white-50">
+          <p>${footer.data.text}</p>
         </div>
       </div>
-      <div class="mt-8 pt-6 border-t border-white/10 text-center opacity-70">
-        <p>${footerText || `© ${new Date().getFullYear()} ${storeName}. جميع الحقوق محفوظة.`}</p>
-      </div>
-    </div>
-  </footer>`;
+    </footer>
+    <!-- End Footer -->`;
 };

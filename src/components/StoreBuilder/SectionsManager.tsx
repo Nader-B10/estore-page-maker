@@ -1,55 +1,38 @@
-import React, { useState } from 'react';
-import HeroSectionEditor from '../SectionsManager/HeroSectionEditor';
-import ProductSectionsEditor from '../SectionsManager/ProductSectionsEditor';
-import WhyChooseUsEditor from '../SectionsManager/WhyChooseUsEditor';
-import FAQEditor from '../SectionsManager/FAQEditor';
-
-const sections = [
-  { id: 'hero', label: 'قسم البطل (Hero)' },
-  { id: 'products', label: 'أقسام المنتجات' },
-  { id: 'why-choose-us', label: 'لماذا تختارنا' },
-  { id: 'faq', label: 'الأسئلة الشائعة' },
-];
+import React from 'react';
+import { Tab, Nav, Row, Col } from 'react-bootstrap';
+import { sectionEditorConfig } from '../SectionsManager/sectionConfig';
 
 export default function SectionsManager() {
-  const [activeSection, setActiveSection] = useState('hero');
-
-  const renderActiveEditor = () => {
-    switch (activeSection) {
-      case 'hero':
-        return <HeroSectionEditor />;
-      case 'products':
-        return <ProductSectionsEditor />;
-      case 'why-choose-us':
-        return <WhyChooseUsEditor />;
-      case 'faq':
-        return <FAQEditor />;
-      default:
-        return null;
-    }
-  };
+  const defaultKey = sectionEditorConfig.length > 0 ? sectionEditorConfig[0].key : '';
 
   return (
-    <div className="space-y-6">
-      <div className="bg-white rounded-lg p-4 shadow-sm">
-        <div className="flex flex-wrap gap-2">
-          {sections.map(section => (
-            <button
-              key={section.id}
-              onClick={() => setActiveSection(section.id)}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                activeSection === section.id
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
-            >
-              {section.label}
-            </button>
-          ))}
-        </div>
-      </div>
-      
-      {renderActiveEditor()}
-    </div>
+    <Tab.Container id="sections-manager-tabs" defaultActiveKey={defaultKey}>
+      <Row className="g-4">
+        {/* Vertical Navigation */}
+        <Col sm={4} md={3}>
+          <Nav variant="pills" className="flex-column">
+            {sectionEditorConfig.map(tab => (
+              <Nav.Item key={tab.key}>
+                <Nav.Link eventKey={tab.key}>{tab.title}</Nav.Link>
+              </Nav.Item>
+            ))}
+          </Nav>
+        </Col>
+
+        {/* Tab Content */}
+        <Col sm={8} md={9}>
+          <Tab.Content>
+            {sectionEditorConfig.map(tab => {
+              const { Component } = tab;
+              return (
+                <Tab.Pane key={tab.key} eventKey={tab.key} className="fade">
+                  <Component />
+                </Tab.Pane>
+              );
+            })}
+          </Tab.Content>
+        </Col>
+      </Row>
+    </Tab.Container>
   );
 }

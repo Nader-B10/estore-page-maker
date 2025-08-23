@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Button, Row, Col } from 'react-bootstrap';
 import { Plus } from 'lucide-react';
 import { useStore } from '../../contexts/StoreContext';
 import { Product } from '../../types/store';
@@ -37,28 +38,26 @@ export default function ProductManager() {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h3 className="text-lg font-semibold">إدارة المنتجات</h3>
-        <button
-          onClick={handleOpenModalForAdd}
-          className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-blue-700 transition-colors"
-        >
+    <div className="d-flex flex-column gap-4">
+      <div className="d-flex justify-content-between align-items-center">
+        <h3 className="h5 mb-0">إدارة المنتجات</h3>
+        <Button onClick={handleOpenModalForAdd} className="d-flex align-items-center gap-2">
           <Plus size={20} />
           إضافة منتج
-        </button>
+        </Button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <Row xs={1} md={2} xl={3} className="g-4">
         {products.map((product) => (
-          <ProductCard
-            key={product.id}
-            product={product}
-            onEdit={handleOpenModalForEdit}
-            onDelete={deleteProduct}
-          />
+          <Col key={product.id}>
+            <ProductCard
+              product={product}
+              onEdit={handleOpenModalForEdit}
+              onDelete={deleteProduct}
+            />
+          </Col>
         ))}
-      </div>
+      </Row>
 
       <ProductForm
         isOpen={isModalOpen}

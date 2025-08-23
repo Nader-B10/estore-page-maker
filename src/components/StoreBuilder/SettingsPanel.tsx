@@ -6,7 +6,7 @@ import ContactSettings from '../SettingsPanel/ContactSettings';
 
 export default function SettingsPanel() {
   return (
-    <div className="space-y-6">
+    <div className="d-flex flex-column gap-4">
       <GeneralSettings />
       <ThemeSettings />
       <LayoutSettings />

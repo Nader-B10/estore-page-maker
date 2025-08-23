@@ -1,38 +1,40 @@
 export const generateStoreJS = (): string => {
   return `
 document.addEventListener('DOMContentLoaded', () => {
-  console.log('Store initialized successfully!');
+  console.log('Store initialized successfully with Bootstrap 5!');
 
-  // FAQ Accordion
-  const faqItems = document.querySelectorAll('.faq-item');
-  faqItems.forEach(item => {
-    const questionButton = item.querySelector('.faq-question');
-    const answerDiv = item.querySelector('.faq-answer');
-    const chevron = questionButton ? questionButton.querySelector('.faq-chevron') : null;
-
-    if (questionButton && answerDiv) {
-      questionButton.addEventListener('click', () => {
-        const isExpanded = questionButton.getAttribute('aria-expanded') === 'true';
-        
-        questionButton.setAttribute('aria-expanded', String(!isExpanded));
-        answerDiv.classList.toggle('hidden');
-
-        if (chevron) {
-          chevron.classList.toggle('rotate-180');
-        }
-      });
-    }
-  });
-
-  // Add to cart alert
-  const addToCartButtons = document.querySelectorAll('.add-to-cart-btn');
+  // Add to cart alert functionality
+  const addToCartButtons = document.querySelectorAll('.btn-add-to-cart');
   addToCartButtons.forEach(button => {
     button.addEventListener('click', (event) => {
-      const card = event.target.closest('[data-product-id]');
-      const productId = card ? card.dataset.productId : 'unknown';
+      event.preventDefault();
+      const card = (event.target as HTMLElement).closest('[data-product-id]');
+      const productId = card ? card.getAttribute('data-product-id') : 'unknown';
       alert('تمت إضافة المنتج إلى السلة (وظيفة تجريبية)');
+      console.log('Product added to cart (demo):', productId);
     });
   });
+
+  // Scroll-triggered animations
+  const animatedElements = document.querySelectorAll('.animate-on-scroll');
+  if (animatedElements.length > 0) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, {
+      threshold: 0.1
+    });
+
+    animatedElements.forEach(element => {
+      observer.observe(element);
+    });
+  }
+
+  // Bootstrap components are initialized automatically via data attributes.
 });
 `;
 };

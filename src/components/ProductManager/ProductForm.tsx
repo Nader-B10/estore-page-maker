@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X } from 'lucide-react';
+import { Modal, Button, Form, Row, Col, Image } from 'react-bootstrap';
 import { Product, StoreSettings } from '../../types/store';
 
 interface ProductFormProps {
@@ -32,8 +32,6 @@ export default function ProductForm({ isOpen, onClose, onSave, editingProduct, s
     }
   }, [editingProduct, isOpen]);
 
-  if (!isOpen) return null;
-
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -59,57 +57,65 @@ export default function ProductForm({ isOpen, onClose, onSave, editingProduct, s
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-lg p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-        <div className="flex justify-between items-center mb-4">
-          <h3 className="text-lg font-semibold">{editingProduct ? 'تعديل المنتج' : 'إضافة منتج جديد'}</h3>
-          <button onClick={onClose} className="text-gray-500 hover:text-gray-700"><X size={24} /></button>
-        </div>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Form fields... */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium mb-2">اسم المنتج *</label>
-              <input type="text" value={formData.name} onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))} className="w-full p-2 border border-gray-300 rounded-lg" required />
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-2">الفئة</label>
-              <input type="text" value={formData.category} onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value }))} className="w-full p-2 border border-gray-300 rounded-lg" />
-            </div>
+    <Modal show={isOpen} onHide={onClose} size="lg" centered>
+      <Modal.Header closeButton>
+        <Modal.Title>{editingProduct ? 'تعديل المنتج' : 'إضافة منتج جديد'}</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <Form onSubmit={handleSubmit}>
+          <Row className="g-3">
+            <Col md={6}>
+              <Form.Group>
+                <Form.Label>اسم المنتج *</Form.Label>
+                <Form.Control type="text" value={formData.name} onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))} required />
+              </Form.Group>
+            </Col>
+            <Col md={6}>
+              <Form.Group>
+                <Form.Label>الفئة</Form.Label>
+                <Form.Control type="text" value={formData.category} onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value }))} />
+              </Form.Group>
+            </Col>
+            <Col xs={12}>
+              <Form.Group>
+                <Form.Label>الوصف</Form.Label>
+                <Form.Control as="textarea" rows={3} value={formData.description} onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))} />
+              </Form.Group>
+            </Col>
+            <Col md={6}>
+              <Form.Group>
+                <Form.Label>السعر الحالي *</Form.Label>
+                <Form.Control type="number" step="0.01" value={formData.price} onChange={(e) => setFormData(prev => ({ ...prev, price: parseFloat(e.target.value) || 0 }))} required />
+              </Form.Group>
+            </Col>
+            <Col md={6}>
+              <Form.Group>
+                <Form.Label>السعر الأصلي</Form.Label>
+                <Form.Control type="number" step="0.01" value={formData.originalPrice} onChange={(e) => setFormData(prev => ({ ...prev, originalPrice: parseFloat(e.target.value) || 0 }))} />
+              </Form.Group>
+            </Col>
+            <Col xs={12}>
+              <Form.Group>
+                <Form.Label>صورة المنتج *</Form.Label>
+                <Form.Control type="file" accept="image/*" onChange={handleImageUpload} />
+                {formData.image && <Image src={formData.image} alt="معاينة" fluid thumbnail className="mt-2" style={{ maxHeight: '150px' }} />}
+              </Form.Group>
+            </Col>
+            <Col xs={12} className="border-top pt-3">
+              <h5 className="h6">إعدادات العرض</h5>
+              <div className="d-flex flex-column gap-2">
+                {settings.sections.featuredProducts.enabled && <Form.Check type="checkbox" label="منتج مميز" checked={formData.isFeatured} onChange={(e) => setFormData(prev => ({ ...prev, isFeatured: e.target.checked }))} />}
+                {settings.sections.bestSellers.enabled && <Form.Check type="checkbox" label="من الأعلى مبيعاً" checked={formData.isBestSeller} onChange={(e) => setFormData(prev => ({ ...prev, isBestSeller: e.target.checked }))} />}
+                {settings.sections.onSale.enabled && <Form.Check type="checkbox" label="عليه عرض/تخفيض" checked={formData.isOnSale} onChange={(e) => setFormData(prev => ({ ...prev, isOnSale: e.target.checked }))} />}
+              </div>
+            </Col>
+          </Row>
+          <div className="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+            <Button variant="secondary" onClick={onClose}>إلغاء</Button>
+            <Button variant="primary" type="submit">{editingProduct ? 'حفظ التغييرات' : 'إضافة المنتج'}</Button>
           </div>
-          <div>
-            <label className="block text-sm font-medium mb-2">الوصف</label>
-            <textarea value={formData.description} onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))} className="w-full p-2 border border-gray-300 rounded-lg" rows={3} />
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium mb-2">السعر الحالي *</label>
-              <input type="number" step="0.01" value={formData.price} onChange={(e) => setFormData(prev => ({ ...prev, price: parseFloat(e.target.value) || 0 }))} className="w-full p-2 border border-gray-300 rounded-lg" required />
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-2">السعر الأصلي</label>
-              <input type="number" step="0.01" value={formData.originalPrice} onChange={(e) => setFormData(prev => ({ ...prev, originalPrice: parseFloat(e.target.value) || 0 }))} className="w-full p-2 border border-gray-300 rounded-lg" />
-            </div>
-          </div>
-          <div>
-            <label className="block text-sm font-medium mb-2">صورة المنتج *</label>
-            <input type="file" accept="image/*" onChange={handleImageUpload} className="w-full p-2 border border-gray-300 rounded-lg" />
-            {formData.image && <img src={formData.image} alt="معاينة" className="mt-2 w-full h-32 object-cover rounded-lg" />}
-          </div>
-          <div className="border-t pt-4">
-            <h4 className="font-medium mb-3">إعدادات العرض</h4>
-            <div className="space-y-3">
-              {settings.sections.featuredProducts.enabled && <label className="flex items-center gap-2"><input type="checkbox" checked={formData.isFeatured} onChange={(e) => setFormData(prev => ({ ...prev, isFeatured: e.target.checked }))} /><span>منتج مميز</span></label>}
-              {settings.sections.bestSellers.enabled && <label className="flex items-center gap-2"><input type="checkbox" checked={formData.isBestSeller} onChange={(e) => setFormData(prev => ({ ...prev, isBestSeller: e.target.checked }))} /><span>من الأعلى مبيعاً</span></label>}
-              {settings.sections.onSale.enabled && <label className="flex items-center gap-2"><input type="checkbox" checked={formData.isOnSale} onChange={(e) => setFormData(prev => ({ ...prev, isOnSale: e.target.checked }))} /><span>عليه عرض/تخفيض</span></label>}
-            </div>
-          </div>
-          <div className="flex gap-3 pt-4">
-            <button type="submit" className="flex-1 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700">{editingProduct ? 'حفظ التغييرات' : 'إضافة المنتج'}</button>
-            <button type="button" onClick={onClose} className="flex-1 bg-gray-300 text-gray-700 py-2 rounded-lg hover:bg-gray-400">إلغاء</button>
-          </div>
-        </form>
-      </div>
-    </div>
+        </Form>
+      </Modal.Body>
+    </Modal>
   );
 }

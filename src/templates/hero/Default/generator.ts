@@ -8,25 +8,26 @@ export const generator = (storeData: StoreData): string => {
   const { title, subtitle, ctaText, ctaLink, backgroundImage } = hero.data;
 
   const backgroundStyle = backgroundImage
-    ? `background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('${backgroundImage}')`
-    : `background: linear-gradient(135deg, ${settings.primaryColor}, ${settings.secondaryColor})`;
+    ? `background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('${backgroundImage}');`
+    : `background: linear-gradient(135deg, var(--bs-primary), var(--bs-secondary));`;
 
   return `
+    <!-- Hero Section -->
     <section
       id="hero"
-      class="py-24 px-6 text-center text-white bg-cover bg-center flex items-center justify-center min-h-[60vh]"
+      class="hero-section py-5 text-center text-white d-flex align-items-center"
       style="${backgroundStyle}"
     >
-      <div class="max-w-3xl">
-        <h2 class="text-4xl md:text-6xl font-extrabold leading-tight mb-4" style="color: ${hero.data.titleColor || 'white'}">${title}</h2>
-        <p class="text-lg md:text-xl opacity-90 mb-8" style="color: ${hero.data.subtitleColor || 'white'}">${subtitle}</p>
+      <div class="container">
+        <h1 class="display-3 fw-bolder mb-3 animate-fade-in-down">${title}</h1>
+        <p class="lead fw-normal text-white-50 mb-4 animate-fade-in-up">${subtitle}</p>
         <a
           href="${ctaLink}"
-          class="inline-block text-black font-bold py-3 px-8 rounded-full text-lg transition-transform hover:scale-105"
-          style="background-color: ${settings.accentColor}; color: #111"
+          class="btn btn-lg btn-cta fw-bold"
         >
           ${ctaText}
         </a>
       </div>
-    </section>`;
+    </section>
+    <!-- End Hero Section -->`;
 };

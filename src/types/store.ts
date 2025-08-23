@@ -25,6 +25,7 @@ export interface ProductSectionData {
   title: string;
   subtitle: string;
   limit: number;
+  autoplay?: boolean; // Option for carousel template
 }
 
 export interface WhyChooseUsItem {
@@ -38,10 +39,11 @@ export interface WhyChooseUsSectionData {
   title: string;
   subtitle: string;
   items: WhyChooseUsItem[];
+  sideImage?: string; // Option for sideBySide template
 }
 
 export interface FAQItem {
-  id: string;
+  id:string;
   question: string;
   answer: string;
 }
@@ -52,10 +54,21 @@ export interface FAQSectionData {
   items: FAQItem[];
 }
 
+export interface FooterSectionData {
+  text: string;
+}
+
 export interface SectionConfig<T> {
   template: string;
   enabled: boolean;
   data: T;
+}
+
+export interface Page {
+  id: string;
+  slug: string;
+  title: string;
+  sections: (keyof StoreSettings['sections'])[];
 }
 
 export interface StoreSettings {
@@ -68,22 +81,30 @@ export interface StoreSettings {
   secondaryColor: string;
   accentColor: string;
   fontFamily: string;
-  layout: 'grid' | 'list' | 'masonry';
+  layout: 'grid' | 'list';
   headerStyle: 'classic' | 'modern' | 'minimal';
-  footerText: string;
+  pages: Page[];
   contactInfo: {
     email: string;
     phone: string;
     address: string;
+    socials?: {
+      facebook?: string;
+      twitter?: string;
+      instagram?: string;
+      linkedin?: string;
+    }
   };
   sections: {
     hero: SectionConfig<HeroSectionData>;
     featuredProducts: SectionConfig<ProductSectionData>;
     bestSellers: SectionConfig<ProductSectionData>;
     onSale: SectionConfig<ProductSectionData>;
-    allProducts: SectionConfig<Omit<ProductSectionData, 'limit'>>;
+    homeAllProducts: SectionConfig<ProductSectionData>; // New section for homepage
+    allProducts: SectionConfig<Omit<ProductSectionData, 'limit' | 'autoplay'>>;
     whyChooseUs: SectionConfig<WhyChooseUsSectionData>;
     faq: SectionConfig<FAQSectionData>;
+    footer: SectionConfig<FooterSectionData>;
   };
 }
 

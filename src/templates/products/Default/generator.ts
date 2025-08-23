@@ -1,25 +1,24 @@
 import { StoreData, Product, StoreSettings } from '../../../types/store';
 
-const generateProductHTML = (product: Product, settings: StoreSettings): string => `
-  <div class="bg-surface rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow group border border-gray-200/10 flex flex-col" data-product-id="${product.id}">
-    <div class="relative overflow-hidden aspect-square">
-      <img src="${product.image}" alt="${product.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" />
-      <div class="absolute top-2 right-2 flex flex-col gap-1">
-        ${product.category ? `<span class="px-2 py-1 text-xs font-medium text-black rounded-full" style="background-color: ${settings.accentColor};">${product.category}</span>` : ''}
-        ${product.isOnSale && product.discountPercentage ? `<span class="bg-red-500 text-white px-2 py-1 text-xs font-bold rounded-full">-${product.discountPercentage}%</span>` : ''}
-      </div>
-    </div>
-    <div class="p-4 flex flex-col flex-grow">
-      <h3 class="font-semibold text-lg mb-2 text-text">${product.name}</h3>
-      <p class="text-subtle-text text-sm mb-3 line-clamp-2 flex-grow">${product.description}</p>
-      <div class="flex justify-between items-center mt-auto">
-        <div class="flex flex-col">
-          <span class="text-xl font-bold" style="color: ${settings.primaryColor};">${product.price} ر.س</span>
-          ${product.originalPrice && product.originalPrice > product.price ? `<span class="text-sm text-subtle-text line-through">${product.originalPrice} ر.س</span>` : ''}
+const generateProductHTML = (product: Product): string => `
+  <div class="col">
+    <div class="card product-card h-100" data-product-id="${product.id}">
+      <div class="product-card-img-container">
+        <img src="${product.image}" class="product-card-img" alt="${product.name}" loading="lazy">
+        <div class="position-absolute top-0 end-0 p-2 d-flex flex-column gap-1">
+          ${product.isOnSale && product.discountPercentage ? `<span class="badge bg-danger fs-sm">-${product.discountPercentage}%</span>` : ''}
         </div>
-        <button class="add-to-cart-btn px-4 py-2 text-white rounded-lg hover:opacity-90 transition-opacity" style="background-color: ${settings.secondaryColor};">
-          أضف للسلة
-        </button>
+      </div>
+      <div class="card-body d-flex flex-column p-3">
+        <h5 class="card-title h6 product-card-title">${product.name}</h5>
+        <p class="card-text small text-muted flex-grow-1 line-clamp-2">${product.description}</p>
+        <div class="d-flex justify-content-between align-items-center mt-3">
+          <div>
+            <span class="fw-bold fs-5" style="color: var(--bs-primary);">${product.price} ر.س</span>
+            ${product.originalPrice && product.originalPrice > product.price ? `<span class="ms-2 text-muted text-decoration-line-through">${product.originalPrice} ر.س</span>` : ''}
+          </div>
+          <button class="btn btn-sm btn-add-to-cart">أضف للسلة</button>
+        </div>
       </div>
     </div>
   </div>
@@ -27,23 +26,27 @@ const generateProductHTML = (product: Product, settings: StoreSettings): string 
 
 const generateProductSectionHTML = (title: string, subtitle: string, products: Product[], settings: StoreSettings): string => {
   if (products.length === 0) return '';
-  const layoutClass = settings.layout === 'list' ? 'grid-cols-1' : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4';
+  const layoutClass = settings.layout === 'list' ? 'row-cols-1' : 'row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-4';
   return `
-    <section class="container mx-auto px-6 py-16">
-      <div class="text-center mb-12">
-        <h2 class="text-3xl lg:text-4xl font-bold mb-2" style="color: ${settings.primaryColor};">${title}</h2>
-        <p class="text-subtle-text max-w-2xl mx-auto">${subtitle}</p>
-        <div class="w-24 h-1 mx-auto mt-4 rounded" style="background-color: ${settings.accentColor};"></div>
-      </div>
-      <div class="grid ${layoutClass} gap-6">
-        ${products.map(p => generateProductHTML(p, settings)).join('')}
+    <!-- Products Section -->
+    <section id="products" class="py-5 animate-on-scroll">
+      <div class="container">
+        <div class="section-header text-center mb-5">
+          <h2 class="display-5 fw-bold mb-2">${title}</h2>
+          <p class="lead text-muted">${subtitle}</p>
+          <div class="section-divider mx-auto"></div>
+        </div>
+        <div class="row ${layoutClass} g-4">
+          ${products.map(p => generateProductHTML(p)).join('')}
+        </div>
       </div>
     </section>
+    <!-- End Products Section -->
   `;
 };
 
 export const generator = (storeData: StoreData, sectionKey?: keyof StoreSettings['sections']): string => {
-  const productSectionKeys: (keyof StoreSettings['sections'])[] = ['featuredProducts', 'bestSellers', 'onSale', 'allProducts'];
+  const productSectionKeys: (keyof StoreSettings['sections'])[] = ['featuredProducts', 'bestSellers', 'onSale', 'allProducts', 'homeAllProducts'];
   if (!sectionKey || !productSectionKeys.includes(sectionKey)) return '';
 
   const { settings, products } = storeData;
@@ -59,10 +62,11 @@ export const generator = (storeData: StoreData, sectionKey?: keyof StoreSettings
     case 'bestSellers': sectionProducts = products.filter(p => p.isBestSeller); break;
     case 'onSale': sectionProducts = products.filter(p => p.isOnSale); break;
     case 'allProducts': sectionProducts = products; break;
+    case 'homeAllProducts': sectionProducts = products; break;
   }
 
   if (limit) sectionProducts = sectionProducts.slice(0, limit);
-  if (sectionProducts.length === 0) return '';
+  if (sectionProducts.length === 0 && sectionKey !== 'allProducts' && sectionKey !== 'homeAllProducts') return '';
 
   return generateProductSectionHTML(title, subtitle, sectionProducts, settings);
 };

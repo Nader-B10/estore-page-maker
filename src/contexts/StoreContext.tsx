@@ -13,11 +13,30 @@ const defaultSettings: StoreSettings = {
   fontFamily: 'Cairo',
   layout: 'grid',
   headerStyle: 'classic',
-  footerText: '',
+  pages: [
+    { 
+      id: 'home', 
+      slug: 'index', 
+      title: 'الرئيسية', 
+      sections: ['hero', 'featuredProducts', 'bestSellers', 'onSale', 'homeAllProducts', 'whyChooseUs', 'faq'] 
+    },
+    { 
+      id: 'products', 
+      slug: 'products', 
+      title: 'المنتجات', 
+      sections: ['allProducts'] 
+    }
+  ],
   contactInfo: {
     email: '',
     phone: '',
-    address: ''
+    address: '',
+    socials: {
+      facebook: '',
+      twitter: '',
+      instagram: '',
+      linkedin: ''
+    }
   },
   sections: {
     hero: {
@@ -28,7 +47,7 @@ const defaultSettings: StoreSettings = {
         subtitle: 'اكتشف أفضل المنتجات بأسعار منافسة',
         backgroundImage: '',
         ctaText: 'تسوق الآن',
-        ctaLink: '#products'
+        ctaLink: 'products.html'
       }
     },
     featuredProducts: {
@@ -37,7 +56,8 @@ const defaultSettings: StoreSettings = {
       data: {
         title: 'المنتجات المميزة',
         subtitle: 'اختيارنا الأفضل لك',
-        limit: 4
+        limit: 4,
+        autoplay: true,
       }
     },
     bestSellers: {
@@ -46,7 +66,8 @@ const defaultSettings: StoreSettings = {
       data: {
         title: 'الأعلى مبيعاً',
         subtitle: 'المنتجات الأكثر طلباً',
-        limit: 4
+        limit: 4,
+        autoplay: true,
       }
     },
     onSale: {
@@ -55,12 +76,23 @@ const defaultSettings: StoreSettings = {
       data: {
         title: 'عروض وتخفيضات',
         subtitle: 'وفر أكثر مع عروضنا الخاصة',
-        limit: 4
+        limit: 4,
+        autoplay: true,
       }
     },
-    allProducts: {
+    homeAllProducts: {
       template: 'default',
-      enabled: true,
+      enabled: false, // Disabled by default on the homepage
+      data: {
+        title: 'تصفح منتجاتنا',
+        subtitle: 'كل ما تحتاجه في مكان واحد',
+        limit: 8,
+        autoplay: false,
+      }
+    },
+    allProducts: { // This is for the dedicated /products.html page
+      template: 'default',
+      enabled: true, // Always enabled
       data: {
         title: 'جميع المنتجات',
         subtitle: 'تصفح مجموعتنا الكاملة'
@@ -76,7 +108,8 @@ const defaultSettings: StoreSettings = {
           { id: '1', icon: 'truck', title: 'شحن سريع', description: 'توصيل مجاني خلال 24 ساعة' },
           { id: '2', icon: 'shield', title: 'ضمان الجودة', description: 'منتجات أصلية مع ضمان شامل' },
           { id: '3', icon: 'headphones', title: 'دعم 24/7', description: 'خدمة عملاء متاحة على مدار الساعة' }
-        ]
+        ],
+        sideImage: '',
       }
     },
     faq: {
@@ -90,13 +123,20 @@ const defaultSettings: StoreSettings = {
           { id: '2', question: 'ما هي طرق الدفع المتاحة؟', answer: 'نقبل جميع بطاقات الائتمان والدفع عند الاستلام' }
         ]
       }
+    },
+    footer: {
+        template: 'default',
+        enabled: true,
+        data: {
+            text: `© ${new Date().getFullYear()} متجري. جميع الحقوق محفوظة.`
+        }
     }
   }
 };
 
 interface StoreContextType {
   storeData: StoreData;
-  updateSettings: (newSettings: Partial<Omit<StoreSettings, 'sections'>>) => void;
+  updateSettings: (newSettings: Partial<Omit<StoreSettings, 'sections' | 'contactInfo' | 'pages'>> & { contactInfo?: Partial<StoreSettings['contactInfo']> }) => void;
   updateSection: (sectionKey: keyof StoreSettings['sections'], newConfig: any) => void;
   addProduct: (product: Product) => void;
   editProduct: (id: string, updatedProduct: Product) => void;
@@ -111,10 +151,21 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
     products: []
   });
 
-  const updateSettings = useCallback((newSettings: Partial<Omit<StoreSettings, 'sections'>>) => {
+  const updateSettings = useCallback((newSettings: Partial<Omit<StoreSettings, 'sections' | 'contactInfo' | 'pages'>> & { contactInfo?: Partial<StoreSettings['contactInfo']> }) => {
     setStoreData(prev => ({
       ...prev,
-      settings: { ...prev.settings, ...newSettings }
+      settings: {
+        ...prev.settings,
+        ...newSettings,
+        contactInfo: {
+          ...prev.settings.contactInfo,
+          ...newSettings.contactInfo,
+          socials: {
+            ...prev.settings.contactInfo.socials,
+            ...newSettings.contactInfo?.socials,
+          }
+        }
+      }
     }));
   }, []);
 

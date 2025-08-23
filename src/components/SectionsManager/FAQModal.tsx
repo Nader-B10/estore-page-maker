@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { X } from 'lucide-react';
+import { Modal, Button, Form } from 'react-bootstrap';
 import { FAQItem } from '../../types/store';
 
 interface FAQModalProps {
+  show: boolean;
   item: FAQItem | null;
   onSave: (item: Omit<FAQItem, 'id'>) => void;
   onClose: () => void;
 }
 
-export default function FAQModal({ item, onSave, onClose }: FAQModalProps) {
+export default function FAQModal({ show, item, onSave, onClose }: FAQModalProps) {
   const [formData, setFormData] = useState({ question: '', answer: '' });
 
   useEffect(() => {
@@ -29,27 +30,26 @@ export default function FAQModal({ item, onSave, onClose }: FAQModalProps) {
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg p-6 w-full max-w-md">
-        <div className="flex justify-between items-center mb-4">
-          <h3 className="text-lg font-semibold">{item ? 'تعديل السؤال' : 'إضافة سؤال جديد'}</h3>
-          <button onClick={onClose} className="text-gray-500 hover:text-gray-700"><X size={24} /></button>
-        </div>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium mb-2">السؤال</label>
-            <input type="text" value={formData.question} onChange={(e) => setFormData(prev => ({ ...prev, question: e.target.value }))} className="w-full p-3 border border-gray-300 rounded-lg" required />
-          </div>
-          <div>
-            <label className="block text-sm font-medium mb-2">الإجابة</label>
-            <textarea value={formData.answer} onChange={(e) => setFormData(prev => ({ ...prev, answer: e.target.value }))} className="w-full p-3 border border-gray-300 rounded-lg" rows={4} required />
-          </div>
-          <div className="flex gap-3 pt-4">
-            <button type="submit" className="flex-1 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700">{item ? 'حفظ التغييرات' : 'إضافة السؤال'}</button>
-            <button type="button" onClick={onClose} className="flex-1 bg-gray-300 text-gray-700 py-2 rounded-lg hover:bg-gray-400">إلغاء</button>
-          </div>
-        </form>
-      </div>
-    </div>
+    <Modal show={show} onHide={onClose} centered>
+      <Modal.Header closeButton>
+        <Modal.Title>{item ? 'تعديل السؤال' : 'إضافة سؤال جديد'}</Modal.Title>
+      </Modal.Header>
+      <Form onSubmit={handleSubmit}>
+        <Modal.Body>
+          <Form.Group className="mb-3">
+            <Form.Label>السؤال</Form.Label>
+            <Form.Control type="text" value={formData.question} onChange={(e) => setFormData(prev => ({ ...prev, question: e.target.value }))} required />
+          </Form.Group>
+          <Form.Group>
+            <Form.Label>الإجابة</Form.Label>
+            <Form.Control as="textarea" rows={4} value={formData.answer} onChange={(e) => setFormData(prev => ({ ...prev, answer: e.target.value }))} required />
+          </Form.Group>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={onClose}>إلغاء</Button>
+          <Button variant="primary" type="submit">{item ? 'حفظ التغييرات' : 'إضافة السؤال'}</Button>
+        </Modal.Footer>
+      </Form>
+    </Modal>
   );
 }

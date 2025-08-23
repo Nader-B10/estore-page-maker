@@ -1,8 +1,9 @@
 import React from 'react';
+import { Card, Form, Row, Col } from 'react-bootstrap';
 import { Palette } from 'lucide-react';
 import { useStore } from '../../contexts/StoreContext';
 import ThemeSelector from '../StoreBuilder/ThemeSelector';
-import { Theme, themes } from '../../themes/palettes';
+import { Theme } from '../../themes/palettes';
 
 export default function ThemeSettings() {
   const { storeData, updateSettings } = useStore();
@@ -22,30 +23,34 @@ export default function ThemeSettings() {
   };
 
   return (
-    <div className="bg-white rounded-lg p-6 shadow-sm">
-      <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-        <Palette size={20} />
-        الثيم والألوان
-      </h3>
-      <div className="mb-6">
-        <label className="block text-sm font-medium mb-3">اختر ثيماً جاهزاً</label>
-        <ThemeSelector currentThemeName={settings.theme} onSelectTheme={handleThemeSelect} />
-      </div>
-      <h4 className="text-md font-semibold mb-3">أو قم بتخصيص الألوان</h4>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div>
-          <label className="block text-sm font-medium mb-2">اللون الأساسي</label>
-          <input type="color" value={settings.primaryColor} onChange={(e) => handleChange('primaryColor', e.target.value)} className="w-full h-10 rounded-lg border border-gray-300 cursor-pointer" />
+    <Card>
+      <Card.Header>
+        <Card.Title as="h3" className="mb-0 h6 d-flex align-items-center gap-2">
+          <Palette size={20} />
+          الثيم والألوان
+        </Card.Title>
+      </Card.Header>
+      <Card.Body>
+        <div className="mb-4">
+          <Form.Label className="fw-semibold mb-3">اختر ثيماً جاهزاً</Form.Label>
+          <ThemeSelector currentThemeName={settings.theme} onSelectTheme={handleThemeSelect} />
         </div>
-        <div>
-          <label className="block text-sm font-medium mb-2">اللون الثانوي</label>
-          <input type="color" value={settings.secondaryColor} onChange={(e) => handleChange('secondaryColor', e.target.value)} className="w-full h-10 rounded-lg border border-gray-300 cursor-pointer" />
-        </div>
-        <div>
-          <label className="block text-sm font-medium mb-2">لون التأكيد</label>
-          <input type="color" value={settings.accentColor} onChange={(e) => handleChange('accentColor', e.target.value)} className="w-full h-10 rounded-lg border border-gray-300 cursor-pointer" />
-        </div>
-      </div>
-    </div>
+        <h4 className="h6 fw-semibold mb-3">أو قم بتخصيص الألوان</h4>
+        <Row>
+          <Col>
+            <Form.Label>الأساسي</Form.Label>
+            <Form.Control type="color" value={settings.primaryColor} onChange={(e) => handleChange('primaryColor', e.target.value)} className="form-color-input" />
+          </Col>
+          <Col>
+            <Form.Label>الثانوي</Form.Label>
+            <Form.Control type="color" value={settings.secondaryColor} onChange={(e) => handleChange('secondaryColor', e.target.value)} className="form-color-input" />
+          </Col>
+          <Col>
+            <Form.Label>التأكيد</Form.Label>
+            <Form.Control type="color" value={settings.accentColor} onChange={(e) => handleChange('accentColor', e.target.value)} className="form-color-input" />
+          </Col>
+        </Row>
+      </Card.Body>
+    </Card>
   );
 }

@@ -1,79 +1,73 @@
 import React, { useState } from 'react';
-import { Settings, Package, Layers, Eye } from 'lucide-react';
+import { Container, Row, Col, Tab, Nav } from 'react-bootstrap';
+import { Settings, Package, Layers } from 'lucide-react';
 import SettingsPanel from '../StoreBuilder/SettingsPanel';
 import ProductManager from '../StoreBuilder/ProductManager';
 import StorePreview from '../StoreBuilder/StorePreview';
 import SectionsManager from '../StoreBuilder/SectionsManager';
+import { useStore } from '../../contexts/StoreContext';
 
 const tabs = [
-  { id: 'settings', label: 'الإعدادات', icon: Settings },
-  { id: 'sections', label: 'الأقسام', icon: Layers },
-  { id: 'products', label: 'المنتجات', icon: Package },
+  { eventKey: 'settings', title: 'الإعدادات', icon: Settings },
+  { eventKey: 'sections', title: 'الأقسام', icon: Layers },
+  { eventKey: 'products', title: 'المنتجات', icon: Package },
 ];
 
 export default function MainLayout() {
-  const [activeTab, setActiveTab] = useState('settings');
-
-  const renderActivePanel = () => {
-    switch (activeTab) {
-      case 'settings':
-        return <SettingsPanel />;
-      case 'sections':
-        return <SectionsManager />;
-      case 'products':
-        return <ProductManager />;
-      default:
-        return null;
-    }
-  };
+  const { storeData } = useStore();
+  const [previewPageId, setPreviewPageId] = useState('home');
 
   return (
-    <div className="flex-1 grid grid-cols-1 lg:grid-cols-12">
-      {/* Control Panel */}
-      <aside className="col-span-1 lg:col-span-5 xl:col-span-4 bg-white flex flex-col border-r border-gray-200">
-        <div className="p-3 border-b border-gray-200">
-          <div className="flex justify-center flex-wrap gap-2">
-            {tabs.map(tab => {
-              const Icon = tab.icon;
-              const isActive = activeTab === tab.id;
-              return (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
-                  className={`flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
-                    isActive
-                      ? 'bg-blue-600 text-white shadow'
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                  }`}
-                >
-                  <Icon size={18} />
-                  <span>{tab.label}</span>
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        <div className="flex-1 overflow-y-auto p-4 lg:p-6">
-          {renderActivePanel()}
-        </div>
-      </aside>
-
-      {/* Preview Panel */}
-      <main className="col-span-1 lg:col-span-7 xl:col-span-8 bg-gray-100 flex flex-col h-full">
-        <div className="bg-white border-b border-gray-200 px-6 py-4 z-10">
-          <div className="flex items-center justify-between">
-            <h2 className="text-lg font-semibold text-gray-900">معاينة المتجر المباشرة</h2>
-            <div className="flex items-center gap-2 text-sm text-gray-600">
-              <Eye size={16} />
-              <span>يتم التحديث تلقائياً</span>
+    <Container fluid className="flex-grow-1 p-0">
+      <Tab.Container id="main-builder-tabs" defaultActiveKey="settings">
+        <Row className="g-0 min-vh-100">
+          {/* Control Panel */}
+          <Col lg={5} xl={4} className="bg-white d-flex flex-column border-end">
+            <div className="p-3 border-bottom">
+              <Nav variant="pills" justify>
+                {tabs.map(tab => {
+                  const Icon = tab.icon;
+                  return (
+                    <Nav.Item key={tab.eventKey}>
+                      <Nav.Link eventKey={tab.eventKey} className="d-flex align-items-center justify-content-center gap-2">
+                        <Icon size={18} />
+                        <span>{tab.title}</span>
+                      </Nav.Link>
+                    </Nav.Item>
+                  );
+                })}
+              </Nav>
             </div>
-          </div>
-        </div>
-        <div className="flex-1 overflow-y-auto">
-          <StorePreview />
-        </div>
-      </main>
-    </div>
+
+            <div className="flex-grow-1 overflow-y-auto p-3 p-lg-4">
+              <Tab.Content>
+                <Tab.Pane eventKey="settings"><SettingsPanel /></Tab.Pane>
+                <Tab.Pane eventKey="sections"><SectionsManager /></Tab.Pane>
+                <Tab.Pane eventKey="products"><ProductManager /></Tab.Pane>
+              </Tab.Content>
+            </div>
+          </Col>
+
+          {/* Preview Panel */}
+          <Col lg={7} xl={8} className="bg-light d-flex flex-column h-100">
+            <div className="bg-white border-bottom px-4 py-3 z-10">
+              <div className="d-flex align-items-center justify-content-between">
+                <h2 className="h5 mb-0 fw-semibold">معاينة المتجر المباشرة</h2>
+                <Nav variant="pills" activeKey={previewPageId} onSelect={(k) => setPreviewPageId(k || 'home')}>
+                  {storeData.settings.pages.map(page => (
+                    <Nav.Item key={page.id}>
+                      <Nav.Link eventKey={page.id} className="py-1 px-2">{page.title}</Nav.Link>
+                    </Nav.Item>
+                  ))}
+                </Nav>
+              </div>
+            </div>
+            <div className="flex-grow-1 overflow-y-auto">
+              <StorePreview pageId={previewPageId} />
+            </div>
+          </Col>
+        </Row>
+      </Tab.Container>
+    </Container>
   );
 }
