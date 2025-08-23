@@ -1,25 +1,23 @@
 import { StoreData } from '../../types/store';
-import { templateRegistry } from '../../templates/registry';
+import { generateHeaderHTML } from './sectionGenerators/header';
+import { generateFooterHTML } from './sectionGenerators/footer';
+import { generateHeroHTML } from './sectionGenerators/hero';
+import { generateProductSectionHTML } from './sectionGenerators/products';
+import { generateWhyChooseUsHTML } from './sectionGenerators/whyChooseUs';
+import { generateFaqHTML } from './sectionGenerators/faq';
 
 export const generateStoreHTML = (storeData: StoreData): string => {
   const { settings } = storeData;
 
-  const headerHTML = templateRegistry.header.default.generator(storeData);
-  const footerHTML = templateRegistry.footer.default.generator(storeData);
-
-  const orderedSections: (keyof typeof settings.sections)[] = [
-    'hero', 'featuredProducts', 'bestSellers', 'onSale', 'allProducts', 'whyChooseUs', 'faq'
-  ];
-
-  const sectionsHTML = orderedSections
-    .map(sectionKey => {
-      const sectionConfig = settings.sections[sectionKey];
-      if (!sectionConfig.enabled) return '';
-      const template = (templateRegistry as any)[sectionKey]?.[sectionConfig.template];
-      if (!template) return `<!-- Template ${sectionConfig.template} for ${sectionKey} not found -->`;
-      return template.generator(storeData, sectionKey);
-    })
-    .join('\n');
+  const sectionsHTML = [
+    generateHeroHTML(storeData),
+    generateProductSectionHTML(storeData, 'featuredProducts'),
+    generateProductSectionHTML(storeData, 'bestSellers'),
+    generateProductSectionHTML(storeData, 'onSale'),
+    generateWhyChooseUsHTML(storeData),
+    generateFaqHTML(storeData),
+    generateProductSectionHTML(storeData, 'allProducts'),
+  ].filter(Boolean).join('\n');
 
   return `<!DOCTYPE html>
 <html lang="ar" dir="rtl">
@@ -35,11 +33,11 @@ export const generateStoreHTML = (storeData: StoreData): string => {
     <link rel="stylesheet" href="styles.css">
 </head>
 <body class="font-sans">
-    ${headerHTML}
+    ${generateHeaderHTML(storeData)}
     <main>
         ${sectionsHTML}
     </main>
-    ${footerHTML}
+    ${generateFooterHTML(storeData)}
     <script src="main.js"></script>
 </body>
 </html>`;

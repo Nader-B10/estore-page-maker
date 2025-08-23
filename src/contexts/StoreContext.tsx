@@ -13,26 +13,42 @@ const defaultSettings: StoreSettings = {
   fontFamily: 'Cairo',
   layout: 'grid',
   headerStyle: 'classic',
-  footerText: '',
-  contactInfo: {
-    email: '',
-    phone: '',
-    address: ''
-  },
   sections: {
+    header: {
+      enabled: true,
+      data: {
+        links: [
+          { id: '1', text: 'المنتجات', link: '#all-products' },
+          { id: '2', text: 'لماذا نحن', link: '#why-us' },
+          { id: '3', text: 'الأسئلة الشائعة', link: '#faq' },
+        ]
+      }
+    },
+    footer: {
+      enabled: true,
+      data: {
+        linksTitle: 'روابط سريعة',
+        contactTitle: 'تواصل معنا',
+        contactInfo: {
+          email: 'contact@example.com',
+          phone: '+966 12 345 6789',
+          address: 'الرياض، المملكة العربية السعودية'
+        },
+        socialLinks: [],
+        copyrightText: `© ${new Date().getFullYear()} متجري. جميع الحقوق محفوظة.`
+      }
+    },
     hero: {
-      template: 'default',
       enabled: true,
       data: {
         title: 'مرحباً بك في متجرنا',
         subtitle: 'اكتشف أفضل المنتجات بأسعار منافسة',
         backgroundImage: '',
         ctaText: 'تسوق الآن',
-        ctaLink: '#products'
+        ctaLink: '#all-products'
       }
     },
     featuredProducts: {
-      template: 'default',
       enabled: true,
       data: {
         title: 'المنتجات المميزة',
@@ -41,7 +57,6 @@ const defaultSettings: StoreSettings = {
       }
     },
     bestSellers: {
-      template: 'default',
       enabled: true,
       data: {
         title: 'الأعلى مبيعاً',
@@ -50,7 +65,6 @@ const defaultSettings: StoreSettings = {
       }
     },
     onSale: {
-      template: 'default',
       enabled: true,
       data: {
         title: 'عروض وتخفيضات',
@@ -59,7 +73,6 @@ const defaultSettings: StoreSettings = {
       }
     },
     allProducts: {
-      template: 'default',
       enabled: true,
       data: {
         title: 'جميع المنتجات',
@@ -67,7 +80,6 @@ const defaultSettings: StoreSettings = {
       }
     },
     whyChooseUs: {
-      template: 'default',
       enabled: true,
       data: {
         title: 'لماذا تختارنا؟',
@@ -80,7 +92,6 @@ const defaultSettings: StoreSettings = {
       }
     },
     faq: {
-      template: 'default',
       enabled: true,
       data: {
         title: 'الأسئلة الشائعة',

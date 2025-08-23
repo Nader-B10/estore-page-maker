@@ -2,7 +2,6 @@ import React from 'react';
 import GeneralSettings from '../SettingsPanel/GeneralSettings';
 import ThemeSettings from '../SettingsPanel/ThemeSettings';
 import LayoutSettings from '../SettingsPanel/LayoutSettings';
-import ContactSettings from '../SettingsPanel/ContactSettings';
 
 export default function SettingsPanel() {
   return (
@@ -10,7 +9,6 @@ export default function SettingsPanel() {
       <GeneralSettings />
       <ThemeSettings />
       <LayoutSettings />
-      <ContactSettings />
     </div>
   );
 }

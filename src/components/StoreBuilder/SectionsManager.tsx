@@ -1,21 +1,29 @@
 import React, { useState } from 'react';
+import HeaderEditor from '../SectionsManager/HeaderEditor';
+import FooterEditor from '../SectionsManager/FooterEditor';
 import HeroSectionEditor from '../SectionsManager/HeroSectionEditor';
 import ProductSectionsEditor from '../SectionsManager/ProductSectionsEditor';
 import WhyChooseUsEditor from '../SectionsManager/WhyChooseUsEditor';
 import FAQEditor from '../SectionsManager/FAQEditor';
 
 const sections = [
+  { id: 'header', label: 'الهيدر' },
   { id: 'hero', label: 'قسم البطل (Hero)' },
   { id: 'products', label: 'أقسام المنتجات' },
   { id: 'why-choose-us', label: 'لماذا تختارنا' },
   { id: 'faq', label: 'الأسئلة الشائعة' },
+  { id: 'footer', label: 'الفوتر' },
 ];
 
 export default function SectionsManager() {
-  const [activeSection, setActiveSection] = useState('hero');
+  const [activeSection, setActiveSection] = useState('header');
 
   const renderActiveEditor = () => {
     switch (activeSection) {
+      case 'header':
+        return <HeaderEditor />;
+      case 'footer':
+        return <FooterEditor />;
       case 'hero':
         return <HeroSectionEditor />;
       case 'products':

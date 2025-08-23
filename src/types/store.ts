@@ -13,6 +13,30 @@ export interface Product {
   tags: string[];
 }
 
+export interface HeaderLink {
+  id: string;
+  text: string;
+  link: string;
+}
+
+export interface SocialLink {
+  id: string;
+  platform: 'facebook' | 'twitter' | 'instagram' | 'linkedin' | 'youtube';
+  url: string;
+}
+
+export interface FooterData {
+  contactInfo: {
+    email: string;
+    phone: string;
+    address: string;
+  };
+  linksTitle: string;
+  contactTitle: string;
+  socialLinks: SocialLink[];
+  copyrightText: string;
+}
+
 export interface HeroSectionData {
   title: string;
   subtitle: string;
@@ -23,7 +47,7 @@ export interface HeroSectionData {
 
 export interface ProductSectionData {
   title: string;
-  subtitle: string;
+  subtitle:string;
   limit: number;
 }
 
@@ -53,7 +77,6 @@ export interface FAQSectionData {
 }
 
 export interface SectionConfig<T> {
-  template: string;
   enabled: boolean;
   data: T;
 }
@@ -70,13 +93,9 @@ export interface StoreSettings {
   fontFamily: string;
   layout: 'grid' | 'list' | 'masonry';
   headerStyle: 'classic' | 'modern' | 'minimal';
-  footerText: string;
-  contactInfo: {
-    email: string;
-    phone: string;
-    address: string;
-  };
   sections: {
+    header: SectionConfig<{ links: HeaderLink[] }>;
+    footer: SectionConfig<FooterData>;
     hero: SectionConfig<HeroSectionData>;
     featuredProducts: SectionConfig<ProductSectionData>;
     bestSellers: SectionConfig<ProductSectionData>;
