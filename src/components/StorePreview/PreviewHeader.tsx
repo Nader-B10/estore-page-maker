@@ -1,18 +1,29 @@
 import React from 'react';
-import { ShoppingCart } from 'lucide-react';
+import { MessageCircle } from 'lucide-react';
 import { StoreSettings } from '../../types/store';
+import { useStore } from '../../contexts/StoreContext';
 
 interface PreviewHeaderProps {
   settings: StoreSettings;
 }
 
 export default function PreviewHeader({ settings }: PreviewHeaderProps) {
+  const { storeData } = useStore();
+  const { whatsappSettings } = storeData;
   const { storeName, logo } = settings;
   const { header } = settings.sections;
 
   if (!header.enabled) {
     return null;
   }
+
+  const handleWhatsAppClick = () => {
+    if (!whatsappSettings.enabled) return;
+    
+    const message = `مرحباً، أريد الاستفسار عن منتجاتكم في متجر ${settings.storeName}`;
+    const whatsappUrl = `https://wa.me/${whatsappSettings.phoneNumber.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
+  };
 
   return (
     <header className="bg-white shadow-sm border-b border-gray-200 p-4 sticky top-0 z-20">
@@ -26,8 +37,12 @@ export default function PreviewHeader({ settings }: PreviewHeaderProps) {
             <a key={link.id} href={link.link} className="text-gray-600 hover:text-gray-900">{link.text}</a>
           ))}
         </nav>
-        <button className="text-gray-700" aria-label="Shopping Cart">
-          <ShoppingCart size={24} />
+        <button 
+          onClick={handleWhatsAppClick}
+          className={`${whatsappSettings.enabled ? 'text-green-600 hover:text-green-700' : 'text-gray-700'}`} 
+          aria-label={whatsappSettings.enabled ? 'WhatsApp Contact' : 'Contact'}
+        >
+          <MessageCircle size={24} />
         </button>
       </div>
     </header>

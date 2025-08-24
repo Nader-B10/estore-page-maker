@@ -1,7 +1,15 @@
 import { Product, StoreData, StoreSettings } from '../../../types/store';
 import { generateIconHTML } from '../iconGenerator';
 
-const generateProductCardHTML = (product: Product, settings: StoreSettings): string => `
+const generateProductCardHTML = (product: Product, settings: StoreSettings, whatsappSettings: any): string => {
+  const whatsappMessage = whatsappSettings.enabled ? whatsappSettings.messageTemplate
+    .replace('{productName}', product.name)
+    .replace('{price}', product.price.toString())
+    .replace('{description}', product.description)
+    .replace('{productUrl}', typeof window !== 'undefined' ? window.location.href : '')
+    .replace('{storeName}', settings.storeName) : '';
+
+  return `
   <div class="bg-surface rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow group border border-gray-200/10 flex flex-col" data-product-id="${product.id}">
     <div class="relative overflow-hidden aspect-square">
       <img src="${product.image}" alt="${product.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" />
@@ -18,16 +26,22 @@ const generateProductCardHTML = (product: Product, settings: StoreSettings): str
           <span class="text-xl font-bold" style="color: ${settings.primaryColor};">${product.price} ر.س</span>
           ${product.originalPrice && product.originalPrice > product.price ? `<span class="text-sm text-subtle-text line-through">${product.originalPrice} ر.س</span>` : ''}
         </div>
-        <button class="add-to-cart-btn px-4 py-2 text-white rounded-lg hover:opacity-90 transition-opacity" style="background-color: ${settings.secondaryColor};">
-          أضف للسلة
+        <button 
+          class="whatsapp-buy-btn px-4 py-2 text-white rounded-lg hover:opacity-90 transition-opacity flex items-center gap-2" 
+          style="background-color: ${whatsappSettings.enabled ? '#25D366' : settings.secondaryColor};"
+          data-phone="${whatsappSettings.phoneNumber || ''}"
+          data-message="${whatsappMessage}"
+        >
+          ${whatsappSettings.enabled ? `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21l1.9-5.7a8.5 8.5 0 1 1 3.8 3.8z"/><path d="M12 7v5l3 3"/></svg>` : ''}
+          ${whatsappSettings.enabled ? whatsappSettings.buttonText : 'أضف للسلة'}
         </button>
       </div>
     </div>
   </div>
-`;
+`};
 
 export const generateProductSectionHTML = (storeData: StoreData, sectionKey: 'featuredProducts' | 'bestSellers' | 'onSale' | 'allProducts'): string => {
-  const { settings, products } = storeData;
+  const { settings, products, whatsappSettings } = storeData;
   const sectionConfig = settings.sections[sectionKey];
 
   if (!sectionConfig.enabled) {
@@ -61,7 +75,7 @@ export const generateProductSectionHTML = (storeData: StoreData, sectionKey: 'fe
   
   const contentHTML = sectionProducts.length > 0
     ? `<div class="grid ${layoutClass} gap-6">
-        ${sectionProducts.map(p => generateProductCardHTML(p, settings)).join('')}
+        ${sectionProducts.map(p => generateProductCardHTML(p, settings, whatsappSettings)).join('')}
       </div>`
     : `<div class="py-10 border-2 border-dashed border-gray-400/30 rounded-lg text-center bg-surface/50">
         <div class="w-12 h-12 bg-gray-500/10 rounded-full flex items-center justify-center mx-auto mb-4" style="color: var(--subtle-text-color);">

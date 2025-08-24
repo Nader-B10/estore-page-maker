@@ -22,13 +22,31 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Add to cart alert using event delegation
+  // WhatsApp purchase functionality using event delegation
   document.body.addEventListener('click', (event) => {
-    const button = event.target.closest('.add-to-cart-btn');
+    const button = event.target.closest('.whatsapp-buy-btn');
     if (button) {
-      const card = event.target.closest('[data-product-id]');
-      const productName = card ? card.querySelector('h3')?.textContent || 'المنتج' : 'المنتج';
-      alert(\`تمت إضافة "\${productName}" إلى السلة (وظيفة تجريبية)\`);
+      const phoneNumber = button.dataset.phone;
+      const message = button.dataset.message;
+      
+      if (phoneNumber && message) {
+        const whatsappUrl = \`https://wa.me/\${phoneNumber.replace(/[^0-9]/g, '')}?text=\${encodeURIComponent(message)}\`;
+        window.open(whatsappUrl, '_blank');
+      }
+    }
+  });
+
+  // Header WhatsApp contact
+  document.body.addEventListener('click', (event) => {
+    const button = event.target.closest('.header-whatsapp-btn');
+    if (button) {
+      const phoneNumber = button.dataset.phone;
+      const message = button.dataset.message;
+      
+      if (phoneNumber && message) {
+        const whatsappUrl = \`https://wa.me/\${phoneNumber.replace(/[^0-9]/g, '')}?text=\${encodeURIComponent(message)}\`;
+        window.open(whatsappUrl, '_blank');
+      }
     }
   });
 });

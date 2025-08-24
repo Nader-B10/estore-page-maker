@@ -75,6 +75,13 @@ export default function PagesManager() {
                       افتراضية
                     </span>
                   )}
+                  <span className={`text-xs px-2 py-1 rounded-full ${
+                    page.pageType === 'products' 
+                      ? 'bg-purple-100 text-purple-800' 
+                      : 'bg-gray-100 text-gray-800'
+                  }`}>
+                    {page.pageType === 'products' ? 'صفحة منتجات' : 'صفحة محتوى'}
+                  </span>
                   {page.showAllProducts && (
                     <span className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">
                       عرض المنتجات

@@ -1,5 +1,7 @@
 import React from 'react';
+import { MessageCircle } from 'lucide-react';
 import { Product, StoreSettings } from '../../types/store';
+import { useStore } from '../../contexts/StoreContext';
 
 interface PreviewProductCardProps {
   product: Product;
@@ -7,6 +9,23 @@ interface PreviewProductCardProps {
 }
 
 export default function PreviewProductCard({ product, settings }: PreviewProductCardProps) {
+  const { storeData } = useStore();
+  const { whatsappSettings } = storeData;
+
+  const handleWhatsAppClick = () => {
+    if (!whatsappSettings.enabled) return;
+    
+    const message = whatsappSettings.messageTemplate
+      .replace('{productName}', product.name)
+      .replace('{price}', product.price.toString())
+      .replace('{description}', product.description)
+      .replace('{productUrl}', window.location.href)
+      .replace('{storeName}', settings.storeName);
+    
+    const whatsappUrl = `https://wa.me/${whatsappSettings.phoneNumber.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
+  };
+
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow group">
       <div className="relative overflow-hidden">
@@ -36,8 +55,13 @@ export default function PreviewProductCard({ product, settings }: PreviewProduct
               <span className="text-sm text-gray-500 line-through">${product.originalPrice}</span>
             )}
           </div>
-          <button className="px-4 py-2 text-white rounded-lg hover:opacity-90 transition-opacity" style={{ backgroundColor: settings.secondaryColor }}>
-            أضف للسلة
+          <button 
+            onClick={handleWhatsAppClick}
+            className="px-4 py-2 text-white rounded-lg hover:opacity-90 transition-opacity flex items-center gap-2" 
+            style={{ backgroundColor: whatsappSettings.enabled ? '#25D366' : settings.secondaryColor }}
+          >
+            {whatsappSettings.enabled && <MessageCircle size={16} />}
+            {whatsappSettings.enabled ? whatsappSettings.buttonText : 'أضف للسلة'}
           </button>
         </div>
       </div>

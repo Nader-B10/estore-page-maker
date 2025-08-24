@@ -1,5 +1,5 @@
 import React, { createContext, useContext, ReactNode, useCallback } from 'react';
-import { StoreData, StoreSettings, Product, CustomPage } from '../types/store';
+import { StoreData, StoreSettings, Product, CustomPage, WhatsAppSettings } from '../types/store';
 import useLocalStorage from '../hooks/useLocalStorage';
 
 const defaultSettings: StoreSettings = {
@@ -120,15 +120,24 @@ const defaultPages: CustomPage[] = [
     content: 'تصفح مجموعتنا الكاملة من المنتجات المتميزة',
     isDefault: true,
     showAllProducts: true,
-    metaDescription: 'تصفح جميع منتجاتنا المتاحة بأفضل الأسعار'
+    metaDescription: 'تصفح جميع منتجاتنا المتاحة بأفضل الأسعار',
+    pageType: 'products'
   }
 ];
+
+const defaultWhatsAppSettings: WhatsAppSettings = {
+  enabled: true,
+  phoneNumber: '+966501234567',
+  messageTemplate: 'مرحباً، أريد شراء هذا المنتج:\n\n📦 *{productName}*\n💰 السعر: {price} ر.س\n📝 الوصف: {description}\n\n🔗 رابط المنتج: {productUrl}',
+  buttonText: 'اشتري عبر الواتساب'
+};
 
 interface StoreContextType {
   storeData: StoreData;
   updateSettings: (newSettings: Partial<Omit<StoreSettings, 'sections'>>) => void;
   updateSection: (sectionKey: keyof StoreSettings['sections'], newConfig: any) => void;
   updateSectionOrder: (newOrder: string[]) => void;
+  updateWhatsAppSettings: (settings: Partial<WhatsAppSettings>) => void;
   addProduct: (product: Product) => void;
   editProduct: (id: string, updatedProduct: Product) => void;
   deleteProduct: (id: string) => void;
@@ -145,7 +154,8 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
   const [storeData, setStoreData] = useLocalStorage<StoreData>(STORE_DATA_KEY, {
     settings: defaultSettings,
     products: [],
-    pages: defaultPages
+    pages: defaultPages,
+    whatsappSettings: defaultWhatsAppSettings
   });
 
   const updateSettings = useCallback((newSettings: Partial<Omit<StoreSettings, 'sections'>>) => {
@@ -179,6 +189,13 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
     setStoreData(prev => ({
       ...prev,
       settings: { ...prev.settings, sectionOrder: newOrder }
+    }));
+  }, [setStoreData]);
+
+  const updateWhatsAppSettings = useCallback((newSettings: Partial<WhatsAppSettings>) => {
+    setStoreData(prev => ({
+      ...prev,
+      whatsappSettings: { ...prev.whatsappSettings, ...newSettings }
     }));
   }, [setStoreData]);
 
@@ -229,6 +246,7 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
     updateSettings,
     updateSection,
     updateSectionOrder,
+    updateWhatsAppSettings,
     addProduct,
     editProduct,
     deleteProduct,

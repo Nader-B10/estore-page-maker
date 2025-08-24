@@ -16,6 +16,7 @@ export default function PageForm({ isOpen, onClose, onSave, editingPage }: PageF
     content: '',
     showAllProducts: false,
     metaDescription: '',
+    pageType: 'content' as 'products' | 'content',
   });
 
   useEffect(() => {
@@ -26,6 +27,7 @@ export default function PageForm({ isOpen, onClose, onSave, editingPage }: PageF
         content: editingPage.content,
         showAllProducts: editingPage.showAllProducts,
         metaDescription: editingPage.metaDescription || '',
+        pageType: editingPage.pageType || 'content',
       });
     } else {
       setFormData({
@@ -34,6 +36,7 @@ export default function PageForm({ isOpen, onClose, onSave, editingPage }: PageF
         content: '',
         showAllProducts: false,
         metaDescription: '',
+        pageType: 'content',
       });
     }
   }, [editingPage, isOpen]);
@@ -71,6 +74,7 @@ export default function PageForm({ isOpen, onClose, onSave, editingPage }: PageF
       isDefault: editingPage?.isDefault || false,
       showAllProducts: formData.showAllProducts,
       metaDescription: formData.metaDescription,
+      pageType: formData.pageType,
     };
     onSave(page);
   };
@@ -117,13 +121,28 @@ export default function PageForm({ isOpen, onClose, onSave, editingPage }: PageF
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-2">وصف الصفحة</label>
+            <label className="block text-sm font-medium mb-2">نوع الصفحة</label>
+            <select
+              value={formData.pageType}
+              onChange={(e) => setFormData(prev => ({ ...prev, pageType: e.target.value as 'products' | 'content' }))}
+              className="w-full p-2 border border-gray-300 rounded-lg"
+              disabled={editingPage?.isDefault}
+            >
+              <option value="content">صفحة محتوى نصي</option>
+              <option value="products">صفحة عرض منتجات</option>
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-2">
+              {formData.pageType === 'content' ? 'محتوى الصفحة' : 'وصف الصفحة'}
+            </label>
             <textarea
               value={formData.content}
               onChange={(e) => setFormData(prev => ({ ...prev, content: e.target.value }))}
               className="w-full p-2 border border-gray-300 rounded-lg"
-              rows={3}
-              placeholder="وصف مختصر عن محتوى الصفحة"
+              rows={formData.pageType === 'content' ? 8 : 3}
+              placeholder={formData.pageType === 'content' ? 'اكتب محتوى الصفحة هنا...' : 'وصف مختصر عن محتوى الصفحة'}
             />
           </div>
 
@@ -140,14 +159,16 @@ export default function PageForm({ isOpen, onClose, onSave, editingPage }: PageF
 
           <div className="border-t pt-4">
             <h4 className="font-medium mb-3">إعدادات العرض</h4>
-            <label className="flex items-center gap-2">
-              <input
-                type="checkbox"
-                checked={formData.showAllProducts}
-                onChange={(e) => setFormData(prev => ({ ...prev, showAllProducts: e.target.checked }))}
-              />
-              <span>عرض جميع المنتجات في هذه الصفحة</span>
-            </label>
+            {formData.pageType === 'products' && (
+              <label className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  checked={formData.showAllProducts}
+                  onChange={(e) => setFormData(prev => ({ ...prev, showAllProducts: e.target.checked }))}
+                />
+                <span>عرض جميع المنتجات في هذه الصفحة</span>
+              </label>
+            )}
           </div>
 
           <div className="flex gap-3 pt-4">

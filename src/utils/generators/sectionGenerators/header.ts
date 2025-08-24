@@ -1,7 +1,7 @@
 import { StoreData } from '../../../types/store';
 
 export const generateHeaderHTML = (storeData: StoreData): string => {
-  const { settings } = storeData;
+  const { settings, whatsappSettings } = storeData;
   const { storeName, logo } = settings;
   const { header } = settings.sections;
 
@@ -19,8 +19,13 @@ export const generateHeaderHTML = (storeData: StoreData): string => {
       <nav class="hidden md:flex gap-6">
         ${header.data.links.map(link => `<a href="${link.link}" class="text-subtle-text hover:text-text">${link.text}</a>`).join('')}
       </nav>
-      <button class="text-text" aria-label="Shopping Cart">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="m2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.16"/></svg>
+      <button 
+        class="header-whatsapp-btn ${whatsappSettings.enabled ? 'text-green-600 hover:text-green-700' : 'text-text'}" 
+        aria-label="${whatsappSettings.enabled ? 'WhatsApp Contact' : 'Contact'}"
+        data-phone="${whatsappSettings.phoneNumber || ''}"
+        data-message="${whatsappSettings.enabled ? `مرحباً، أريد الاستفسار عن منتجاتكم في متجر ${settings.storeName}` : ''}"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21l1.9-5.7a8.5 8.5 0 1 1 3.8 3.8z"/><path d="M12 7v5l3 3"/></svg>
       </button>
     </div>
   </header>`;

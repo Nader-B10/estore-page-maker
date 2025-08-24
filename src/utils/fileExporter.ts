@@ -2,6 +2,7 @@ import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
 import { StoreData } from '../types/store';
 import { generateStoreHTML, generateStoreJS, generateStaticCss } from './storeGenerator';
+import { generateAllCustomPages } from './generators/pageGenerator';
 
 // Helper to convert base64 to Blob
 const base64ToBlob = (base64: string, mimeType: string): Blob => {
@@ -86,6 +87,12 @@ export const exportStore = async (storeData: StoreData) => {
   // Create JS file in the root
   const jsContent = generateStoreJS();
   zip.file('main.js', jsContent);
+
+  // Generate custom pages
+  const customPages = generateAllCustomPages(exportData);
+  Object.entries(customPages).forEach(([filename, content]) => {
+    zip.file(filename, content);
+  });
 
   try {
     const blob = await zip.generateAsync({ type: 'blob' });

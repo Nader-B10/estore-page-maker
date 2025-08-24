@@ -122,10 +122,19 @@ export interface CustomPage {
   isDefault: boolean;
   showAllProducts: boolean;
   metaDescription?: string;
+  pageType: 'products' | 'content';
+}
+
+export interface WhatsAppSettings {
+  enabled: boolean;
+  phoneNumber: string;
+  messageTemplate: string;
+  buttonText: string;
 }
 
 export interface StoreData {
   settings: StoreSettings;
   products: Product[];
   pages: CustomPage[];
+  whatsappSettings: WhatsAppSettings;
 }
