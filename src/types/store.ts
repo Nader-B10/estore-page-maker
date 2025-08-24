@@ -89,6 +89,7 @@ export interface ContactInfo {
 
 export interface StoreSettings {
   theme: string;
+  currentTemplate: string;
   storeName: string;
   description: string;
   logo: string;

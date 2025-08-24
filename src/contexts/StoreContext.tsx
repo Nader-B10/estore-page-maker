@@ -4,6 +4,7 @@ import useLocalStorage from '../hooks/useLocalStorage';
 
 const defaultSettings: StoreSettings = {
   theme: 'oceanic-blue',
+  currentTemplate: 'default',
   storeName: 'متجري الإلكتروني',
   description: 'أفضل المنتجات بأسعار منافسة',
   logo: '',

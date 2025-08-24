@@ -1,7 +1,7 @@
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
 import { StoreData } from '../types/store';
-import { generateStoreHTML, generateStoreJS, generateStaticCss } from './storeGenerator';
+import { getTemplate } from '../templates/registry';
 import { generateAllCustomPages } from './generators/pageGenerator';
 
 // Helper to convert base64 to Blob
@@ -76,16 +76,22 @@ export const exportStore = async (storeData: StoreData) => {
     heroSection.data.backgroundImage = `images/${fileName}`;
   }
 
-  // Create CSS file
-  const cssContent = generateStaticCss(exportData);
+  // Get current template and generate files using template generator
+  const currentTemplate = exportData.settings.currentTemplate || 'default';
+  const templateData = getTemplate(currentTemplate);
+  
+  // Create CSS file using template generator
+  const cssContent = templateData.generator.generateCSS(exportData);
   zip.file('styles.css', cssContent);
 
-  // Create main HTML file
-  const htmlContent = generateStoreHTML(exportData);
+  // Create main HTML file using template generator
+  const htmlContent = templateData.generator.generateHTML(exportData);
   zip.file('index.html', htmlContent);
 
-  // Create JS file in the root
-  const jsContent = generateStoreJS();
+  // Create JS file using template generator
+  const jsContent = templateData.generator.generateJS ? 
+    templateData.generator.generateJS(exportData) : 
+    '';
   zip.file('main.js', jsContent);
 
   // Generate custom pages

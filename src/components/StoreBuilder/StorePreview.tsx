@@ -1,6 +1,8 @@
 import React from 'react';
 import { ExternalLink } from 'lucide-react';
 import { useStore } from '../../contexts/StoreContext';
+import { useTemplate } from '../../contexts/TemplateContext';
+import { getTemplate } from '../../templates/registry';
 import { themes } from '../../themes/palettes';
 import { CustomPage } from '../../types/store';
 
@@ -15,7 +17,12 @@ import StorePreviewPage from '../StorePreview/StorePreviewPage';
 
 export default function StorePreview() {
   const { storeData } = useStore();
+  const { currentTemplate } = useTemplate();
   const { settings, products, pages } = storeData;
+  
+  // الحصول على القالب الحالي ومكوناته
+  const templateData = getTemplate(currentTemplate);
+  const { previewComponents } = templateData;
   
   const currentTheme = themes.find(t => t.name === settings.theme) || themes[0];
   const [selectedPage, setSelectedPage] = React.useState<CustomPage | null>(null);
@@ -43,15 +50,69 @@ export default function StorePreview() {
   const onSale = products.filter(p => p.isOnSale).slice(0, settings.sections.onSale.data.limit);
   const allProducts = products;
 
-  // Create section components map
+  // Create section components map using template components
   const sectionComponents: { [key: string]: { enabled: boolean; component: React.ReactNode } } = {
-    hero: { enabled: settings.sections.hero.enabled, component: <PreviewHero settings={settings} /> },
-    featuredProducts: { enabled: settings.sections.featuredProducts.enabled, component: <PreviewProductSection title={settings.sections.featuredProducts.data.title} subtitle={settings.sections.featuredProducts.data.subtitle} products={featuredProducts} settings={settings} /> },
-    bestSellers: { enabled: settings.sections.bestSellers.enabled, component: <PreviewProductSection title={settings.sections.bestSellers.data.title} subtitle={settings.sections.bestSellers.data.subtitle} products={bestSellers} settings={settings} /> },
-    onSale: { enabled: settings.sections.onSale.enabled, component: <PreviewProductSection title={settings.sections.onSale.data.title} subtitle={settings.sections.onSale.data.subtitle} products={onSale} settings={settings} /> },
-    whyChooseUs: { enabled: settings.sections.whyChooseUs.enabled, component: <PreviewWhyChooseUs settings={settings} /> },
-    faq: { enabled: settings.sections.faq.enabled, component: <PreviewFAQ settings={settings} /> },
-    allProducts: { enabled: settings.sections.allProducts.enabled, component: <PreviewProductSection title={settings.sections.allProducts.data.title} subtitle={settings.sections.allProducts.data.subtitle} products={allProducts} settings={settings} /> },
+    hero: { 
+      enabled: settings.sections.hero.enabled, 
+      component: <previewComponents.Hero settings={settings} /> 
+    },
+    featuredProducts: { 
+      enabled: settings.sections.featuredProducts.enabled, 
+      component: <previewComponents.ProductSection 
+        title={settings.sections.featuredProducts.data.title} 
+        subtitle={settings.sections.featuredProducts.data.subtitle} 
+        products={featuredProducts} 
+        settings={settings}
+        sectionType="featuredProducts"
+      /> 
+    },
+    bestSellers: { 
+      enabled: settings.sections.bestSellers.enabled, 
+      component: <previewComponents.ProductSection 
+        title={settings.sections.bestSellers.data.title} 
+        subtitle={settings.sections.bestSellers.data.subtitle} 
+        products={bestSellers} 
+        settings={settings}
+        sectionType="bestSellers"
+      /> 
+    },
+    onSale: { 
+      enabled: settings.sections.onSale.enabled, 
+      component: <previewComponents.ProductSection 
+        title={settings.sections.onSale.data.title} 
+        subtitle={settings.sections.onSale.data.subtitle} 
+        products={onSale} 
+        settings={settings}
+        sectionType="onSale"
+      /> 
+    },
+    whyChooseUs: { 
+      enabled: settings.sections.whyChooseUs.enabled, 
+      component: <previewComponents.WhyChooseUs settings={settings} /> 
+    },
+    faq: { 
+      enabled: settings.sections.faq.enabled, 
+      component: <previewComponents.FAQ settings={settings} /> 
+    },
+    allProducts: { 
+      enabled: settings.sections.allProducts.enabled, 
+      component: <previewComponents.ProductSection 
+        title={settings.sections.allProducts.data.title} 
+        subtitle={settings.sections.allProducts.data.subtitle} 
+        products={allProducts} 
+        settings={settings}
+        sectionType="allProducts"
+      /> 
+    },
+    // أقسام مخصصة للقوالب
+    testimonials: {
+      enabled: true,
+      component: previewComponents.Testimonials ? <previewComponents.Testimonials settings={settings} /> : null
+    },
+    cta: {
+      enabled: true,
+      component: previewComponents.CTA ? <previewComponents.CTA settings={settings} /> : null
+    },
   };
 
   // Create ordered sections based on sectionOrder
@@ -91,13 +152,13 @@ export default function StorePreview() {
           backgroundColor: currentTheme.colors.background, 
           color: currentTheme.colors.text 
       }}>
-        <PreviewHeader settings={settings} />
+        <previewComponents.Header settings={settings} />
 
         <main>
           {orderedSections.map(section => section.enabled && <React.Fragment key={section.key}>{section.component}</React.Fragment>)}
         </main>
 
-        <PreviewFooter settings={settings} />
+        <previewComponents.Footer settings={settings} />
       </div>
     </div>
   );
