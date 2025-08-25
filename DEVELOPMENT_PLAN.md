@@ -863,7 +863,6 @@ src/
 - [ ] دليل المستخدم
 - [ ] API Documentation
 - [ ] Component Storybook
-- [ ] Video Tutorials
 
 ### 🚀 استراتيجية النشر
 - [ ] إعداد CI/CD Pipeline
