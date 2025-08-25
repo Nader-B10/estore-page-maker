@@ -133,6 +133,8 @@ const defaultWhatsAppSettings: WhatsAppSettings = {
   buttonText: 'اشتري عبر الواتساب'
 };
 
+export { defaultWhatsAppSettings };
+
 interface StoreContextType {
   storeData: StoreData;
   updateSettings: (newSettings: Partial<Omit<StoreSettings, 'sections'>>) => void;

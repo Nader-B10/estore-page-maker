@@ -1,10 +1,11 @@
 import React from 'react';
 import { MessageCircle, Phone } from 'lucide-react';
 import { useStore } from '../../contexts/StoreContext';
+import { defaultWhatsAppSettings } from '../../contexts/StoreContext';
 
 export default function WhatsAppSettings() {
   const { storeData, updateWhatsAppSettings } = useStore();
-  const { whatsappSettings } = storeData;
+  const { whatsappSettings = defaultWhatsAppSettings } = storeData;
 
   const handleChange = (field: string, value: any) => {
     updateWhatsAppSettings({ [field]: value });

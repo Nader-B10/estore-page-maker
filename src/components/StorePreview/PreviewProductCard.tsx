@@ -2,6 +2,7 @@ import React from 'react';
 import { MessageCircle } from 'lucide-react';
 import { Product, StoreSettings } from '../../types/store';
 import { useStore } from '../../contexts/StoreContext';
+import { defaultWhatsAppSettings } from '../../contexts/StoreContext';
 
 interface PreviewProductCardProps {
   product: Product;
@@ -10,7 +11,7 @@ interface PreviewProductCardProps {
 
 export default function PreviewProductCard({ product, settings }: PreviewProductCardProps) {
   const { storeData } = useStore();
-  const { whatsappSettings } = storeData;
+  const { whatsappSettings = defaultWhatsAppSettings } = storeData;
 
   const handleWhatsAppClick = () => {
     if (!whatsappSettings.enabled) return;
