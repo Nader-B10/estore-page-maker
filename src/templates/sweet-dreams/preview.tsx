@@ -358,9 +358,7 @@ const SweetDreamsFooter: React.FC<{ settings: StoreSettings }> = ({ settings }) 
                 <p>البريد: <a href={`mailto:${footer.data.contactInfo.email}`} className="text-pink-400 hover:text-pink-300">{footer.data.contactInfo.email}</a></p>
               )}
               {footer.data.contactInfo.phone && <p>الهاتف: {footer.data.contactInfo.phone}</p>}
-              }
               {footer.data.contactInfo.address && <p>العنوان: {footer.data.contactInfo.address}</p>}
-              }
             </div>
           </div>
         </div>
