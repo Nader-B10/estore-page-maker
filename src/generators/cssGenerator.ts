@@ -1,7 +1,14 @@
 import { StoreData } from '../types/store';
 import { getThemeById } from '../types/theme';
+import { generateEnhancedStoreCSS } from './enhancedCssGenerator';
 
 export const generateStoreCSS = (storeData: StoreData): string => {
+  // استخدام CSS المحسن الجديد
+  return generateEnhancedStoreCSS(storeData);
+};
+
+// الاحتفاظ بالدالة القديمة للتوافق مع الإصدارات السابقة
+export const generateBasicStoreCSS = (storeData: StoreData): string => {
   const { settings } = storeData;
   const currentTheme = getThemeById(settings.themeId);
 

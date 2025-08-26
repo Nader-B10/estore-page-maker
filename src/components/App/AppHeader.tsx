@@ -53,16 +53,17 @@ export default function AppHeader({
               <button
                 onClick={onSaveNow}
                 className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-blue-700 transition-colors"
-                title="حفظ فوري"
+                className="bg-gradient-to-r from-green-600 to-green-700 text-white px-6 py-3 rounded-lg flex items-center gap-2 hover:from-green-700 hover:to-green-800 transition-all duration-200 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
+                title="تصدير المتجر باستخدام ReactDOMServer"
               >
                 <Save className="w-4 h-4" />
                 حفظ
               </button>
-            )}
+                    جاري التحويل إلى HTML...
 
             {/* Data Management Dropdown */}
             <div className="relative group">
-              <button className="bg-gray-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-gray-700 transition-colors">
+                    تصدير HTML ثابت
                 <Package className="w-4 h-4" />
                 إدارة البيانات
               </button>

@@ -1,4 +1,12 @@
+import { generateEnhancedStoreJS } from './enhancedJsGenerator';
+
 export const generateStoreJS = (): string => {
+  // استخدام JavaScript المحسن الجديد
+  return generateEnhancedStoreJS();
+};
+
+// الاحتفاظ بالدالة القديمة للتوافق مع الإصدارات السابقة
+export const generateBasicStoreJS = (): string => {
   return `// Store JavaScript Functionality
 class Store {
     constructor() {
