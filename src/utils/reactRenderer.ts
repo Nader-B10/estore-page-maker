@@ -1,6 +1,8 @@
 import { renderToStaticMarkup } from 'react-dom/server';
 import { createElement } from 'react';
 import { StoreData, StoreSettings, Product, CustomPage } from '../types';
+import ProductDetailPage from '../components/Products/ProductDetailPage';
+import ProductsPage from '../components/Products/ProductsPage';
 import { 
   getHeaderComponent, 
   getFooterComponent, 
@@ -286,8 +288,6 @@ export const renderProductDetailPageToHTML = (
   settings: StoreSettings, 
   relatedProducts: Product[] = []
 ): string => {
-  // استخدام مكون ProductDetailPage الموجود
-  const ProductDetailPage = require('../components/Products/ProductDetailPage').default;
   const pageElement = createElement(ProductDetailPage, { 
     product, 
     storeData: { settings, products: relatedProducts, customPages: [] },
@@ -301,8 +301,6 @@ export const renderProductDetailPageToHTML = (
  * تحويل صفحة المنتجات إلى HTML ثابت
  */
 export const renderProductsPageToHTML = (storeData: StoreData): string => {
-  // استخدام مكون ProductsPage الموجود
-  const ProductsPage = require('../components/Products/ProductsPage').default;
   const pageElement = createElement(ProductsPage, { storeData });
   
   return renderComponentToHTML(pageElement);
