@@ -44,27 +44,28 @@ export default function AccordionFAQ({ settings }: AccordionFAQProps) {
           {faq.items.map((item, index) => {
             const isOpen = openItems.includes(item.id);
             return (
-              <div 
+              <div
                 key={item.id} 
-                className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-shadow duration-300"
+                className="faq-item bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-shadow duration-300"
               >
                 <button
                   onClick={() => toggleItem(item.id)}
-                  className="w-full px-8 py-6 text-right flex justify-between items-center hover:bg-gray-50 transition-colors duration-200"
+                  className="faq-question w-full px-8 py-6 text-right flex justify-between items-center hover:bg-gray-50 transition-colors duration-200"
+                  onclick={`toggleFAQ(${index})`}
                 >
                   <span className="font-semibold text-lg text-gray-800 flex-1">
                     {item.question}
                   </span>
                   <ChevronDown 
                     size={24} 
-                    className={`transform transition-transform duration-300 flex-shrink-0 ml-4 ${
+                    className={`faq-icon transform transition-transform duration-300 flex-shrink-0 ml-4 ${
                       isOpen ? 'rotate-180' : ''
                     }`}
                     style={{ color: settings.primaryColor }}
                   />
                 </button>
                 
-                <div className={`overflow-hidden transition-all duration-300 ${
+                <div className={`faq-answer overflow-hidden transition-all duration-300 ${
                   isOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
                 }`}>
                   <div className="px-8 pb-6">

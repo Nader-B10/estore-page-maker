@@ -25,7 +25,7 @@ export default function SimpleFAQ({ settings }: SimpleFAQProps) {
 
         <div className="space-y-8">
           {faq.items.map((item, index) => (
-            <div key={item.id} className="border-b border-gray-200 pb-8 last:border-b-0">
+            <div key={item.id} className="faq-item border-b border-gray-200 pb-8 last:border-b-0">
               <div className="flex items-start gap-4">
                 <div 
                   className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 mt-1"
@@ -34,12 +34,17 @@ export default function SimpleFAQ({ settings }: SimpleFAQProps) {
                   <HelpCircle size={16} style={{ color: settings.primaryColor }} />
                 </div>
                 <div className="flex-1">
-                  <h3 className="font-semibold text-lg mb-3" style={{ color: settings.primaryColor }}>
+                  <h3 className="faq-question font-semibold text-lg mb-3 cursor-pointer" style={{ color: settings.primaryColor }} onclick={`toggleFAQ(${index})`}>
                     {item.question}
+                    <svg class="faq-icon w-5 h-5 inline-block ml-2 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
                   </h3>
-                  <p className="text-gray-600 leading-relaxed">
+                  <div className="faq-answer" style="max-height: 0; overflow: hidden; transition: max-height 0.3s ease, opacity 0.3s ease; opacity: 0;">
+                    <p className="text-gray-600 leading-relaxed">
                     {item.answer}
-                  </p>
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
