@@ -35,7 +35,7 @@ export const generateHeaderHTML = (templateId: string, settings: StoreSettings):
               </div>
               <nav class="hidden md:flex items-center gap-8">
                 ${settings.headerLinks.filter(link => link.isVisible).map(link => `
-                  <a href="${link.url}" class="text-white hover:text-opacity-80 transition-all duration-200 font-medium relative group" ${link.type === 'external' ? 'target="_blank" rel="noopener noreferrer"' : link.type === 'internal' ? `onclick="scrollToSection('${link.url.replace('#', '')}'); return false;"` : link.type === 'page' ? `onclick="navigateToPage('${link.url.replace('/', '').replace('#', '')}'); return false;"` : ''}>
+                  <a href="${link.url}" class="text-white hover:text-opacity-80 transition-all duration-200 font-medium relative group" ${link.type === 'external' ? 'target="_blank" rel="noopener noreferrer"' : link.type === 'internal' ? `data-scroll-to="${link.url.replace('#', '')}"` : link.type === 'page' ? `data-navigate="page" data-value="${link.url.replace('/', '').replace('#', '')}"` : ''}>
                     ${link.text}
                     <div class="absolute -bottom-1 left-0 w-0 h-0.5 bg-white/60 group-hover:w-full transition-all duration-300"></div>
                   </a>
@@ -77,13 +77,13 @@ export const generateHeaderHTML = (templateId: string, settings: StoreSettings):
               <div class="mb-6">
                 <div class="relative max-w-2xl mx-auto">
                   <input type="text" placeholder="ابحث عن المنتجات..." class="w-full pl-12 pr-6 py-4 border-2 border-gray-200 rounded-full focus:outline-none focus:border-blue-500 text-lg" />
-                  <button onclick="performSearch()" class="absolute left-2 top-1/2 transform -translate-y-1/2 px-6 py-2 rounded-full text-white font-medium" style="background-color: ${settings.primaryColor}">بحث</button>
+                  <button data-action="search" class="absolute left-2 top-1/2 transform -translate-y-1/2 px-6 py-2 rounded-full text-white font-medium" style="background-color: ${settings.primaryColor}">بحث</button>
                 </div>
               </div>
               <nav class="flex justify-center">
                 <div class="flex items-center gap-8 bg-gray-50 px-8 py-4 rounded-full">
                   ${settings.headerLinks.filter(link => link.isVisible).map(link => `
-                    <a href="${link.url}" class="text-gray-700 hover:text-blue-600 transition-colors font-medium text-lg relative group" ${link.type === 'external' ? 'target="_blank" rel="noopener noreferrer"' : link.type === 'internal' ? `onclick="scrollToSection('${link.url.replace('#', '')}'); return false;"` : link.type === 'page' ? `onclick="navigateToPage('${link.url.replace('/', '').replace('#', '')}'); return false;"` : ''}>
+                    <a href="${link.url}" class="text-gray-700 hover:text-blue-600 transition-colors font-medium text-lg relative group" ${link.type === 'external' ? 'target="_blank" rel="noopener noreferrer"' : link.type === 'internal' ? `data-scroll-to="${link.url.replace('#', '')}"` : link.type === 'page' ? `data-navigate="page" data-value="${link.url.replace('/', '').replace('#', '')}"` : ''}>
                       ${link.text}
                     </a>
                   `).join('')}
@@ -108,7 +108,7 @@ export const generateHeaderHTML = (templateId: string, settings: StoreSettings):
               </div>
               <nav class="hidden md:flex items-center gap-6">
                 ${settings.headerLinks.filter(link => link.isVisible).map(link => `
-                  <a href="${link.url}" class="text-white hover:opacity-80 transition-opacity font-medium" ${link.type === 'external' ? 'target="_blank" rel="noopener noreferrer"' : link.type === 'internal' ? `onclick="scrollToSection('${link.url.replace('#', '')}'); return false;"` : link.type === 'page' ? `onclick="navigateToPage('${link.url.replace('/', '').replace('#', '')}'); return false;"` : ''}>
+                  <a href="${link.url}" class="text-white hover:opacity-80 transition-opacity font-medium" ${link.type === 'external' ? 'target="_blank" rel="noopener noreferrer"' : link.type === 'internal' ? `data-scroll-to="${link.url.replace('#', '')}"` : link.type === 'page' ? `data-navigate="page" data-value="${link.url.replace('/', '').replace('#', '')}"` : ''}>
                     ${link.text}
                   </a>
                 `).join('')}
@@ -125,3 +125,4 @@ export const generateHeaderHTML = (templateId: string, settings: StoreSettings):
       `;
   }
 };
+                  <button data-action="search" class="absolute left-2 top-1/2 transform -translate-y-1/2 px-6 py-2 rounded-full text-white font-medium" style="background-color: ${settings.primaryColor}">بحث</button>

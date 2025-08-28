@@ -73,7 +73,7 @@ export const renderProductSectionToHTML = (
   };
 
   const generateProductCardHTML = (product: Product) => `
-    <div class="product-card bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 group transform hover:-translate-y-2 cursor-pointer" onclick="navigateToProduct('${product.id}')">
+    <div class="product-card bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 group transform hover:-translate-y-2 cursor-pointer" data-product-id="${product.id}">
       <div class="relative overflow-hidden">
         <img src="images/${product.id}.jpg" alt="${product.name}" class="w-full h-56 object-cover group-hover:scale-110 transition-transform duration-500" />
         
@@ -90,8 +90,8 @@ export const renderProductSectionToHTML = (
       </div>
 
       <div class="p-6">
-        <h3 class="font-bold text-xl mb-3 text-gray-800 group-hover:text-blue-600 transition-colors">${product.name}</h3>
-        <p class="text-gray-600 mb-4 line-clamp-2 leading-relaxed">${product.description}</p>
+        <h3 class="product-title font-bold text-xl mb-3 text-gray-800 group-hover:text-blue-600 transition-colors">${product.name}</h3>
+        <p class="product-description text-gray-600 mb-4 line-clamp-2 leading-relaxed">${product.description}</p>
         
         <div class="flex justify-between items-center">
           <div class="flex flex-col">
@@ -150,7 +150,7 @@ export const renderProductSectionToHTML = (
         </div>
 
         <div class="text-center">
-          <button onclick="navigateToProducts('${getFilterParam()}')" class="inline-flex items-center gap-3 px-8 py-4 rounded-full font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg text-lg" style="background-color: ${getSectionColor()}10; color: ${getSectionColor()}; border: 2px solid ${getSectionColor()}20">
+          <button data-navigate="products" data-value="${getFilterParam()}" class="inline-flex items-center gap-3 px-8 py-4 rounded-full font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg text-lg" style="background-color: ${getSectionColor()}10; color: ${getSectionColor()}; border: 2px solid ${getSectionColor()}20">
             <span>عرض جميع ${sectionConfig.title}</span>
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
@@ -235,7 +235,7 @@ export const renderProductsPageToHTML = (storeData: StoreData): string => {
   const { settings, products } = storeData;
   
   const generateProductHTML = (product: Product) => `
-    <div class="product-card bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow cursor-pointer" onclick="navigateToProduct('${product.id}')">
+    <div class="product-card bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow cursor-pointer" data-product-id="${product.id}">
       <div class="product-image relative">
         <img src="images/${product.id}.jpg" alt="${product.name}" class="w-full h-48 object-cover hover:scale-105 transition-transform duration-300" />
         <div class="product-badges absolute top-2 right-2 flex flex-col gap-1">
@@ -343,16 +343,16 @@ export const renderProductsPageToHTML = (storeData: StoreData): string => {
     <div class="max-w-7xl mx-auto px-4 py-8">
         <!-- Filter Buttons -->
         <div class="flex flex-wrap gap-4 mb-8">
-            <button onclick="filterProducts('all')" class="filter-btn active px-6 py-2 rounded-full font-medium transition-colors" style="background-color: ${settings.primaryColor}; color: white;">
+            <button data-filter="all" class="filter-btn active px-6 py-2 rounded-full font-medium transition-colors" style="background-color: ${settings.primaryColor}; color: white;">
                 جميع المنتجات
             </button>
-            <button onclick="filterProducts('featured')" class="filter-btn px-6 py-2 rounded-full font-medium border-2 transition-colors" style="border-color: ${settings.primaryColor}; color: ${settings.primaryColor};">
+            <button data-filter="featured" class="filter-btn px-6 py-2 rounded-full font-medium border-2 transition-colors" style="border-color: ${settings.primaryColor}; color: ${settings.primaryColor};">
                 المنتجات المميزة
             </button>
-            <button onclick="filterProducts('bestsellers')" class="filter-btn px-6 py-2 rounded-full font-medium border-2 transition-colors" style="border-color: ${settings.secondaryColor}; color: ${settings.secondaryColor};">
+            <button data-filter="bestsellers" class="filter-btn px-6 py-2 rounded-full font-medium border-2 transition-colors" style="border-color: ${settings.secondaryColor}; color: ${settings.secondaryColor};">
                 الأعلى مبيعاً
             </button>
-            <button onclick="filterProducts('onsale')" class="filter-btn px-6 py-2 rounded-full font-medium border-2 transition-colors" style="border-color: ${settings.accentColor}; color: ${settings.accentColor};">
+            <button data-filter="onsale" class="filter-btn px-6 py-2 rounded-full font-medium border-2 transition-colors" style="border-color: ${settings.accentColor}; color: ${settings.accentColor};">
                 العروض والتخفيضات
             </button>
         </div>
@@ -467,7 +467,7 @@ export const renderProductDetailPageToHTML = (
                     </button>
                     
                     ${productDetailSettings.showShareButton ? `
-                        <button onclick="shareProduct()" class="flex items-center gap-2 text-gray-600 hover:text-gray-800 px-4 py-2 border border-gray-300 rounded-lg transition-colors">
+                        <button data-action="share" class="flex items-center gap-2 text-gray-600 hover:text-gray-800 px-4 py-2 border border-gray-300 rounded-lg transition-colors">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z"></path></svg>
                             مشاركة
                         </button>
@@ -574,14 +574,14 @@ export const renderProductDetailPageToHTML = (
                                 <p class="text-sm text-gray-600">ضمان لمدة سنة</p>
                             </div>
                         </div>
-                        
+                    <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow cursor-pointer" data-product-id="${relatedProduct.id}">
                         <div class="flex items-center gap-3 text-center">
                             <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
-                                <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
-                            </div>
+                            <h3 class="product-title font-semibold text-lg mb-2 hover:text-blue-600 transition-colors">${relatedProduct.name}</h3>
+                            <p class="product-description text-gray-600 text-sm mb-3 line-clamp-2">${relatedProduct.description}</p>
                             <div>
                                 <p class="font-semibold text-gray-900">إرجاع مجاني</p>
-                                <p class="text-sm text-gray-600">خلال 30 يوم</p>
+                                <button data-navigate="product" data-value="${relatedProduct.id}" class="text-blue-600 hover:text-blue-800 text-sm font-medium">عرض التفاصيل</button>
                             </div>
                         </div>
                     </div>
@@ -602,7 +602,7 @@ export const renderProductDetailPageToHTML = (
                     `}
 
                     ${productDetailSettings.showFavoriteButton ? `
-                        <button class="w-full flex items-center justify-center gap-3 border-2 border-gray-300 text-gray-700 hover:bg-gray-50 px-8 py-4 rounded-xl transition-colors text-lg font-semibold">
+                        <button data-action="favorite" data-product-id="${product.id}" class="w-full flex items-center justify-center gap-3 border-2 border-gray-300 text-gray-700 hover:bg-gray-50 px-8 py-4 rounded-xl transition-colors text-lg font-semibold">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
                             إضافة للمفضلة
                         </button>
@@ -689,6 +689,9 @@ export const renderCustomPageToHTML = (page: CustomPage, settings: StoreSettings
                 </div>
                 
                 <button onclick="navigateToHome()" class="flex items-center gap-2 text-gray-600 hover:text-gray-800 px-4 py-2 border border-gray-300 rounded-lg transition-colors">
+                <button data-navigate="home" class="flex items-center gap-2 text-gray-600 hover:text-gray-800 px-4 py-2 border border-gray-300 rounded-lg transition-colors">
+                <button data-navigate="home" class="flex items-center gap-2 text-gray-600 hover:text-gray-800 px-4 py-2 border border-gray-300 rounded-lg transition-colors">
+                <button data-navigate="home" class="flex items-center gap-2 text-gray-600 hover:text-gray-800 px-4 py-2 border border-gray-300 rounded-lg transition-colors">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
                     العودة للرئيسية
                 </button>
