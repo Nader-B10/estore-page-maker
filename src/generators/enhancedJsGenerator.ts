@@ -77,7 +77,7 @@ class InteractiveStore {
     }
 
     handleNavigation(type, value) {
-        console.log(`🧭 Navigation: ${type} -> ${value}`);
+        console.log(\`🧭 Navigation: \${type} -> \${value}\`);
         
         switch (type) {
             case 'home':
@@ -112,22 +112,22 @@ class InteractiveStore {
     }
 
     navigateToProducts(filter = 'all') {
-        const url = filter && filter !== 'all' ? `products.html?filter=${filter}` : 'products.html';
+        const url = filter && filter !== 'all' ? \`products.html?filter=\${filter}\` : 'products.html';
         window.location.href = url;
     }
 
     navigateToProduct(productId) {
-        window.location.href = `product-${productId}.html`;
+        window.location.href = \`product-\${productId}.html\`;
     }
 
     navigateToPage(slug) {
-        window.location.href = `${slug}.html`;
+        window.location.href = \`\${slug}.html\`;
     }
 
     scrollToSection(sectionId) {
         const element = document.getElementById(sectionId) || 
-                      document.querySelector(`[data-section="${sectionId}"]`) ||
-                      document.querySelector(`.${sectionId}`);
+                      document.querySelector(\`[data-section="\${sectionId}"]\`) ||
+                      document.querySelector(\`.\${sectionId}\`);
         
         if (element) {
             const headerHeight = document.querySelector('header')?.offsetHeight || 0;
@@ -138,9 +138,9 @@ class InteractiveStore {
                 behavior: 'smooth'
             });
             
-            console.log(`📍 Scrolled to section: ${sectionId}`);
+            console.log(\`📍 Scrolled to section: \${sectionId}\`);
         } else {
-            console.warn(`Section not found: ${sectionId}`);
+            console.warn(\`Section not found: \${sectionId}\`);
         }
     }
 
@@ -198,7 +198,7 @@ class InteractiveStore {
                         faqItem?.classList.add('active');
                     }
                     
-                    console.log(`❓ FAQ toggled: ${isOpen ? 'closed' : 'opened'}`);
+                    console.log(\`❓ FAQ toggled: \${isOpen ? 'closed' : 'opened'}\`);
                 }
             }
         });
@@ -285,7 +285,7 @@ class InteractiveStore {
                 if (filterBtn) {
                     this.updateActiveFilterButton(filterBtn);
                 }
-                const filterBtn = document.querySelector(`[data-filter="${initialFilter}"]`);
+                const filterBtn = document.querySelector(\`[data-filter="\${initialFilter}"]\`);
                 if (filterBtn) {
                     this.updateActiveFilterButton(filterBtn);
                 }
@@ -307,7 +307,7 @@ class InteractiveStore {
             
             if (shouldShow) {
                 product.style.display = 'block';
-                product.style.animation = `fadeInUp 0.5s ease-out ${index * 0.1}s forwards`;
+                product.style.animation = \`fadeInUp 0.5s ease-out \${index * 0.1}s forwards\`;
                 visibleCount++;
             } else {
                 product.style.display = 'none';
@@ -326,7 +326,7 @@ class InteractiveStore {
             
             if (shouldShow) {
                 product.style.display = 'block';
-                product.style.animation = `fadeInUp 0.5s ease-out ${index * 0.1}s forwards`;
+                product.style.animation = \`fadeInUp 0.5s ease-out \${index * 0.1}s forwards\`;
                 visibleCount++;
             } else {
                 product.style.display = 'none';
@@ -334,7 +334,7 @@ class InteractiveStore {
         });
 
         this.updateSearchResults(visibleCount, products.length);
-        console.log(`🏷️ Filtered products: ${filter} (${visibleCount} results)`);
+        console.log(\`🏷️ Filtered products: \${filter} (\${visibleCount} results)\`);
     }
 
     shouldShowProduct(productElement, filter) {
@@ -380,7 +380,7 @@ class InteractiveStore {
         // تحديث عداد النتائج
         const resultsCount = document.getElementById('resultsCount');
         if (resultsCount) {
-            resultsCount.textContent = `عرض ${visible} من أصل ${total} منتج`;
+            resultsCount.textContent = \`عرض \${visible} من أصل \${total} منتج\`;
         }
 
         // إظهار/إخفاء رسالة عدم وجود نتائج
@@ -413,11 +413,11 @@ class InteractiveStore {
     setupBackToTop() {
         // إنشاء زر العودة للأعلى
         const backToTop = document.createElement('button');
-        backToTop.innerHTML = `
+        backToTop.innerHTML = \`
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path>
             </svg>
-        `;
+        \`;
         backToTop.className = 'fixed bottom-6 left-6 w-12 h-12 bg-blue-600 text-white rounded-full shadow-lg hover:bg-blue-700 transition-all duration-300 transform hover:scale-110 z-50 opacity-0 pointer-events-none';
         backToTop.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
         backToTop.setAttribute('aria-label', 'العودة للأعلى');
@@ -476,13 +476,13 @@ class InteractiveStore {
             info: 'bg-blue-500 text-white border-blue-600'
         };
 
-        notification.className = `px-6 py-4 rounded-lg shadow-lg transform translate-x-full transition-transform duration-300 border-l-4 ${colors[type]}`;
-        notification.innerHTML = `
+        notification.className = \`px-6 py-4 rounded-lg shadow-lg transform translate-x-full transition-transform duration-300 border-l-4 \${colors[type]}\`;
+        notification.innerHTML = \`
             <div class="flex items-center gap-3">
-                <span class="text-lg">${icons[type]}</span>
-                <span class="font-medium">${message}</span>
+                <span class="text-lg">\${icons[type]}</span>
+                <span class="font-medium">\${message}</span>
             </div>
-        `;
+        \`;
 
         container.appendChild(notification);
 
@@ -502,41 +502,8 @@ class InteractiveStore {
         }, 4000);
     }
 
-    shareProduct() {
-        const title = document.title;
-        const description = document.querySelector('meta[name="description"]')?.content || '';
-        const url = window.location.href;
-
-        if (navigator.share) {
-            navigator.share({
-                title: title,
-                text: description,
-                url: url,
-            }).then(() => {
-                this.showNotification('تم مشاركة المنتج بنجاح! 📤', 'success');
-            }).catch(console.error);
-        } else {
-            navigator.clipboard.writeText(url).then(() => {
-                this.showNotification('تم نسخ رابط المنتج! 📋', 'success');
-            });
-        }
-    }
-
-    addToFavorites(productId) {
-        if (!productId) return;
-        
-        const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
-        if (!favorites.includes(productId)) {
-            favorites.push(productId);
-            localStorage.setItem('favorites', JSON.stringify(favorites));
-            this.showNotification('تم إضافة المنتج للمفضلة! ❤️', 'success');
-        } else {
-            this.showNotification('المنتج موجود بالفعل في المفضلة', 'info');
-        }
-    }
-
     trackEvent(eventName, data) {
-        console.log(`📊 Event: ${eventName}`, data);
+        console.log(\`📊 Event: \${eventName}\`, data);
         
         // إرسال للـ Analytics إذا كان متوفراً
         if (typeof gtag !== 'undefined') {
@@ -585,7 +552,7 @@ function filterProducts(filter) {
     const store = InteractiveStore.getInstance();
     if (store) {
         store.filterProductsByType(filter);
-        const button = document.querySelector(`[data-filter="${filter}"]`);
+        const button = document.querySelector(\`[data-filter="\${filter}"]\`);
         if (button) store.updateActiveFilterButton(button);
     }
 }
@@ -658,7 +625,7 @@ function navigateBack() {
 window.interactiveStore = new InteractiveStore();
 
 // إضافة CSS للحركات
-const animationCSS = `
+const animationCSS = \`
 <style>
 @keyframes fadeInUp {
     from {
@@ -709,7 +676,7 @@ const animationCSS = `
     }
 }
 </style>
-`;
+\`;
 
 // إضافة CSS للصفحة
 if (!document.querySelector('#interactive-store-styles')) {
@@ -720,3 +687,6 @@ if (!document.querySelector('#interactive-store-styles')) {
 }
 
 console.log('🎉 Interactive Store JavaScript loaded successfully!');
+        )
+    }
+}
